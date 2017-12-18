@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="F:/ALL_SIU/SentiCR/Projects/SentiSE/src/libs/excel/commons-codec-1.10.jar"/>
+	<classpathentry kind="lib" path="F:/ALL_SIU/SentiCR/Projects/SentiSE/src/libs/excel/commons-collections4-4.1.jar"/>
+	<classpathentry kind="lib" path="F:/ALL_SIU/SentiCR/Projects/SentiSE/src/libs/excel/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="F:/ALL_SIU/SentiCR/Projects/SentiSE/src/libs/excel/curvesapi-1.04.jar"/>
+	<classpathentry kind="lib" path="F:/ALL_SIU/SentiCR/Projects/SentiSE/src/libs/excel/junit-4.12.jar"/>
+	<classpathentry kind="lib" path="F:/ALL_SIU/SentiCR/Projects/SentiSE/src/libs/excel/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="F:/ALL_SIU/SentiCR/Projects/SentiSE/src/libs/excel/poi-3.17.jar"/>
+	<classpathentry kind="lib" path="F:/ALL_SIU/SentiCR/Projects/SentiSE/src/libs/excel/poi-examples-3.17.jar"/>
+	<classpathentry kind="lib" path="F:/ALL_SIU/SentiCR/Projects/SentiSE/src/libs/excel/poi-excelant-3.17.jar"/>
+	<classpathentry kind="lib" path="F:/ALL_SIU/SentiCR/Projects/SentiSE/src/libs/excel/poi-ooxml-3.17.jar"/>
+	<classpathentry kind="lib" path="F:/ALL_SIU/SentiCR/Projects/SentiSE/src/libs/excel/poi-ooxml-schemas-3.17.jar"/>
+	<classpathentry kind="lib" path="F:/ALL_SIU/SentiCR/Projects/SentiSE/src/libs/excel/poi-scratchpad-3.17.jar"/>
+	<classpathentry kind="lib" path="F:/ALL_SIU/SentiCR/Projects/SentiSE/src/libs/excel/xmlbeans-2.6.0.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
