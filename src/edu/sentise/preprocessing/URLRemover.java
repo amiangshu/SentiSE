@@ -20,7 +20,7 @@ public class URLRemover {
 			Matcher m = p.matcher(text);
 			while(m.find()) {
 				String urlStr = m.group();
-				System.out.println(":::"+urlStr);
+				
 				sentiData.get(i).setText(sentiData.get(i).getText().replaceAll(urlStr,""));
 			}
 		}
