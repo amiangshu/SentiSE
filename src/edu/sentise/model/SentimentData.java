@@ -16,6 +16,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import edu.sentise.util.Constants;
+import edu.sentise.util.Util;
 
 public class SentimentData {
 
@@ -38,8 +39,9 @@ public class SentimentData {
 		this.text = text;
 		this.rating = rating;
 	}
-	public static ArrayList<SentimentData> parseSentimentData(BufferedReader bufferedReader)
+	public static ArrayList<SentimentData> parseSentimentData()
 	{
+		BufferedReader bufferedReader=Util.getBufferedreaderByFileName(Constants.ORACLE_FILE_NAME);
 		ArrayList<SentimentData> sentimentDataList =  new ArrayList<>();
 		 try {
 

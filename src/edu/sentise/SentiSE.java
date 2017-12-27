@@ -16,9 +16,8 @@ public class SentiSE {
 	
 	public static void main(String[] args) {
 		
-		BufferedReader bufferedReader=Util.getBufferedreaderByFileName(Constants.ORACLE_FILE_NAME);
-		//Util.printFile(bufferedReader);
-		sentimentDataList= SentimentData.parseSentimentData(bufferedReader);
+		
+		sentimentDataList= SentimentData.parseSentimentData();
 		System.out.println(sentimentDataList.size());
 		sentimentDataList=ContractionLoader.preprocessContractions(sentimentDataList);
 		for(int i = 0;i < sentimentDataList.size();i++)
