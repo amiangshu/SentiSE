@@ -1,15 +1,18 @@
 package edu.sentise;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import edu.sentise.model.SentimentData;
 import edu.sentise.preprocessing.ContractionLoader;
 import edu.sentise.preprocessing.EmoticonLoader;
+import edu.sentise.preprocessing.POSTagger;
 import edu.sentise.preprocessing.URLRemover;
 import edu.sentise.util.Constants;
 import edu.sentise.util.Util;
+import edu.stanford.nlp.tagger.maxent.MaxentTagger;
 
 
 public class SentiSE {
@@ -24,10 +27,13 @@ public class SentiSE {
 		sentimentDataList=ContractionLoader.preprocessContractions(sentimentDataList);
 		sentimentDataList=URLRemover.removeURL(sentimentDataList);
 		sentimentDataList=EmoticonLoader.preprocessEmoticons(sentimentDataList);
-		/*for(int i = 0;i < sentimentDataList.size();i++)
+		for(int i = 0;i < sentimentDataList.size();i++)
 		{
 			System.out.println(sentimentDataList.get(i).getText());
-		}*/
+		}
+		//POSTagger.addPOSToText();
+		 
+	
 		
 	}
 
