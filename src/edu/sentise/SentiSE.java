@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.sun.javafx.scene.paint.GradientUtils.Parser;
+
 import edu.sentise.model.SentimentData;
 import edu.sentise.preprocessing.ContractionLoader;
 import edu.sentise.preprocessing.EmoticonLoader;
@@ -31,7 +33,7 @@ public class SentiSE {
 		{
 			System.out.println(sentimentDataList.get(i).getText());
 		}
-		//POSTagger.addPOSToText();
+		
 		 
 	
 		
