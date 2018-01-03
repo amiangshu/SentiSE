@@ -6,7 +6,12 @@ import org.apache.poi.hslf.record.Sound;
 
 import edu.sentise.preprocessing.MyStopWordsHandler;
 import edu.sentise.util.Constants;
+import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
+import weka.classifiers.bayes.NaiveBayes;
+import weka.classifiers.functions.MultilayerPerceptron;
+import weka.classifiers.lazy.IBk;
+import weka.classifiers.meta.AdaBoostM1;
 import weka.classifiers.trees.J48;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
@@ -34,8 +39,16 @@ public class WekaTest {
 			Instances trainedFilteredInstances= Filter.useFilter(trainInstances, filter);
 			if (trainedFilteredInstances.classIndex() == -1)
 				trainedFilteredInstances.setClassIndex(0);
-			J48 classifier=new J48();
+			//J48 classifier=new J48();
+			Classifier classifier=new NaiveBayes();
+			/*MultilayerPerceptron classifier = new MultilayerPerceptron();
+			//Setting Parameters
+			classifier.setLearningRate(0.1);
+			classifier.setMomentum(0.2);
+			classifier.setTrainingTime(2000);
+			classifier.setHiddenLayers("1");*/
 			classifier.buildClassifier(trainedFilteredInstances);
+			
 			//System.out.println("\n\nClassifier model:\n\n" + classifier);
 			
 			//evaluation

@@ -56,11 +56,12 @@ public class EmoticonLoader {
 		{
 			for(String key: keySet)
 			{
-				if(sentiList.get(i).getText().contains(key))
+				// previously used if. and replace all. problem in regex compelled to use while
+				while(sentiList.get(i).getText().contains(key))
 				{
-					System.out.println(sentiList.get(i).getText()+"  "+ key);
-					sentiList.get(i).setText(sentiList.get(i).getText().replace(key, emoticonMap.get(key)));
-					System.out.println(sentiList.get(i).getText());
+					//System.out.println(sentiList.get(i).getText()+"  "+ key);
+					sentiList.get(i).setText(sentiList.get(i).getText().replace(key," "+ emoticonMap.get(key)+" "));
+					//System.out.println(sentiList.get(i).getText());
 				}
 			}
 		}

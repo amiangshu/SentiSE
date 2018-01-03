@@ -56,10 +56,10 @@ public class ContractionLoader {
 		{
 			for(String key: keySet)
 			{
-				if(sentiList.get(i).getText().contains(key))
+				if(sentiList.get(i).getText().toLowerCase().contains(key))
 				{
 					//System.out.println(sentiList.get(i).getText());
-					sentiList.get(i).setText(sentiList.get(i).getText().replaceAll(key, contractionMap.get(key)));
+					sentiList.get(i).setText(sentiList.get(i).getText().toLowerCase().replaceAll(key, contractionMap.get(key)));
 					//System.out.println(sentiList.get(i).getText());
 				}
 			}

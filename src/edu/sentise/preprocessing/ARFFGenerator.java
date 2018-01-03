@@ -16,7 +16,7 @@ import weka.core.Instances;
 public class ARFFGenerator {
 
 	public static void generateARIFForWeka(ArrayList<SentimentData> sentiList) {
-		Collections.shuffle(sentiList);
+		//Collections.shuffle(sentiList);
 		Instances instances = generateTrainData(sentiList);
 		writeInFile(instances);
 		instances=generateTestData(sentiList);
@@ -54,18 +54,23 @@ public class ARFFGenerator {
 		FastVector classVectors=new FastVector<>();
 		classVectors.addElement("0");
 		classVectors.addElement("-1");
+		//classVectors.addElement("1");
 		attributes.addElement(new Attribute("label",classVectors));
 		attributes.addElement(new Attribute("text", (FastVector) null));
 
 		data = new Instances("SentiSe", attributes, 0);
 		int length = sentiList.size();
+		System.out.println("sentilist size: "+ length);
 		int train=(int)(length*.8);
 		
 		for (int i = 0; i <train; i++) {
 			double[] vals = new double[data.numAttributes()];
 			vals[0] = classVectors.indexOf(""+sentiList.get(i).getRating());
 			vals[1] = data.attribute(1).addStringValue(sentiList.get(i).getText());
-			data.add(new DenseInstance(1.0, vals));
+			DenseInstance denseInstance= new DenseInstance(1.0, vals);
+			data.add(denseInstance);
+		  // System.out.println("i "+ i +" "+sentiList.get(i).getRating()+ " "+sentiList.get(i).getText());
+			
 		}
 		//System.out.println(data);
 		return data;
@@ -77,13 +82,14 @@ public class ARFFGenerator {
 		FastVector classVectors=new FastVector<>();
 		classVectors.addElement("0");
 		classVectors.addElement("-1");
+	//	classVectors.addElement("1");
 		attributes.addElement(new Attribute("label",classVectors));
 		attributes.addElement(new Attribute("text", (FastVector) null));
 
 		data = new Instances("SentiSe", attributes, 0);
 		int length = sentiList.size();
 		int train=(int)(length*.8);
-		Collections.shuffle(sentiList);
+		//Collections.shuffle(sentiList);
 		for (int i = train; i < length; i++) {
 			double[] vals = new double[data.numAttributes()];
 			vals[0] = classVectors.indexOf(""+sentiList.get(i).getRating());
