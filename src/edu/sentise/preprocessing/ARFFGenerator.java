@@ -16,7 +16,7 @@ import weka.core.Instances;
 public class ARFFGenerator {
 
 	public static void generateARIFForWeka(ArrayList<SentimentData> sentiList) {
-		//Collections.shuffle(sentiList);
+		Collections.shuffle(sentiList);
 		Instances instances = generateTrainData(sentiList);
 		writeInFile(instances);
 		instances=generateTestData(sentiList);
@@ -54,7 +54,7 @@ public class ARFFGenerator {
 		FastVector classVectors=new FastVector<>();
 		classVectors.addElement("0");
 		classVectors.addElement("-1");
-		//classVectors.addElement("1");
+		classVectors.addElement("1");
 		attributes.addElement(new Attribute("label",classVectors));
 		attributes.addElement(new Attribute("text", (FastVector) null));
 
@@ -82,7 +82,7 @@ public class ARFFGenerator {
 		FastVector classVectors=new FastVector<>();
 		classVectors.addElement("0");
 		classVectors.addElement("-1");
-	//	classVectors.addElement("1");
+		classVectors.addElement("1");
 		attributes.addElement(new Attribute("label",classVectors));
 		attributes.addElement(new Attribute("text", (FastVector) null));
 

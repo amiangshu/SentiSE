@@ -4,6 +4,7 @@ import javax.xml.transform.Source;
 
 import org.apache.poi.hslf.record.Sound;
 
+import edu.sentise.preprocessing.EvaluateModels;
 import edu.sentise.preprocessing.MyStopWordsHandler;
 import edu.sentise.util.Constants;
 import weka.classifiers.Classifier;
@@ -57,22 +58,65 @@ public class WekaTest {
 			Instances testInstances=dataSource.getDataSet();
 			System.out.println(testInstances.size());
 			
-			filter = new StringToWordVector();
+			/*filter = new StringToWordVector();
 			filter.setInputFormat(testInstances);
 			filter.setStopwordsHandler(new MyStopWordsHandler());
 			stemmer = new SnowballStemmer();
 			filter.setStemmer(stemmer);
-			filter.setLowerCaseTokens(true);
+			filter.setLowerCaseTokens(true);*/
 			
 			Instances testFilteredInstances= Filter.useFilter(testInstances, filter);
 			if (testFilteredInstances.classIndex() == -1)
 				testFilteredInstances.setClassIndex(0);
-			Evaluation eval = new Evaluation(trainedFilteredInstances);
-			 eval.evaluateModel(classifier, testFilteredInstances);
-			 System.out.println(eval.toSummaryString("\nResults\n======\n", false));
+			
+			 /*for(int i=0; i<testFilteredInstances.numInstances(); i++) {
+				//System.out.println( testFilteredInstances.instance(i).attribute(0));
+		            double index = classifier.classifyInstance(testFilteredInstances.instance(i));
+		            System.out.println(index);
+			 }*/
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	public static void wekaTestRuns()
+	{
+		try {
+			DataSource dataSource = new DataSource(Constants.ARFF_ORACLE_FILE_NAME);
+			Instances trainInstances=dataSource.getDataSet();
+			System.out.println(trainInstances.size());
+			
+			
+			StringToWordVector filter = new StringToWordVector();
+			filter.setInputFormat(trainInstances);
+			filter.setStopwordsHandler(new MyStopWordsHandler());
+			SnowballStemmer stemmer = new SnowballStemmer();
+			filter.setStemmer(stemmer);
+			filter.setLowerCaseTokens(true);
+			
+			Instances trainedFilteredInstances= Filter.useFilter(trainInstances, filter);
+			if (trainedFilteredInstances.classIndex() == -1)
+				trainedFilteredInstances.setClassIndex(0);
+			
+			dataSource = new DataSource(Constants.ARFF_ORACLE_FILE_NAME_TEST);
+
+			Instances testInstances=dataSource.getDataSet();
+			System.out.println(testInstances.size());
+		
+			Instances testFilteredInstances= Filter.useFilter(testInstances, filter);
+			if (testFilteredInstances.classIndex() == -1)
+				testFilteredInstances.setClassIndex(0);
+			
+			 /*for(int i=0; i<testFilteredInstances.numInstances(); i++) {
+				//System.out.println( testFilteredInstances.instance(i).attribute(0));
+		            double index = classifier.classifyInstance(testFilteredInstances.instance(i));
+		            System.out.println(index);
+			 }*/
+			EvaluateModels.evaluateModels(trainedFilteredInstances, testFilteredInstances);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 }

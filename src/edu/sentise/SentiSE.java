@@ -36,6 +36,7 @@ public class SentiSE {
 		}*/
 		
 		ARFFGenerator.generateARIFForWeka(sentimentDataList);
+		WekaTest.wekaTestRuns();
 		 
 	
 		
