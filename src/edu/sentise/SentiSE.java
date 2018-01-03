@@ -8,6 +8,7 @@ import java.util.HashMap;
 import com.sun.javafx.scene.paint.GradientUtils.Parser;
 
 import edu.sentise.model.SentimentData;
+import edu.sentise.preprocessing.ARFFGenerator;
 import edu.sentise.preprocessing.ContractionLoader;
 import edu.sentise.preprocessing.EmoticonLoader;
 import edu.sentise.preprocessing.POSTagger;
@@ -29,11 +30,12 @@ public class SentiSE {
 		sentimentDataList=ContractionLoader.preprocessContractions(sentimentDataList);
 		sentimentDataList=URLRemover.removeURL(sentimentDataList);
 		sentimentDataList=EmoticonLoader.preprocessEmoticons(sentimentDataList);
-		for(int i = 0;i < sentimentDataList.size();i++)
+		/*for(int i = 0;i < sentimentDataList.size();i++)
 		{
 			System.out.println(sentimentDataList.get(i).getText());
-		}
+		}*/
 		
+		ARFFGenerator.generateARIFForWeka(sentimentDataList);
 		 
 	
 		

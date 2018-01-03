@@ -1,10 +1,12 @@
 package edu.sentise.util;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -33,6 +35,30 @@ public class Util {
 	public void closeBufferedReader(BufferedReader bufferedReader) {
 		try {
 			bufferedReader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static BufferedWriter getBufferedWriterByFileName(String fileName) {
+
+		try {
+
+			FileWriter fileWriter = new FileWriter(fileName);
+
+			return new BufferedWriter(fileWriter);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static void closeBufferedWriter(BufferedWriter bufferedWriter) {
+		try {
+			bufferedWriter.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
