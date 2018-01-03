@@ -67,7 +67,7 @@ public class ARFFGenerator {
 			vals[1] = data.attribute(1).addStringValue(sentiList.get(i).getText());
 			data.add(new DenseInstance(1.0, vals));
 		}
-		System.out.println(data);
+		//System.out.println(data);
 		return data;
 	}
 	private static Instances generateTestData(ArrayList<SentimentData> sentiList) {
@@ -90,7 +90,7 @@ public class ARFFGenerator {
 			vals[1] = data.attribute(1).addStringValue(sentiList.get(i).getText());
 			data.add(new DenseInstance(1.0, vals));
 		}
-		System.out.println(data);
+		//System.out.println(data);
 		return data;
 	}
 }

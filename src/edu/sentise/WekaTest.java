@@ -4,11 +4,14 @@ import javax.xml.transform.Source;
 
 import org.apache.poi.hslf.record.Sound;
 
+import edu.sentise.preprocessing.MyStopWordsHandler;
 import edu.sentise.util.Constants;
 import weka.classifiers.Evaluation;
 import weka.classifiers.trees.J48;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
+import weka.core.stemmers.SnowballStemmer;
+import weka.core.stopwords.StopwordsHandler;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.StringToWordVector;
 
@@ -23,6 +26,10 @@ public class WekaTest {
 			
 			StringToWordVector filter = new StringToWordVector();
 			filter.setInputFormat(trainInstances);
+			filter.setStopwordsHandler(new MyStopWordsHandler());
+			SnowballStemmer stemmer = new SnowballStemmer();
+			filter.setStemmer(stemmer);
+			filter.setLowerCaseTokens(true);
 			
 			Instances trainedFilteredInstances= Filter.useFilter(trainInstances, filter);
 			if (trainedFilteredInstances.classIndex() == -1)
@@ -39,6 +46,10 @@ public class WekaTest {
 			
 			filter = new StringToWordVector();
 			filter.setInputFormat(testInstances);
+			filter.setStopwordsHandler(new MyStopWordsHandler());
+			stemmer = new SnowballStemmer();
+			filter.setStemmer(stemmer);
+			filter.setLowerCaseTokens(true);
 			
 			Instances testFilteredInstances= Filter.useFilter(testInstances, filter);
 			if (testFilteredInstances.classIndex() == -1)
