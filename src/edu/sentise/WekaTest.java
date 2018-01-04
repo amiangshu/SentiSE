@@ -94,6 +94,11 @@ public class WekaTest {
 			SnowballStemmer stemmer = new SnowballStemmer();
 			filter.setStemmer(stemmer);
 			filter.setLowerCaseTokens(true);
+			filter.setTFTransform(true);
+			filter.setIDFTransform(true);
+			filter.setMinTermFreq(3);
+			
+			System.out.println("Creating TF-IDF..");
 			
 			Instances trainedFilteredInstances= Filter.useFilter(trainInstances, filter);
 			if (trainedFilteredInstances.classIndex() == -1)

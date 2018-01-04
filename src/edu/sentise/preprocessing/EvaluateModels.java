@@ -17,8 +17,8 @@ public class EvaluateModels {
 
 		Classifier classifier= getClassifierByName("J48");
 		evaluateClassifier(classifier, train,"J48");
-		classifier = getClassifierByName("NB");
-		evaluateClassifier(classifier, train,"NB");
+		classifier = getClassifierByName("RF");
+		evaluateClassifier(classifier, train,"RF");
 		/*RandomForest classifier=new RandomForest();
 		classifier.setNumIterations(40);
 		evaluateClassifier(classifier, train, test);
@@ -87,6 +87,11 @@ public class EvaluateModels {
 		else if(cls.equals("J48"))
 		{
 			return new J48();
+		}
+		else if(cls.equals("RF"))
+		{
+			System.out.println("Instantiated Random Forest Classifier..");
+			return new RandomForest();
 		}
 		
 		return null;
