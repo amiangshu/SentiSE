@@ -34,7 +34,9 @@ public class SentiSE {
 		{
 			System.out.println(sentimentDataList.get(i).getText());
 		}*/
-		
+		// ARFF is the default file format for weka. I converted our clean data to arff format
+		// so that its easier to be compitable with weka. Shuffled the sentilist and divided 80% and 20% of the
+		//data for train and test respectively
 		ARFFGenerator.generateARIFForWeka(sentimentDataList);
 		WekaTest.wekaTestRuns();
 		 
