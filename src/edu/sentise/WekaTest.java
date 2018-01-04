@@ -99,7 +99,7 @@ public class WekaTest {
 			if (trainedFilteredInstances.classIndex() == -1)
 				trainedFilteredInstances.setClassIndex(0);
 			
-			dataSource = new DataSource(Constants.ARFF_ORACLE_FILE_NAME_TEST);
+			/*dataSource = new DataSource(Constants.ARFF_ORACLE_FILE_NAME_TEST);
 
 			Instances testInstances=dataSource.getDataSet();
 			System.out.println(testInstances.size());
@@ -108,12 +108,12 @@ public class WekaTest {
 			if (testFilteredInstances.classIndex() == -1)
 				testFilteredInstances.setClassIndex(0);
 			
-			 /*for(int i=0; i<testFilteredInstances.numInstances(); i++) {
+			 for(int i=0; i<testFilteredInstances.numInstances(); i++) {
 				//System.out.println( testFilteredInstances.instance(i).attribute(0));
 		            double index = classifier.classifyInstance(testFilteredInstances.instance(i));
 		            System.out.println(index);
 			 }*/
-			EvaluateModels.evaluateModels(trainedFilteredInstances, testFilteredInstances);
+			EvaluateModels.evaluateModels(trainedFilteredInstances);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
