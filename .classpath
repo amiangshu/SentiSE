@@ -15,5 +15,9 @@
 	<classpathentry kind="lib" path="src/libs/excel/poi-ooxml-schemas-3.17.jar"/>
 	<classpathentry kind="lib" path="src/libs/excel/poi-scratchpad-3.17.jar"/>
 	<classpathentry kind="lib" path="src/libs/excel/xmlbeans-2.6.0.jar"/>
+	<classpathentry kind="lib" path="src/libs/pos/stanford-postagger.jar"/>
+	<classpathentry kind="lib" path="src/libs/parser/stanford-parser.jar"/>
+	<classpathentry kind="lib" path="src/libs.weka/weka-src.jar"/>
+	<classpathentry kind="lib" path="src/libs.weka/weka.jar" sourcepath="src/libs.weka/weka-src.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
