@@ -50,8 +50,12 @@ public class SentimentData {
 	            Sheet datatypeSheet = workbook.getSheetAt(0);
 	            Iterator<Row> iterator = datatypeSheet.iterator();
 
+	            int count=0;
 	            while (iterator.hasNext()) {
 
+	            	count++;
+	            	if(count>1600)
+	            		break;
 	                Row currentRow = iterator.next();
 	                Iterator<Cell> cellIterator = currentRow.iterator();
 	                //SentimentData sentimentData=new SentimentData(text, rating)

@@ -14,8 +14,8 @@ public class POSTagger {
 	}
 	public static void addPOSToText()
 	{
-		try
-		{
+		//try
+		//{
 		MaxentTagger tagger = new MaxentTagger("src/taggers/bidirectional-distsim-wsj-0-18.tagger");
 		String sample = "This is a sample text";
 		String tagged = tagPartsOfSpeech(tagger,sample);
@@ -23,7 +23,7 @@ public class POSTagger {
 		
 		 
 		
-		}
+		/*}
 		catch(ClassNotFoundException e)
 		{
 			e.printStackTrace();
@@ -31,7 +31,20 @@ public class POSTagger {
 		catch(IOException e)
 		{
 			e.printStackTrace();
-		}
+		}*/
+	}
+	private static String getPOSToWord(MaxentTagger tagger, String word)
+	{
+		String tagged = tagger.tagString(word);
+		// Output the result
+		return tagged;
+	}
+	public static String addPOSToWord(String word)
+	{
+		MaxentTagger tagger = new MaxentTagger("src/taggers/bidirectional-distsim-wsj-0-18.tagger");
+		//String sample = "This is a sample text";
+		String tagged = getPOSToWord(tagger,word);
+		return tagged;
 	}
 	
 }

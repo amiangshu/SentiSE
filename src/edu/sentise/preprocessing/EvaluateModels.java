@@ -17,8 +17,8 @@ public class EvaluateModels {
 
 		Classifier classifier= getClassifierByName("J48");
 		evaluateClassifier(classifier, train,"J48");
-		classifier = getClassifierByName("RF");
-		evaluateClassifier(classifier, train,"RF");
+		/*Classifier classifier = getClassifierByName("RF");
+		evaluateClassifier(classifier, train,"RF");*/
 		/*RandomForest classifier=new RandomForest();
 		classifier.setNumIterations(40);
 		evaluateClassifier(classifier, train, test);
@@ -43,7 +43,11 @@ public class EvaluateModels {
 
 	private static void evaluateClassifier(Classifier classifier, Instances data, String clsName) {
 		try {
-			int folds=10;
+			int folds=4;
+			double accuracy=0;
+			double precision=0;
+			double recall=0;
+			double fmeasure=0;
 			 Random rand = new Random(System.currentTimeMillis());
 			    Instances randData = new Instances(data);
 			    randData.randomize(rand);
@@ -62,17 +66,33 @@ public class EvaluateModels {
 			      Classifier clsCopy = getClassifierByName(clsName);
 			      clsCopy.buildClassifier(train);
 			      eval.evaluateModel(clsCopy, test);
+			      accuracy+=eval.pctCorrect();
+			      fmeasure+=eval.fMeasure(1);
+			      recall+=eval.recall(1);
+			      precision+=eval.precision(1);
+			      System.out.println("fold: "+n);
+			      System.out.println("Accuracy:"+eval.pctCorrect());
+			      //System.out.println("Precision:"+precision);
+			      //System.out.println("Recall:"+recall);
+			     // System.out.println("Fmeasure:"+fmeasure);
+			      
 			    }
 
 			    // output evaluation
-			    System.out.println();
+			   /* System.out.println();
 			    System.out.println("=== Setup ===");
 			 //   System.out.println("Classifier: " + classifier.getClass().getName() + " " + Utils.joinOptions(cls.getOptions()));
 			    System.out.println("Dataset: " + data.relationName());
 			    System.out.println("Folds: " + folds);
 			    System.out.println("Seed: " + classifier);
 			    System.out.println();
-			    System.out.println(eval.toSummaryString("=== " + folds + "-fold Cross-validation ===", false));
+			    System.out.println(eval.toSummaryString("=== " + folds + "-fold Cross-validation ===", false));*/
+			    
+			    System.out.println("\n\n.......Average......: \n\n");
+			      System.out.println("Accuracy:"+accuracy/folds);
+			      //System.out.println("Precision:"+precision/folds);
+			      //System.out.println("Recall:"+recall/folds);
+			     // System.out.println("Fmeasure:"+fmeasure/folds);
 			  
 		} catch (Exception e) {
 			e.printStackTrace();

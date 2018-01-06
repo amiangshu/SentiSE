@@ -20,5 +20,8 @@ public class DataLists {
 			"virtual", "union", "goto", "var", "function", "require", "print", "echo", "foreach", "elseif", "namespace",
 			"delegate", "event", "override", "struct", "readonly", "explicit", "interface", "get", "set", "elif", "for",
 			"throw", "throws", "lambda", "endfor", "endforeach", "endif", "endwhile", "clone" };
+	public static final String [] negation_words ={"not", "never", "none", "nobody", "nowhere", "neither", "barely", "hardly",
+	                                                "nothing", "rarely", "seldom", "despite" };
+	public static final String[] emoticon_words={"PositiveSentiment","NegativeSentiment"};
 
 }

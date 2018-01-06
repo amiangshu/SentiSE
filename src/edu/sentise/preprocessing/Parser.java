@@ -8,7 +8,6 @@ import java.util.List;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.ling.HasWord;
 import edu.stanford.nlp.ling.SentenceUtils;
-import edu.stanford.nlp.objectbank.TokenizerFactory;
 import edu.stanford.nlp.process.CoreLabelTokenFactory;
 import edu.stanford.nlp.process.DocumentPreprocessor;
 import edu.stanford.nlp.process.PTBTokenizer;
@@ -37,7 +36,7 @@ public class Parser {
 	}
 	public static void wordTokenizer()
 	{
-		String sent2 = "This is another sentence.";
+		/*String sent2 = "This is another sentence.";
 	    TokenizerFactory<CoreLabel> tokenizerFactory =
 	        PTBTokenizer.factory(new CoreLabelTokenFactory(), "");
 	    Tokenizer<CoreLabel> tok =
@@ -45,7 +44,7 @@ public class Parser {
 	    List<CoreLabel> rawWords = tok.tokenize();
 	    for (CoreLabel word : rawWords) {
 			   System.out.println(word.word());
-	}
+	}*/
 	}
 	
 }

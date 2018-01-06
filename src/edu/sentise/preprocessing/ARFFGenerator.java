@@ -54,8 +54,8 @@ public class ARFFGenerator {
 		FastVector classVectors=new FastVector<>();
 		classVectors.addElement("0");
 		classVectors.addElement("-1");
-		classVectors.addElement("1");
-		attributes.addElement(new Attribute("label",classVectors));
+	//	classVectors.addElement("1");
+		attributes.addElement(new Attribute("lab",classVectors));
 		attributes.addElement(new Attribute("text", (FastVector) null));
 
 		data = new Instances("SentiSe", attributes, 0);
