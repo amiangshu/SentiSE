@@ -29,7 +29,7 @@ public class EmoticonLoader {
 				String key=line.substring(0,index).trim();
 				String value=line.substring(index+1,line.length()).trim();
 				//System.out.println(index+" "+ key+": "+ value+" ::"+ line);
-				emoticonMap.put(" "+key+" "," "+value);
+				emoticonMap.put(key," "+value+ " ");
 			}
 
 			// Always close files.

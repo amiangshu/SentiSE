@@ -15,8 +15,8 @@ public class EvaluateModels {
 
 	public static void evaluateModels(Instances train) {
 
-		Classifier classifier= getClassifierByName("J48");
-		evaluateClassifier(classifier, train,"J48");
+		Classifier classifier= getClassifierByName("NB");
+		evaluateClassifier(classifier, train,"NB");
 		/*Classifier classifier = getClassifierByName("RF");
 		evaluateClassifier(classifier, train,"RF");*/
 		/*RandomForest classifier=new RandomForest();
@@ -72,9 +72,9 @@ public class EvaluateModels {
 			      precision+=eval.precision(1);
 			      System.out.println("fold: "+n);
 			      System.out.println("Accuracy:"+eval.pctCorrect());
-			      //System.out.println("Precision:"+precision);
-			      //System.out.println("Recall:"+recall);
-			     // System.out.println("Fmeasure:"+fmeasure);
+			      System.out.println("Precision:"+eval.precision(1));
+			      System.out.println("Recall:"+eval.recall(1));
+			      System.out.println("Fmeasure:"+eval.fMeasure(1));
 			      
 			    }
 
@@ -90,9 +90,9 @@ public class EvaluateModels {
 			    
 			    System.out.println("\n\n.......Average......: \n\n");
 			      System.out.println("Accuracy:"+accuracy/folds);
-			      //System.out.println("Precision:"+precision/folds);
-			      //System.out.println("Recall:"+recall/folds);
-			     // System.out.println("Fmeasure:"+fmeasure/folds);
+			      System.out.println("Precision:"+precision/folds);
+			      System.out.println("Recall:"+recall/folds);
+			      System.out.println("Fmeasure:"+fmeasure/folds);
 			  
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -110,7 +110,7 @@ public class EvaluateModels {
 		}
 		else if(cls.equals("RF"))
 		{
-			System.out.println("Instantiated Random Forest Classifier..");
+			//System.out.println("Instantiated Random Forest Classifier..");
 			return new RandomForest();
 		}
 		

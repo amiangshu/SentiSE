@@ -35,7 +35,7 @@ public class ARFFGenerator {
 		}
 
 	}
-	private static void writeInFileTest(Instances instances) {
+	public static void writeInFileTest(Instances instances) {
 		try {
 			
 			BufferedWriter bufferedWriter = Util.getBufferedWriterByFileName(Constants.ARFF_ORACLE_FILE_NAME_TEST);
@@ -54,7 +54,7 @@ public class ARFFGenerator {
 		FastVector classVectors=new FastVector<>();
 		classVectors.addElement("0");
 		classVectors.addElement("-1");
-	//	classVectors.addElement("1");
+		classVectors.addElement("1");
 		attributes.addElement(new Attribute("lab",classVectors));
 		attributes.addElement(new Attribute("text", (FastVector) null));
 

@@ -54,8 +54,8 @@ public class SentimentData {
 	            while (iterator.hasNext()) {
 
 	            	count++;
-	            	if(count>1600)
-	            		break;
+	            	//if(count>1600)
+	            		//break;
 	                Row currentRow = iterator.next();
 	                Iterator<Cell> cellIterator = currentRow.iterator();
 	                //SentimentData sentimentData=new SentimentData(text, rating)

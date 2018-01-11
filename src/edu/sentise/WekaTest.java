@@ -4,6 +4,7 @@ import javax.xml.transform.Source;
 
 import org.apache.poi.hslf.record.Sound;
 
+import edu.sentise.preprocessing.ARFFGenerator;
 import edu.sentise.preprocessing.EvaluateModels;
 import edu.sentise.preprocessing.MyStopWordsHandler;
 import edu.sentise.util.Constants;
@@ -18,6 +19,7 @@ import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.core.stemmers.SnowballStemmer;
 import weka.core.stopwords.StopwordsHandler;
+import weka.core.tokenizers.WordTokenizer;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.StringToWordVector;
 
@@ -90,19 +92,29 @@ public class WekaTest {
 			
 			StringToWordVector filter = new StringToWordVector();
 			filter.setInputFormat(trainInstances);
+			
+			WordTokenizer customTokenizer = new WordTokenizer();
+			String delimiters = " \r\t\n.,;:\'\"()?!-><#$\\%&*+/@^_=[]{}|`~0123456789\'ãµâ´¾¦¢â‚„ã¬¸â½ã‘ï¿";
+			customTokenizer.setDelimiters(delimiters);
+			filter.setTokenizer(customTokenizer);
 			filter.setStopwordsHandler(new MyStopWordsHandler());
 			SnowballStemmer stemmer = new SnowballStemmer();
 			filter.setStemmer(stemmer);
 			filter.setLowerCaseTokens(true);
-			filter.setTFTransform(true);
-			filter.setIDFTransform(true);
+			//filter.setTFTransform(true);
+			//filter.setIDFTransform(true);
 			filter.setMinTermFreq(3);
+			filter.setOutputWordCounts(true);
+			
 			
 			System.out.println("Creating TF-IDF..");
 			
 			Instances trainedFilteredInstances= Filter.useFilter(trainInstances, filter);
+			//trainedFilteredInstances.
 			if (trainedFilteredInstances.classIndex() == -1)
 				trainedFilteredInstances.setClassIndex(0);
+			ARFFGenerator.writeInFileTest(trainedFilteredInstances);
+			
 			
 			/*dataSource = new DataSource(Constants.ARFF_ORACLE_FILE_NAME_TEST);
 
@@ -119,6 +131,7 @@ public class WekaTest {
 		            System.out.println(index);
 			 }*/
 			EvaluateModels.evaluateModels(trainedFilteredInstances);
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
