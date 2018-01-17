@@ -94,7 +94,7 @@ public class WekaTest {
 			filter.setInputFormat(trainInstances);
 			
 			WordTokenizer customTokenizer = new WordTokenizer();
-			String delimiters = " \r\t\n.,;:\'\"()?!-><#$\\%&*+/@^=[]{}|`~0123456789\'ãµâ´¾¦¢â‚„ã¬¸â½ã‘ï¿";
+			String delimiters = " \r\t\n.,;:\'\"()?!-><#$\\%&*+/@^=[]{}|`~0123456789\'ï¿½â´¾ï¿½ï¿½â‚„ã¬¸ï¿½ï¿½ï¿½";
 			customTokenizer.setDelimiters(delimiters);
 			filter.setTokenizer(customTokenizer);
 			filter.setStopwordsHandler(new MyStopWordsHandler());
@@ -103,7 +103,7 @@ public class WekaTest {
 			filter.setLowerCaseTokens(true);
 			//filter.setTFTransform(true);
 			//filter.setIDFTransform(true);
-			//filter.setMinTermFreq(2);
+			filter.setMinTermFreq(2);
 			filter.setOutputWordCounts(true);
 			
 			

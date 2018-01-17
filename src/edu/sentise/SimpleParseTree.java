@@ -39,8 +39,18 @@ public class SimpleParseTree {
 
 	        }*/
 		//System.out.println(POSTagger.addPOSToWord("observed"));
-        String text = "the histograms themselves do not use multipoint storage. the input for them often would be, but in this case it is not.";
-		 System.out.println(NegationHandler.getNegatedSentiment(text, getCoreNLP()));
+		String[] testTexts= {"the histograms themselves do not use multipoint storage. the input for them often would be, but in this case it is not.",
+				"whoops, this is not new code, but docs are always good!",
+						"could not  you just remember the first sequence number your rild connection received?",
+						"do not remove the entire statement, seekgroup() has side effects.", 
+						"ctr is not something that we would want to call out in ui as users may not understand what it is about.",
+						"this does not  make too much sense to me, as this file lives in the same directory (hence double quotes)."
+
+						};
+       // String text = "the histograms themselves do not use multipoint storage. the input for them often would be, but in this case it is not.";
+        StanfordCoreNLP pipeline= getCoreNLP();
+        for( String text: testTexts)
+        	System.out.println(NegationHandler.getNegatedSentiment(text,pipeline));
 	}
 	public static StanfordCoreNLP getCoreNLP()
 	{

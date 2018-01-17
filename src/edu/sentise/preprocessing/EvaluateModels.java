@@ -15,10 +15,10 @@ public class EvaluateModels {
 
 	public static void evaluateModels(Instances train) {
 
-		Classifier classifier= getClassifierByName("J48");
-		evaluateClassifier(classifier, train,"J48");
-		/*Classifier classifier = getClassifierByName("RF");
-		evaluateClassifier(classifier, train,"RF");*/
+		//Classifier classifier= getClassifierByName("J48");
+		//evaluateClassifier(classifier, train,"J48");
+		Classifier classifier = getClassifierByName("RF");
+		evaluateClassifier(classifier, train,"RF");
 		/*RandomForest classifier=new RandomForest();
 		classifier.setNumIterations(40);
 		evaluateClassifier(classifier, train, test);

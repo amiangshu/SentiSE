@@ -70,7 +70,7 @@ public class NegationHandler {
 							//System.out.println(leave);
 							//System.out.println(leave.parent(tree));
 						//	System.out.println(parentNode);
-							getNegatedSentence(parentNode,hashTable);
+							getNegatedSentence(parentNode,hashTable,compare);
 							//newText+=" "+compare;
 						}
 					}
@@ -95,13 +95,17 @@ public class NegationHandler {
 		return newText;
 	}
 
-	private static String getNegatedSentence(Tree tree,Hashtable<String ,String> hashTable) {
-		String sentence = "";
+	private static void getNegatedSentence(Tree tree,Hashtable<String ,String> hashTable, String negatedWord) {
+		
 		List<Tree> leaves = new ArrayList<>();
+		boolean isNegWordfound=false;
+		boolean isNounFundAfterNegation=false;
 		leaves = tree.getLeaves(leaves);
 		// boolean isNegationFound=false;
 		for (Tree leave : leaves) {
 			String compare = leave.toString().toLowerCase();
+			if(compare.equals(negatedWord))
+				isNegWordfound=true;
 			String pos_arr[]=leave.parent(tree).toString().replace(")","").replace("(", "").split(" ");
 			String pos="";
 			if(pos_arr.length==2)
@@ -109,12 +113,16 @@ public class NegationHandler {
 				pos=pos_arr[0];
 				
 			}
+			if(isNegWordfound && (pos.startsWith("NN") || pos.startsWith("PR")))
+				isNounFundAfterNegation=true;
+			if(isNounFundAfterNegation)
+				return;
 			String neg=negatedWord(compare,pos);
 			//System.out.println(compare+"  "+ neg);
 			hashTable.put(leave.label().toString(),neg);
 
 		}
-		return sentence;
+		
 	}
 
 	private static boolean isNegationAvailable(String text)
@@ -133,7 +141,7 @@ public class NegationHandler {
 			return word;
 		else if (emoticon_words.contains(word))
 			return " " + word;
-		else if(pos.startsWith("VB") || pos.startsWith("RB") || pos.startsWith("JJ"))
+		else if(pos.startsWith("VB") || pos.startsWith("RB") || pos.startsWith("JJ") || pos.startsWith("MD"))
 			return "NOT_" + word;
 		else 
 			return  word;
