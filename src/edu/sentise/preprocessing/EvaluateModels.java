@@ -15,8 +15,8 @@ public class EvaluateModels {
 
 	public static void evaluateModels(Instances train) {
 
-		Classifier classifier= getClassifierByName("NB");
-		evaluateClassifier(classifier, train,"NB");
+		Classifier classifier= getClassifierByName("J48");
+		evaluateClassifier(classifier, train,"J48");
 		/*Classifier classifier = getClassifierByName("RF");
 		evaluateClassifier(classifier, train,"RF");*/
 		/*RandomForest classifier=new RandomForest();
@@ -43,7 +43,7 @@ public class EvaluateModels {
 
 	private static void evaluateClassifier(Classifier classifier, Instances data, String clsName) {
 		try {
-			int folds=4;
+			int folds=10;
 			double accuracy=0;
 			double precision=0;
 			double recall=0;

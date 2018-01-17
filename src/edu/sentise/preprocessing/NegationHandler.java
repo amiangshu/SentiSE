@@ -3,6 +3,7 @@ package edu.sentise.preprocessing;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.List;
 
 import com.sun.org.apache.regexp.internal.recompile;
@@ -30,10 +31,10 @@ public class NegationHandler {
 			System.out.println(i);
 			if(isNegationAvailable(sentimentData.get(i).getText()))
 			{
-				//System.out.println("bef: "+sentimentData.get(i).getText());
+				System.out.println("bef: "+sentimentData.get(i).getText());
 				String negst=getNegatedSentiment(sentimentData.get(i).getText(), pipeline);
 				sentimentData.get(i).setText(negst);
-				//System.out.println("af: "+negst);
+				System.out.println("af: "+negst);
 			}
 		}
 		return sentimentData;
@@ -48,38 +49,53 @@ public class NegationHandler {
 			Tree tree = sentence.get(TreeAnnotation.class);
 			List<Tree> leaves = new ArrayList<>();
 			leaves = tree.getLeaves(leaves);
-			boolean isNegationFound = false;
-			String negetedSentence = sentence.toString();
+			Hashtable<String,String> hashTable=new Hashtable<>();
+			//boolean isNegationFound = false;
+			//String negetedSentence = sentence.toString();
 			for (Tree leave : leaves) {
 				String compare = leave.toString().toLowerCase();
-				if (isNegationFound) {
-					Tree parentNode = leave.parent(tree).parent(tree);
-				  
-					newText+= getNegatedSentence(parentNode, compare);
-					/*System.out.println(tree);
-					System.out.println("---");
-					System.out.println(leave);
-					System.out.println(leave.parent(tree));
-					System.out.println((leave.parent(tree)).parent(tree));*/
-					isNegationFound=false;
+				//System.out.println("label: "+ leave.toString().toLowerCase()+"  "+ leave.label());
+				Tree parentNode =null ;
+			
+					if(!isAleadyChanged(leave, hashTable))
+					{
+						hashTable.put(leave.label().toString(),compare);
+					
+						if(negation_words.contains(compare))
+						{
+							//isNegationFound = true;
+							parentNode=leave.parent(tree).parent(tree);
+							//System.out.println(tree);
+							//System.out.println("---");
+							//System.out.println(leave);
+							//System.out.println(leave.parent(tree));
+						//	System.out.println(parentNode);
+							getNegatedSentence(parentNode,hashTable);
+							//newText+=" "+compare;
+						}
+					}
+				}
+			int i=0;
+			for (Tree leave : leaves) {
+				//String compare = leave.toString().toLowerCase();
+				if(i==0)
+				{
+					newText+=hashTable.get(leave.label().toString());
 				}
 				else
 				{
-					if(negation_words.contains(compare))
-						isNegationFound = true;
-					else
-						newText+=" "+compare;
+					newText+=" "+hashTable.get(leave.label().toString());
 				}
-				
+				i++;
+					
 			}
-			//newText += negetedSentence;
-
+	
 		}
 
 		return newText;
 	}
 
-	private static String getNegatedSentence(Tree tree, String negetaed_word) {
+	private static String getNegatedSentence(Tree tree,Hashtable<String ,String> hashTable) {
 		String sentence = "";
 		List<Tree> leaves = new ArrayList<>();
 		leaves = tree.getLeaves(leaves);
@@ -91,9 +107,11 @@ public class NegationHandler {
 			if(pos_arr.length==2)
 			{
 				pos=pos_arr[0];
-				//System.out.println(pos_arr[0]+" "+pos_arr[1]);
+				
 			}
-			sentence += negatedWord(compare,pos);
+			String neg=negatedWord(compare,pos);
+			//System.out.println(compare+"  "+ neg);
+			hashTable.put(leave.label().toString(),neg);
 
 		}
 		return sentence;
@@ -112,15 +130,22 @@ public class NegationHandler {
 	}
 	private static String negatedWord(String word,String pos) {
 		if (negation_words.contains(word))
-			return " " + word;
-		else if (stop_words.contains(word))
-			return " " + word;
+			return word;
 		else if (emoticon_words.contains(word))
 			return " " + word;
 		else if(pos.startsWith("VB") || pos.startsWith("RB") || pos.startsWith("JJ"))
-			return " NOT_" + word;
+			return "NOT_" + word;
 		else 
-			return " " + word;
+			return  word;
+	}
+	private static boolean isAleadyChanged(Tree leaf, Hashtable<String,String> hashtable)
+	{
+		String val=hashtable.get(leaf.label().toString());
+		String compare = leaf.toString().toLowerCase();
+		if(val==null || val.equals(compare))
+			return false;
+		else
+			return true;
 	}
 
 }

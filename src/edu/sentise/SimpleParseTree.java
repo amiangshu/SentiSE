@@ -39,7 +39,7 @@ public class SimpleParseTree {
 
 	        }*/
 		//System.out.println(POSTagger.addPOSToWord("observed"));
-        String text = "The bug that I reported was actually on the change screen; I had not observed the same issue on the project page.Yep, the original fix was to fix the project page. It'd be great if we could fix both in one go ";
+        String text = "the histograms themselves do not use multipoint storage. the input for them often would be, but in this case it is not.";
 		 System.out.println(NegationHandler.getNegatedSentiment(text, getCoreNLP()));
 	}
 	public static StanfordCoreNLP getCoreNLP()
