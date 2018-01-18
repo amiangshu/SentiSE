@@ -50,42 +50,54 @@ public class NegationHandler {
 			List<Tree> leaves = new ArrayList<>();
 			leaves = tree.getLeaves(leaves);
 			Hashtable<String,String> hashTable=new Hashtable<>();
+			Hashtable<String,String> poshashTable=new Hashtable<>();
 			//boolean isNegationFound = false;
 			//String negetedSentence = sentence.toString();
 			for (Tree leave : leaves) {
 				String compare = leave.toString().toLowerCase();
+				String pos_arr[]=leave.parent(tree).toString().replace(")","").replace("(", "").split(" ");
+				String pos="";
+				if(pos_arr.length==2)
+				{
+					pos=pos_arr[0];
+					
+				}
+				poshashTable.put(leave.label().toString(),pos);
 				//System.out.println("label: "+ leave.toString().toLowerCase()+"  "+ leave.label());
 				Tree parentNode =null ;
-			
-					if(!isAleadyChanged(leave, hashTable))
+		
+				if(!isAleadyChanged(leave, hashTable))
+				{
+					hashTable.put(leave.label().toString(),compare);
+				
+					if(negation_words.contains(compare))
 					{
-						hashTable.put(leave.label().toString(),compare);
-					
-						if(negation_words.contains(compare))
-						{
-							//isNegationFound = true;
-							parentNode=leave.parent(tree).parent(tree);
-							//System.out.println(tree);
-							//System.out.println("---");
-							//System.out.println(leave);
-							//System.out.println(leave.parent(tree));
-						//	System.out.println(parentNode);
-							getNegatedSentence(parentNode,hashTable,compare);
-							//newText+=" "+compare;
-						}
+						//isNegationFound = true;
+						parentNode=leave.parent(tree).parent(tree);
+						//System.out.println(tree);
+						//System.out.println("---");
+						//System.out.println(leave);
+						//System.out.println(leave.parent(tree));
+					//	System.out.println(parentNode);
+						getNegatedSentence(parentNode,hashTable,compare);
+						//newText+=" "+compare;
 					}
+				}
 				}
 			int i=0;
 			for (Tree leave : leaves) {
-				//String compare = leave.toString().toLowerCase();
-				if(i==0)
+				String value = hashTable.get(leave.label().toString());
+				boolean isStopWord=stop_words.contains(value);
+				if(i>0)
 				{
-					newText+=hashTable.get(leave.label().toString());
+					newText+=" ";
 				}
+				
+				if(isStopWord)
+					newText+=value;
 				else
-				{
-					newText+=" "+hashTable.get(leave.label().toString());
-				}
+					newText+=poshashTable.get(leave.label().toString())+"_"+value;
+				
 				i++;
 					
 			}
@@ -120,6 +132,7 @@ public class NegationHandler {
 			String neg=negatedWord(compare,pos);
 			//System.out.println(compare+"  "+ neg);
 			hashTable.put(leave.label().toString(),neg);
+
 
 		}
 		

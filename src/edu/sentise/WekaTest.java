@@ -94,7 +94,7 @@ public class WekaTest {
 			filter.setInputFormat(trainInstances);
 			
 			WordTokenizer customTokenizer = new WordTokenizer();
-			String delimiters = " \r\t\n.,;:\'\"()?!-><#$\\%&*+/@^=[]{}|`~0123456789\'�ⴾ��₄㬸���";
+			String delimiters = " \r\t\n.,;:\'\"()?!-><#$\\%&*+/@^=[]{}|`~0123456789\'�ⴾ��₄㬸������";
 			customTokenizer.setDelimiters(delimiters);
 			filter.setTokenizer(customTokenizer);
 			filter.setStopwordsHandler(new MyStopWordsHandler());
