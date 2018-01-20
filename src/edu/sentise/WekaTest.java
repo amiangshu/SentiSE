@@ -8,20 +8,14 @@ import edu.sentise.preprocessing.ARFFGenerator;
 import edu.sentise.preprocessing.EvaluateModels;
 import edu.sentise.preprocessing.MyStopWordsHandler;
 import edu.sentise.util.Constants;
-import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
-import weka.classifiers.bayes.NaiveBayes;
-import weka.classifiers.functions.MultilayerPerceptron;
-import weka.classifiers.lazy.IBk;
-import weka.classifiers.meta.AdaBoostM1;
-import weka.classifiers.trees.J48;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.core.stemmers.SnowballStemmer;
-import weka.core.stopwords.StopwordsHandler;
 import weka.core.tokenizers.WordTokenizer;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.StringToWordVector;
+import weka.filters.supervised.instance.SMOTE;
 
 public class WekaTest {
 
@@ -101,18 +95,35 @@ public class WekaTest {
 			SnowballStemmer stemmer = new SnowballStemmer();
 			filter.setStemmer(stemmer);
 			filter.setLowerCaseTokens(true);
-			//filter.setTFTransform(true);
-			//filter.setIDFTransform(true);
-			filter.setMinTermFreq(2);
-			filter.setOutputWordCounts(true);
+			filter.setTFTransform(true);
+			filter.setIDFTransform(true);
+			filter.setMinTermFreq(3);
+			filter.setWordsToKeep(2500);
+		
+			//filter.setOutputWordCounts(true);
 			
 			
-			System.out.println("Creating TF-IDF..");
-			
+			System.out.println("Creating TF-IDF..");			
 			Instances trainedFilteredInstances= Filter.useFilter(trainInstances, filter);
+			trainedFilteredInstances.setClassIndex(0);
+			
+			System.out.println("Applying SMOTE oversampling..");
+			SMOTE oversampler=new SMOTE();
+			oversampler.setNearestNeighbors(15);
+			oversampler.setClassValue("3");
+			//oversampler.setPercentage(90.0);
+			oversampler.setInputFormat(trainedFilteredInstances);
+			trainedFilteredInstances=Filter.useFilter(trainedFilteredInstances, oversampler);
+			
+			SMOTE oversampler2=new SMOTE();
+			oversampler2.setClassValue("2");
+			oversampler2.setNearestNeighbors(15);
+			oversampler2.setPercentage(33.0);
+			oversampler2.setInputFormat(trainedFilteredInstances);
+			
+			trainedFilteredInstances=Filter.useFilter(trainedFilteredInstances, oversampler2);
 			//trainedFilteredInstances.
-			if (trainedFilteredInstances.classIndex() == -1)
-				trainedFilteredInstances.setClassIndex(0);
+			
 			ARFFGenerator.writeInFileTest(trainedFilteredInstances);
 			
 			
