@@ -48,15 +48,15 @@ public class EvaluateModels {
 			Instances randData = new Instances(data);
 			randData.randomize(rand);
 
-			double pos_precision[] = new double[10];
-			double neg_precision[] = new double[10];
-			double neu_precision[] = new double[10];
+			double pos_precision[] = new double[folds];
+			double neg_precision[] = new double[folds];
+			double neu_precision[] = new double[folds];
 
-			double pos_recall[] = new double[10];
-			double neg_recall[] = new double[10];
-			double neu_recall[] = new double[10];
+			double pos_recall[] = new double[folds];
+			double neg_recall[] = new double[folds];
+			double neu_recall[] = new double[folds];
 
-			double accuracies[] = new double[10];
+			double accuracies[] = new double[folds];
 
 			// perform cross-validation
 			Evaluation eval = new Evaluation(randData);
@@ -71,15 +71,15 @@ public class EvaluateModels {
 				Classifier clsCopy = getClassifierByName(clsName);
 				clsCopy.buildClassifier(train);
 				eval.evaluateModel(clsCopy, test);
-				accuracies[folds] = eval.pctCorrect();
+				accuracies[n] = eval.pctCorrect();
 
-				neu_precision[folds] = eval.precision(0);
-				neg_precision[folds] = eval.precision(1);
-				pos_precision[folds] = eval.precision(2);
+				neu_precision[n] = eval.precision(0);
+				neg_precision[n] = eval.precision(1);
+				pos_precision[n] = eval.precision(2);
 
-				neu_recall[folds] = eval.precision(0);
-				neg_recall[folds] = eval.precision(1);
-				pos_recall[folds] = eval.precision(2);
+				neu_recall[n] = eval.precision(0);
+				neg_recall[n] = eval.precision(1);
+				pos_recall[n] = eval.precision(2);
 
 				System.out.println("Accuracy:" + eval.pctCorrect());
 
