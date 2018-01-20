@@ -19,6 +19,18 @@ public class DataLists {
 			"assert", "raise", "global", "with", "or", "yield", "in", "out", "except", "and", "enum", "signed", "void",
 			"virtual", "union", "goto", "var", "function", "require", "print", "echo", "foreach", "elseif", "namespace",
 			"delegate", "event", "override", "struct", "readonly", "explicit", "interface", "get", "set", "elif", "for",
-			"throw", "throws", "lambda", "endfor", "endforeach", "endif", "endwhile", "clone" };
+			"throw", "throws", "lambda", "endfor", "endforeach", "endif", "endwhile", "clone" ,"ifdef","mk",
+			
+			//from obersvation
+			"ad","ah","ani","ag","ar","arg","b","c","cc","cbf","cl","d","e","g","h","ha","hf","hi","id","ie","j","k","l",
+			"lrb","lsb","m","md","n","not_i","o","oh","onc","ond","p","py","r","rc","re","rcb","ro","rrb","rsb","u","v",
+			"so","w","x","y","ye",
+			//test symbols
+			"''","'\\'","_","__"
+
+	       };
+	public static final String [] negation_words ={"not", "never", "none", "nobody", "nowhere", "neither", "barely", "hardly",
+	                                                "nothing", "rarely", "seldom", "despite" };
+	public static final String[] emoticon_words={"PositiveSentiment","NegativeSentiment"};
 
 }

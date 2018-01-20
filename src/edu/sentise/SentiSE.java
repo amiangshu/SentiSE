@@ -11,6 +11,7 @@ import edu.sentise.model.SentimentData;
 import edu.sentise.preprocessing.ARFFGenerator;
 import edu.sentise.preprocessing.ContractionLoader;
 import edu.sentise.preprocessing.EmoticonLoader;
+import edu.sentise.preprocessing.NegationHandler;
 import edu.sentise.preprocessing.POSTagger;
 import edu.sentise.preprocessing.URLRemover;
 import edu.sentise.util.Constants;
@@ -37,6 +38,7 @@ public class SentiSE {
 		// ARFF is the default file format for weka. I converted our clean data to arff format
 		// so that its easier to be compitable with weka. Shuffled the sentilist and divided 80% and 20% of the
 		//data for train and test respectively
+		sentimentDataList=NegationHandler.handleNegation(sentimentDataList);
 		ARFFGenerator.generateARIFForWeka(sentimentDataList);
 		WekaTest.wekaTestRuns();
 		 

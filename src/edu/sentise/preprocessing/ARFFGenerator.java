@@ -16,11 +16,11 @@ import weka.core.Instances;
 public class ARFFGenerator {
 
 	public static void generateARIFForWeka(ArrayList<SentimentData> sentiList) {
-		Collections.shuffle(sentiList);
+		//Collections.shuffle(sentiList);
 		Instances instances = generateTrainData(sentiList);
 		writeInFile(instances);
-		instances=generateTestData(sentiList);
-		writeInFileTest(instances);
+		//instances=generateTestData(sentiList);
+		//writeInFileTest(instances);
 
 	}
 
@@ -35,7 +35,7 @@ public class ARFFGenerator {
 		}
 
 	}
-	private static void writeInFileTest(Instances instances) {
+	public static void writeInFileTest(Instances instances) {
 		try {
 			
 			BufferedWriter bufferedWriter = Util.getBufferedWriterByFileName(Constants.ARFF_ORACLE_FILE_NAME_TEST);
@@ -55,15 +55,15 @@ public class ARFFGenerator {
 		classVectors.addElement("0");
 		classVectors.addElement("-1");
 		classVectors.addElement("1");
-		attributes.addElement(new Attribute("label",classVectors));
+		attributes.addElement(new Attribute("lab",classVectors));
 		attributes.addElement(new Attribute("text", (FastVector) null));
 
 		data = new Instances("SentiSe", attributes, 0);
 		int length = sentiList.size();
 		System.out.println("sentilist size: "+ length);
-		int train=(int)(length*.8);
+		//int train=(int)(length*.8);
 		
-		for (int i = 0; i <train; i++) {
+		for (int i = 0; i <length; i++) {
 			double[] vals = new double[data.numAttributes()];
 			vals[0] = classVectors.indexOf(""+sentiList.get(i).getRating());
 			vals[1] = data.attribute(1).addStringValue(sentiList.get(i).getText());

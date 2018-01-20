@@ -4,6 +4,7 @@ import javax.xml.transform.Source;
 
 import org.apache.poi.hslf.record.Sound;
 
+import edu.sentise.preprocessing.ARFFGenerator;
 import edu.sentise.preprocessing.EvaluateModels;
 import edu.sentise.preprocessing.MyStopWordsHandler;
 import edu.sentise.util.Constants;
@@ -18,6 +19,7 @@ import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.core.stemmers.SnowballStemmer;
 import weka.core.stopwords.StopwordsHandler;
+import weka.core.tokenizers.WordTokenizer;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.StringToWordVector;
 
@@ -90,16 +92,31 @@ public class WekaTest {
 			
 			StringToWordVector filter = new StringToWordVector();
 			filter.setInputFormat(trainInstances);
+			
+			WordTokenizer customTokenizer = new WordTokenizer();
+			String delimiters = " \r\t\n.,;:\'\"()?!-><#$\\%&*+/@^=[]{}|`~0123456789\'я┐╜т┤╛я┐╜я┐╜тВДум╕я┐╜я┐╜я┐╜мту";
+			customTokenizer.setDelimiters(delimiters);
+			filter.setTokenizer(customTokenizer);
 			filter.setStopwordsHandler(new MyStopWordsHandler());
 			SnowballStemmer stemmer = new SnowballStemmer();
 			filter.setStemmer(stemmer);
 			filter.setLowerCaseTokens(true);
+			//filter.setTFTransform(true);
+			//filter.setIDFTransform(true);
+			filter.setMinTermFreq(2);
+			filter.setOutputWordCounts(true);
+			
+			
+			System.out.println("Creating TF-IDF..");
 			
 			Instances trainedFilteredInstances= Filter.useFilter(trainInstances, filter);
+			//trainedFilteredInstances.
 			if (trainedFilteredInstances.classIndex() == -1)
 				trainedFilteredInstances.setClassIndex(0);
+			ARFFGenerator.writeInFileTest(trainedFilteredInstances);
 			
-			dataSource = new DataSource(Constants.ARFF_ORACLE_FILE_NAME_TEST);
+			
+			/*dataSource = new DataSource(Constants.ARFF_ORACLE_FILE_NAME_TEST);
 
 			Instances testInstances=dataSource.getDataSet();
 			System.out.println(testInstances.size());
@@ -108,12 +125,13 @@ public class WekaTest {
 			if (testFilteredInstances.classIndex() == -1)
 				testFilteredInstances.setClassIndex(0);
 			
-			 /*for(int i=0; i<testFilteredInstances.numInstances(); i++) {
+			 for(int i=0; i<testFilteredInstances.numInstances(); i++) {
 				//System.out.println( testFilteredInstances.instance(i).attribute(0));
 		            double index = classifier.classifyInstance(testFilteredInstances.instance(i));
 		            System.out.println(index);
 			 }*/
-			EvaluateModels.evaluateModels(trainedFilteredInstances, testFilteredInstances);
+			EvaluateModels.evaluateModels(trainedFilteredInstances);
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
