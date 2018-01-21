@@ -17,6 +17,11 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import weka.classifiers.Classifier;
+import weka.classifiers.bayes.NaiveBayes;
+import weka.classifiers.trees.J48;
+import weka.classifiers.trees.RandomForest;
+
 public class Util {
 
 	public static BufferedReader getBufferedreaderByFileName(String fileName) {
@@ -99,5 +104,26 @@ public class Util {
 	        }
 
 	    }
+	public static Classifier getClassifierByName(String cls) {
+		if (cls.equals("NB")) {
+			return new NaiveBayes();
+		} else if (cls.equals("J48")) {
+			return new J48();
+		} else if (cls.equals("RF")) {
+			// System.out.println("Instantiated Random Forest Classifier..");
+			RandomForest classifier = new RandomForest();
+			try {
+				classifier.setOptions(
+						weka.core.Utils.splitOptions("-P 100 -I 100 -num-slots 1 -K 0 -M 1.0 -V 0.001 -S 1"));
+			} catch (Exception e) {
+
+			}
+
+			return classifier;
+		}
+
+		return null;
+
+	}
 	
 }

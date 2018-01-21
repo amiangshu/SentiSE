@@ -1,4 +1,4 @@
-package edu.sentise;
+package edu.sentise.test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,14 +19,21 @@ import edu.sentise.util.Util;
 import edu.stanford.nlp.tagger.maxent.MaxentTagger;
 
 
-public class SentiSE {
+public class SentiSETest {
 
 	private static ArrayList<SentimentData> sentimentDataList=new ArrayList<>();
 	
 	public static void main(String[] args) {
 		
+		testFromARFFile();
 		
-		sentimentDataList= SentimentData.parseSentimentData(Constants.ORACLE_FILE_NAME);
+		// testFromRawFile();
+	
+		
+	}
+	private static void testFromRawFile()
+	{
+		sentimentDataList= SentimentData.parseSentimentData(TestUtils.TEST_DATA_FILE);
 		System.out.println(sentimentDataList.size());
 		sentimentDataList=ContractionLoader.preprocessContractions(sentimentDataList);
 		sentimentDataList=URLRemover.removeURL(sentimentDataList);
@@ -38,13 +45,14 @@ public class SentiSE {
 		// ARFF is the default file format for weka. I converted our clean data to arff format
 		// so that its easier to be compitable with weka. Shuffled the sentilist and divided 80% and 20% of the
 		//data for train and test respectively
-		//sentimentDataList=NegationHandler.handleNegation(sentimentDataList);
-		//ARFFGenerator.generateARIFForWeka(sentimentDataList);
-		//WekaTest.wekaTestRuns();
-		WekaTest.EvaluateInstancefromARFF();
-		 
-	
+		sentimentDataList=NegationHandler.handleNegation(sentimentDataList);
+		ARFFTestGenerator.generateARFForWeka(sentimentDataList);
+		SentiSEModelEvaluator.evaluateSentiSEModel();
+	}
+	private static void testFromARFFile()
+	{
 		
+		SentiSEModelEvaluator.evaluateSentiSEModelFromARFF();
 	}
 
 }

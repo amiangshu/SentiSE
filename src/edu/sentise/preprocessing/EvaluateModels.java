@@ -3,6 +3,7 @@ package edu.sentise.preprocessing;
 import java.io.IOException;
 import java.util.Random;
 
+import edu.sentise.util.Util;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayes;
@@ -18,7 +19,7 @@ public class EvaluateModels {
 
 		//Classifier classifier = getClassifierByName("J48");
 		//evaluateClassifier(classifier, train, "J48");
-		 Classifier classifier = getClassifierByName("RF");
+		 Classifier classifier = Util.getClassifierByName("RF");
 		 evaluateClassifier(classifier, train,"RF");
 		/*
 		 * RandomForest classifier=new RandomForest(); classifier.setNumIterations(40);
@@ -68,7 +69,7 @@ public class EvaluateModels {
 				// Instances train = randData.trainCV(folds, n, rand);
 
 				// build and evaluate classifier
-				Classifier clsCopy = getClassifierByName(clsName);
+				Classifier clsCopy = Util.getClassifierByName(clsName);
 				clsCopy.buildClassifier(train);
 				eval.evaluateModel(clsCopy, test);
 				accuracies[n] = eval.pctCorrect();
@@ -123,26 +124,6 @@ public class EvaluateModels {
 		return average;
 	}
 
-	private static Classifier getClassifierByName(String cls) {
-		if (cls.equals("NB")) {
-			return new NaiveBayes();
-		} else if (cls.equals("J48")) {
-			return new J48();
-		} else if (cls.equals("RF")) {
-			// System.out.println("Instantiated Random Forest Classifier..");
-			RandomForest classifier = new RandomForest();
-			try {
-				classifier.setOptions(
-						weka.core.Utils.splitOptions("-P 100 -I 100 -num-slots 1 -K 0 -M 1.0 -V 0.001 -S 1"));
-			} catch (Exception e) {
-
-			}
-
-			return classifier;
-		}
-
-		return null;
-
-	}
+	
 
 }
