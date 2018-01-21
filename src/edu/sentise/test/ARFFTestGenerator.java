@@ -37,7 +37,7 @@ public class ARFFTestGenerator {
 	}
 
 
-	private static Instances generateTestData(ArrayList<SentimentData> sentiList) {
+	public static Instances generateTestData(ArrayList<SentimentData> sentiList) {
 		FastVector attributes;
 		Instances data;
 		attributes = new FastVector<>();
