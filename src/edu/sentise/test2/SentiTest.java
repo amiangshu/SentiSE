@@ -9,8 +9,12 @@ import edu.sentise.preprocessing.MyStopWordsHandler;
 import edu.sentise.preprocessing.NegationHandler;
 import edu.sentise.preprocessing.URLRemover;
 import edu.sentise.test.ARFFTestGenerator;
+import edu.sentise.test.CustomImputMappedClassifer;
+import edu.sentise.test.SentiSEModelEvaluator;
 import edu.sentise.test.TestUtils;
+import edu.stanford.nlp.pipeline.CustomAnnotationSerializer;
 import weka.classifiers.Classifier;
+import weka.classifiers.misc.InputMappedClassifier;
 import weka.core.Instances;
 import weka.core.stemmers.SnowballStemmer;
 import weka.core.tokenizers.WordTokenizer;
@@ -40,7 +44,10 @@ public class SentiTest {
 	                                "I think the comments here are a bad sign... I sent us down an unfortunate slippery slope  we are a search engine library!  don't put shit in the index directory! or we will delete your shit. dead simple.",
 	                                " Matt... I'm an idiot  I used the wrong patch. Sigh.",
 	                                "Adrian   thanks for the patch: rev. ",
-	                                "Ah  damn  I thought it was fixed :/  Guillaume ? "
+	                                "Ah  damn  I thought it was fixed :/  Guillaume ? ",
+	                                "You cannot design an API for logging. We should take out the ,\"command\" argument and have generic errors. It's easy looking at vdsm.log to discover what was the command executed before this failure.",
+	                                "There is no VDSM action here, only database - just make the command transactive, and save yourself all this hassle."
+	                                
 	                                    };
 	public static void main(String[] args) {
 		
@@ -81,15 +88,31 @@ public class SentiTest {
 	
 			// filter.setOutputWordCounts(true);
 	
+			
 			System.out.println("Creating TF-IDF..");
 			testInstances = Filter.useFilter(testInstances, filter);
 			testInstances.setClassIndex(0);
+			ARFFTestGenerator.writeInFile(testInstances);
 			
 			int len=testInstances.size();
-			Classifier classifier=WekaClassifierBuilder.getClassfier();
+			InputMappedClassifier classifier=WekaClassifierBuilder.getClassfier();
 			for(int j=0;j<len;j++){
 				 double[] prediction=classifier.distributionForInstance(testInstances.get(j));
 
+			        //output predictions
+				 System.out.println(sentimentDataList.get(j).getText());
+			       /* for(int i=0; i<prediction.length; i=i+1)
+			        {
+			            System.out.println("Probability of class "+
+			            		testInstances.classAttribute().value(i)+
+			                               " : "+Double.toString(prediction[i]));
+			        }*/
+				System.out.println("class:  "+classifier.classifyInstance(testInstances.get(j)));
+			}
+		/*	CustomImputMappedClassifer classifier=WekaClassifierBuilder.getTestClassfier();
+			for(int j=0;j<len;j++){
+				 double[] prediction=classifier.distributionForInstance(testInstances.get(j));
+                  System.out.println(classifier.getConvertedInstance(testInstances.get(j)));
 			        //output predictions
 				 System.out.println("instance: "+j);
 			        for(int i=0; i<prediction.length; i=i+1)
@@ -99,7 +122,8 @@ public class SentiTest {
 			                               " : "+Double.toString(prediction[i]));
 			        }
 				//System.out.println(i+"  "+classifier.classifyInstance(testInstances.get(i)));
-			}
+			}*/
+			
 		}
 		catch(Exception e)
 		{

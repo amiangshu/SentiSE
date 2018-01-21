@@ -49,7 +49,8 @@ public class SentiSEModelEvaluator {
 		}
 		return null;
 		
-	}public static Instances readTestInstances() {
+	}
+	public static Instances readTestInstances() {
 		DataSource dataSource;
 		try {
 			dataSource = new DataSource(TestUtils.TEST_DATA_PROCESSED_ARFF_FILE);

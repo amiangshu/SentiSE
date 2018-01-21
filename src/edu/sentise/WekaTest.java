@@ -102,6 +102,8 @@ public class WekaTest {
 			StringToWordVector filter = new StringToWordVector();
 			filter.setInputFormat(trainInstances);
 			
+			
+			
 			WordTokenizer customTokenizer = new WordTokenizer();
 			String delimiters = " \r\t\n.,;:\'\"()?!-><#$\\%&*+/@^=[]{}|`~0123456789\'я┐╜т┤╛я┐╜я┐╜тВДум╕я┐╜я┐╜я┐╜мту";
 			customTokenizer.setDelimiters(delimiters);

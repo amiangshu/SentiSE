@@ -24,7 +24,7 @@ public class ARFFTestGenerator {
 
 	}
 
-	private static void writeInFile(Instances instances) {
+	public static void writeInFile(Instances instances) {
 		try {
 			
 			BufferedWriter bufferedWriter = Util.getBufferedWriterByFileName(TestUtils.TEST_DATA_ARFF_FILE);

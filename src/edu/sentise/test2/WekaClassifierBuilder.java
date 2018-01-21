@@ -1,8 +1,11 @@
 package edu.sentise.test2;
 
+import edu.sentise.test.CustomImputMappedClassifer;
 import edu.sentise.util.Constants;
 import edu.sentise.util.Util;
+import edu.stanford.nlp.pipeline.CustomAnnotationSerializer;
 import weka.classifiers.Classifier;
+import weka.classifiers.misc.InputMappedClassifier;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
@@ -24,12 +27,30 @@ public class WekaClassifierBuilder {
 		return null;
 		
 	}
-	public static Classifier getClassfier()
+	public static InputMappedClassifier getClassfier()
 	{
 		try
 		{
-		 Classifier classifier = Util.getClassifierByName("RF");
-		 classifier.buildClassifier(readTrainedInstances());
+			InputMappedClassifier classifier = new InputMappedClassifier();
+			classifier.setClassifier(Util.getClassifierByName("RF"));
+			classifier.setSuppressMappingReport(true);
+		    classifier.buildClassifier(readTrainedInstances());
+		    
+		 return classifier;
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public static CustomImputMappedClassifer getTestClassfier()
+	{
+		try
+		{
+			CustomImputMappedClassifer classifier = new CustomImputMappedClassifer();
+			classifier.setClassifier(Util.getClassifierByName("RF"));
+		    classifier.buildClassifier(readTrainedInstances());
 		 return classifier;
 		}
 		catch(Exception e)
