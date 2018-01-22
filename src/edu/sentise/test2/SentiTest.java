@@ -95,9 +95,9 @@ public class SentiTest {
 			ARFFTestGenerator.writeInFile(testInstances);
 			
 			int len=testInstances.size();
-			InputMappedClassifier classifier=WekaClassifierBuilder.getClassfier();
+			Classifier classifier=WekaClassifierBuilder.getSavedClassfier();
 			for(int j=0;j<len;j++){
-				 double[] prediction=classifier.distributionForInstance(testInstances.get(j));
+				// double[] prediction=classifier.distributionForInstance(testInstances.get(j));
 
 			        //output predictions
 				 System.out.println(sentimentDataList.get(j).getText());

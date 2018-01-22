@@ -27,7 +27,7 @@ public class SentiSETest {
 		
 		testFromARFFile();
 		
-		// testFromRawFile();
+		 //testFromRawFile();
 	
 		
 	}
