@@ -60,7 +60,7 @@ public class SentiTest {
 		System.out.println(sentimentDataList.size());
 		sentimentDataList=ContractionLoader.preprocessContractions(sentimentDataList);
 		sentimentDataList=URLRemover.removeURL(sentimentDataList);
-		
+		sentimentDataList=EmoticonLoader.preprocessEmoticons(sentimentDataList);
 		// ARFF is the default file format for weka. I converted our clean data to arff format
 		// so that its easier to be compitable with weka. Shuffled the sentilist and divided 80% and 20% of the
 		//data for train and test respectively
