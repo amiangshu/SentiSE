@@ -39,13 +39,13 @@ public class SentimentData {
 		this.text = text;
 		this.rating = rating;
 	}
-	public static ArrayList<SentimentData> parseSentimentData()
+	public static ArrayList<SentimentData> parseSentimentData(String fileName)
 	{
-		BufferedReader bufferedReader=Util.getBufferedreaderByFileName(Constants.ORACLE_FILE_NAME);
+		//BufferedReader bufferedReader=Util.getBufferedreaderByFileName(Constants.ORACLE_FILE_NAME);
 		ArrayList<SentimentData> sentimentDataList =  new ArrayList<>();
 		 try {
 
-	            FileInputStream excelFile = new FileInputStream(new File(Constants.ORACLE_FILE_NAME));
+	            FileInputStream excelFile = new FileInputStream(new File(fileName));
 	            Workbook workbook = new XSSFWorkbook(excelFile);
 	            Sheet datatypeSheet = workbook.getSheetAt(0);
 	            Iterator<Row> iterator = datatypeSheet.iterator();

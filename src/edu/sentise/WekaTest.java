@@ -8,20 +8,14 @@ import edu.sentise.preprocessing.ARFFGenerator;
 import edu.sentise.preprocessing.EvaluateModels;
 import edu.sentise.preprocessing.MyStopWordsHandler;
 import edu.sentise.util.Constants;
-import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
-import weka.classifiers.bayes.NaiveBayes;
-import weka.classifiers.functions.MultilayerPerceptron;
-import weka.classifiers.lazy.IBk;
-import weka.classifiers.meta.AdaBoostM1;
-import weka.classifiers.trees.J48;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.core.stemmers.SnowballStemmer;
-import weka.core.stopwords.StopwordsHandler;
 import weka.core.tokenizers.WordTokenizer;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.StringToWordVector;
+import weka.filters.supervised.instance.SMOTE;
 
 public class WekaTest {
 
@@ -82,6 +76,21 @@ public class WekaTest {
 		}*/
 		wekaTestRuns();
 	}
+	
+	public static void EvaluateInstancefromARFF() {
+		DataSource dataSource;
+		try {
+			dataSource = new DataSource(Constants.ARFF_ORACLE_FILE_NAME_TEST);
+			Instances trainInstances=dataSource.getDataSet();
+			System.out.println(trainInstances.size());
+			trainInstances.setClassIndex(0);
+			EvaluateModels.evaluateModels(trainInstances);
+			
+		} catch (Exception e) {
+			
+		}
+		
+	}
 	public static void wekaTestRuns()
 	{
 		try {
@@ -93,6 +102,8 @@ public class WekaTest {
 			StringToWordVector filter = new StringToWordVector();
 			filter.setInputFormat(trainInstances);
 			
+			
+			
 			WordTokenizer customTokenizer = new WordTokenizer();
 			String delimiters = " \r\t\n.,;:\'\"()?!-><#$\\%&*+/@^=[]{}|`~0123456789\'я┐╜т┤╛я┐╜я┐╜тВДум╕я┐╜я┐╜я┐╜мту";
 			customTokenizer.setDelimiters(delimiters);
@@ -101,35 +112,37 @@ public class WekaTest {
 			SnowballStemmer stemmer = new SnowballStemmer();
 			filter.setStemmer(stemmer);
 			filter.setLowerCaseTokens(true);
-			//filter.setTFTransform(true);
-			//filter.setIDFTransform(true);
-			filter.setMinTermFreq(2);
-			filter.setOutputWordCounts(true);
-			
-			
-			System.out.println("Creating TF-IDF..");
-			
-			Instances trainedFilteredInstances= Filter.useFilter(trainInstances, filter);
-			//trainedFilteredInstances.
-			if (trainedFilteredInstances.classIndex() == -1)
-				trainedFilteredInstances.setClassIndex(0);
-			ARFFGenerator.writeInFileTest(trainedFilteredInstances);
-			
-			
-			/*dataSource = new DataSource(Constants.ARFF_ORACLE_FILE_NAME_TEST);
-
-			Instances testInstances=dataSource.getDataSet();
-			System.out.println(testInstances.size());
+			filter.setTFTransform(true);
+			filter.setIDFTransform(true);
+			filter.setMinTermFreq(3);
+			filter.setWordsToKeep(2500);
 		
-			Instances testFilteredInstances= Filter.useFilter(testInstances, filter);
-			if (testFilteredInstances.classIndex() == -1)
-				testFilteredInstances.setClassIndex(0);
+			//filter.setOutputWordCounts(true);
 			
-			 for(int i=0; i<testFilteredInstances.numInstances(); i++) {
-				//System.out.println( testFilteredInstances.instance(i).attribute(0));
-		            double index = classifier.classifyInstance(testFilteredInstances.instance(i));
-		            System.out.println(index);
-			 }*/
+			
+			System.out.println("Creating TF-IDF..");			
+			Instances trainedFilteredInstances= Filter.useFilter(trainInstances, filter);
+			trainedFilteredInstances.setClassIndex(0);
+			
+			System.out.println("Applying SMOTE oversampling..");
+			SMOTE oversampler=new SMOTE();
+			oversampler.setNearestNeighbors(15);
+			oversampler.setClassValue("3");
+			//oversampler.setPercentage(90.0);
+			oversampler.setInputFormat(trainedFilteredInstances);
+			trainedFilteredInstances=Filter.useFilter(trainedFilteredInstances, oversampler);
+			
+			SMOTE oversampler2=new SMOTE();
+			oversampler2.setClassValue("2");
+			oversampler2.setNearestNeighbors(15);
+			oversampler2.setPercentage(33.0);
+			oversampler2.setInputFormat(trainedFilteredInstances);
+			
+			trainedFilteredInstances=Filter.useFilter(trainedFilteredInstances, oversampler2);
+			//trainedFilteredInstances.
+			
+			ARFFGenerator.writeInFileTest(trainedFilteredInstances);
+						
 			EvaluateModels.evaluateModels(trainedFilteredInstances);
 			
 			

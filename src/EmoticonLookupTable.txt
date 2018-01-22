@@ -40,8 +40,6 @@
 :-|	 NegativeSentiment 
 :-}	 PositiveSentiment 
 :/	 NegativeSentiment 
-:3	 PositiveSentiment 
-:9	 PositiveSentiment 
 :D	 PositiveSentiment 
 :E	 NegativeSentiment 
 :F	 NegativeSentiment 

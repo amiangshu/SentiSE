@@ -26,7 +26,7 @@ public class SentiSE {
 	public static void main(String[] args) {
 		
 		
-		sentimentDataList= SentimentData.parseSentimentData();
+		sentimentDataList= SentimentData.parseSentimentData(Constants.ORACLE_FILE_NAME);
 		System.out.println(sentimentDataList.size());
 		sentimentDataList=ContractionLoader.preprocessContractions(sentimentDataList);
 		sentimentDataList=URLRemover.removeURL(sentimentDataList);
@@ -38,9 +38,10 @@ public class SentiSE {
 		// ARFF is the default file format for weka. I converted our clean data to arff format
 		// so that its easier to be compitable with weka. Shuffled the sentilist and divided 80% and 20% of the
 		//data for train and test respectively
-		sentimentDataList=NegationHandler.handleNegation(sentimentDataList);
-		ARFFGenerator.generateARIFForWeka(sentimentDataList);
-		WekaTest.wekaTestRuns();
+		//sentimentDataList=NegationHandler.handleNegation(sentimentDataList);
+		//ARFFGenerator.generateARIFForWeka(sentimentDataList);
+		//WekaTest.wekaTestRuns();
+		WekaTest.EvaluateInstancefromARFF();
 		 
 	
 		

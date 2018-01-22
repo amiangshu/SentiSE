@@ -93,10 +93,10 @@ public class NegationHandler {
 					newText+=" ";
 				}
 				
-				if(isStopWord)
+			//	if(isStopWord)
 					newText+=value;
-				else
-					newText+=poshashTable.get(leave.label().toString())+"_"+value;
+			//	else
+				//	newText+=poshashTable.get(leave.label().toString())+"_"+value;
 				
 				i++;
 					

@@ -1,0 +1,34 @@
+@relation 'SentiSe-weka.filters.unsupervised.attribute.StringToWordVector-R2-W2500-prune-rate-1.0-T-I-N0-L-stemmerweka.core.stemmers.SnowballStemmer -S porter-stopwords-handleredu.sentise.preprocessing.MyStopWordsHandler-M3-tokenizerweka.core.tokenizers.WordTokenizer -delimiters \" \\r\\t\\n.,;:\\\'\\\"()?!-><#$\\\%&*+/@^=[]{}|`~0123456789\\\'я┐╜т┤╛я┐╜я┐╜тВДум╕я┐╜я┐╜я┐╜мту\"'
+
+@attribute lab {0,-1,1}
+@attribute alwai numeric
+@attribute command numeric
+@attribute fals numeric
+@attribute make numeric
+@attribute negat numeric
+@attribute not numeric
+@attribute not_do numeric
+@attribute size_t numeric
+@attribute sure numeric
+@attribute thi numeric
+@attribute think numeric
+@attribute us numeric
+@attribute wa numeric
+@attribute what numeric
+@attribute would numeric
+
+@data
+{0 1,6 0.868349,9 1.348802,12 0.868349,14 0.713678,15 1.067755}
+{0 1,1 1.067755,11 1.067755}
+{0 1,6 0.868349,7 1.067755,14 0.713678}
+{0 1}
+{0 1,6 0.868349,7 1.067755,11 1.067755,14 0.713678}
+{0 1,1 1.067755,4 1.067755,12 0.868349}
+{0 1,8 1.829255,10 1.067755,15 1.067755}
+{0 1,1 1.067755,3 1.829255,4 1.067755,5 1.829255,9 1.348802,12 0.868349,13 1.067755,14 0.713678,15 1.067755}
+{0 1,6 0.868349,7 1.067755,11 1.067755}
+{0 1,12 0.868349}
+{0 1}
+{0 1,13 1.067755}
+{0 1,2 1.348802,10 1.067755,13 1.067755,14 0.713678}
+{0 1,2 1.348802,4 1.067755,10 1.067755}
