@@ -95,6 +95,7 @@ public class Util {
 
 	                }
 	                System.out.println();
+	                workbook.close();
 
 	            }
 	        } catch (FileNotFoundException e) {

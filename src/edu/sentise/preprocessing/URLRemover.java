@@ -1,29 +1,35 @@
 package edu.sentise.preprocessing;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import edu.sentise.model.SentimentData;
-import edu.sentise.util.Constants;
 
 public class URLRemover {
 
-	public static ArrayList<SentimentData> removeURL(ArrayList<SentimentData> sentiData)
-	{
-		int length=sentiData.size();
-		Pattern p = Pattern.compile("((https?|ftp|gopher|telnet|file):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*/)");		
-		for( int i=0;i<length;i++)
-		{
-			String text=sentiData.get(i).getText();
-			Matcher m = p.matcher(text);
-			while(m.find()) {
-				String urlStr = m.group();
-				
-				sentiData.get(i).setText(sentiData.get(i).getText().replaceAll(urlStr,""));
-			}
+	private static Pattern urlPattern = Pattern
+			.compile("((https?|ftp|gopher|telnet|file):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*/)");
+
+	public static ArrayList<SentimentData> removeURL(ArrayList<SentimentData> sentiData) {
+
+		for (int i = 0; i < sentiData.size(); i++) {
+
+			sentiData.get(i).setText(removeURL(sentiData.get(i).getText()));
 		}
+
 		return sentiData;
+	}
+
+	public static String removeURL(String text) {
+
+		Matcher m = urlPattern.matcher(text);
+		while (m.find()) {
+			String urlStr = m.group();
+
+			text = text.replaceAll(urlStr, "");
+		}
+		return text;
 	}
 }

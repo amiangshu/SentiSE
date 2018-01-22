@@ -7,6 +7,6 @@ public class Constants {
 	public static final String ORACLE_FILE_NAME="src/combined.xlsx";
 	public static final String ARFF_ORACLE_FILE_NAME="src/myoracle.arff";
 	public static final String ARFF_ORACLE_FILE_NAME_TEST="src/myoracle_test.arff";
-
+	public static final String DELIMITERS=" \\r\\t\\n.,;:\\'\\\"()?!-><#$\\\\%&*+/@^=[]{}|`~0123456789\\'�ⴾ��₄㬸������";
 
 }

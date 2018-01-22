@@ -55,7 +55,7 @@ public class WekaClassifierBuilder {
 	{
 		try
 		{
-			InputMappedClassifier classifier = new InputMappedClassifier();
+			//InputMappedClassifier classifier = new InputMappedClassifier();
 			FileInputStream fis = new FileInputStream("models/my_model.model");
 			ObjectInputStream ois = new ObjectInputStream(fis);
 

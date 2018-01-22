@@ -50,7 +50,7 @@ public class SimpleParseTree {
        // String text = "the histograms themselves do not use multipoint storage. the input for them often would be, but in this case it is not.";
         StanfordCoreNLP pipeline= getCoreNLP();
         for( String text: testTexts)
-        	System.out.println(NegationHandler.getNegatedSentiment(text,pipeline));
+        	System.out.println(NegationHandler.getNegatedSentiment(text));
 	}
 	public static StanfordCoreNLP getCoreNLP()
 	{

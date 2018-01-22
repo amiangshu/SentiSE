@@ -78,9 +78,9 @@ public class EvaluateModels {
 				neg_precision[n] = eval.precision(1);
 				pos_precision[n] = eval.precision(2);
 
-				neu_recall[n] = eval.precision(0);
-				neg_recall[n] = eval.precision(1);
-				pos_recall[n] = eval.precision(2);
+				neu_recall[n] = eval.recall(0);
+				neg_recall[n] = eval.recall(1);
+				pos_recall[n] = eval.recall(2);
 
 				System.out.println("Accuracy:" + eval.pctCorrect());
 
