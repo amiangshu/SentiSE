@@ -43,6 +43,7 @@ public class SentiSE {
 
 	private boolean preprocessNegation = true;
 	private boolean crossValidate = false;
+	private boolean forceRcreateTrainingData=false;
 
 	Instances trainingInstances = null;
 
@@ -96,6 +97,14 @@ public class SentiSE {
 
 	public void setCrossValidate(boolean crossValidate) {
 		this.crossValidate = crossValidate;
+	}
+
+	public boolean isForceRcreateTrainingData() {
+		return forceRcreateTrainingData;
+	}
+
+	public void setForceRcreateTrainingData(boolean forceRcreateTrainingData) {
+		this.forceRcreateTrainingData = forceRcreateTrainingData;
 	}
 
 	public SentiSE() {
@@ -152,14 +161,14 @@ public class SentiSE {
 		SMOTE oversampler = new SMOTE();
 		oversampler.setNearestNeighbors(15);
 		oversampler.setClassValue("3");
-		oversampler.setPercentage(neutral_count/(2*neg_count) -1.0);
+		oversampler.setPercentage((100*neutral_count)/(2*pos_count) -1.0);//set positive=2:1
 		oversampler.setInputFormat(filteredInstance);
 		filteredInstance = Filter.useFilter(filteredInstance, oversampler);
 
 		SMOTE oversampler2 = new SMOTE();
 		oversampler2.setClassValue("2");
 		oversampler2.setNearestNeighbors(15);
-		oversampler2.setPercentage(neutral_count/(2*pos_count) -1.0);//set positive=2:1
+		oversampler2.setPercentage(30);
 		oversampler2.setInputFormat(filteredInstance);
 
 		filteredInstance = Filter.useFilter(filteredInstance, oversampler2);
@@ -276,7 +285,7 @@ public class SentiSE {
 
 			File arffFile = new File(this.oracleFileName + ".arff");
 
-			if (!arffFile.exists()) {
+			if (!arffFile.exists()||this.isForceRcreateTrainingData()) {
 				this.generateTrainingInstance();
 			}
 			int folds = 10;
@@ -288,10 +297,15 @@ public class SentiSE {
 			double pos_precision[] = new double[folds];
 			double neg_precision[] = new double[folds];
 			double neu_precision[] = new double[folds];
+			
 
 			double pos_recall[] = new double[folds];
 			double neg_recall[] = new double[folds];
 			double neu_recall[] = new double[folds];
+			
+			double pos_fscore[] = new double[folds];
+			double neg_fscore[] = new double[folds];
+			double neu_fscore[] = new double[folds];
 
 			double accuracies[] = new double[folds];
 			double kappa[] = new double[folds];
@@ -299,6 +313,9 @@ public class SentiSE {
 			// perform cross-validation
 			Evaluation eval = new Evaluation(randData);
 			for (int n = 0; n < folds; n++) {
+				System.out.println(".............................");
+				System.out.println(".......Testing on Fold:"+n);
+				System.out.println(".........................."+n);
 				Instances train = randData.trainCV(folds, n);
 				Instances test = randData.testCV(folds, n);
 				Classifier clsCopy = Util.getClassifierByName(this.algorithm);
@@ -310,6 +327,10 @@ public class SentiSE {
 				neu_precision[n] = eval.precision(0);
 				neg_precision[n] = eval.precision(1);
 				pos_precision[n] = eval.precision(2);
+				
+				neu_fscore[n] = eval.fMeasure(0);
+				neg_fscore[n] = eval.fMeasure(1);
+				pos_fscore[n] = eval.fMeasure(2);
 
 				neu_recall[n] = eval.recall(0);
 				neg_recall[n] = eval.recall(1);
@@ -332,16 +353,24 @@ public class SentiSE {
 				System.out.println("Fmeasure(positive):" + eval.fMeasure(2));
 
 			}
-
+			
 			System.out.println("\n\n.......Average......: \n\n");
 			System.out.println("Accuracy:" + getAverage(accuracies));
 
+			System.out.println("Algorithm:"+ this.algorithm+"\n Oracle:" +this.oracleFileName);
 			System.out.println("Precision (Neutral):" + getAverage(neu_precision));
 			System.out.println("Recall (Neutral):" + getAverage(neu_recall));
+			System.out.println("F-Measure (Neutral):" + getAverage(neu_fscore));
+			
 			System.out.println("Precision (Negative):" + getAverage(neg_precision));
 			System.out.println("Recall (Negative):" + getAverage(neg_recall));
+			System.out.println("F-measure (Negative):" + getAverage(neg_fscore));
+			
 			System.out.println("Precision (Positive):" + getAverage(pos_precision));
 			System.out.println("Recall (Positive):" + getAverage(pos_recall));
+			System.out.println("F-Measure (Positive):" + getAverage(pos_fscore));
+			
+			System.out.println("Kappa" + getAverage(kappa));
 
 		} catch (Exception e) {
 			e.printStackTrace();
