@@ -60,7 +60,7 @@ public class ARFFGenerator {
 
 		data = new Instances("SentiSe", attributes, 0);
 		int length = sentiList.size();
-		System.out.println("sentilist size: "+ length);
+		//System.out.println("sentilist size: "+ length);
 		//int train=(int)(length*.8);
 		
 		for (int i = 0; i <length; i++) {

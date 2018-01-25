@@ -57,7 +57,7 @@ public class SimpleParseTree {
 		 Properties props = new Properties();
 		 props.setProperty("annotators","tokenize, ssplit, pos, lemma, ner, parse");
 	     StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
-	     System.out.println("returning core nlp.");
+	     //System.out.println("returning core nlp.");
 	     return pipeline;
 	}
 }

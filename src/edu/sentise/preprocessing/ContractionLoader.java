@@ -12,11 +12,11 @@ import edu.sentise.util.Util;
 
 public class ContractionLoader {
 
-	private static HashMap<String, String> contractionMap = null;
+	private HashMap<String, String> contractionMap = null;
 
-	private static void loadContractionData() {
+	private void loadContractionData(String fileName) {
 		contractionMap = new HashMap<String, String>();
-		BufferedReader bufferedReader = Util.getBufferedreaderByFileName(Constants.CONTRACTION_TEXT_FILE_NAME);
+		BufferedReader bufferedReader = Util.getBufferedreaderByFileName(fileName);
 
 		try {
 			String line = "";
@@ -38,14 +38,15 @@ public class ContractionLoader {
 
 	}
 
-	public static String preprocessContractions(String text) {
-		if (contractionMap == null)
-			loadContractionData();
+	public ContractionLoader(String fileName) {
+		loadContractionData(fileName);
+	}
 
+	public String preprocessContractions(String text) {
 		return applyContraction(text.toLowerCase());
 	}
 
-	public static ArrayList<SentimentData> preprocessContractions(ArrayList<SentimentData> sentiList) {
+	public ArrayList<SentimentData> preprocessContractions(ArrayList<SentimentData> sentiList) {
 
 		for (int i = 0; i < sentiList.size(); i++) {
 			sentiList.get(i).setText(preprocessContractions(sentiList.get(i).getText()));
@@ -53,7 +54,7 @@ public class ContractionLoader {
 		return sentiList;
 	}
 
-	private static String applyContraction(String text) {
+	private String applyContraction(String text) {
 
 		HashSet<String> keySet = new HashSet<String>(contractionMap.keySet());
 		for (String key : keySet) {

@@ -11,12 +11,12 @@ import edu.sentise.util.Util;
 
 public class EmoticonLoader {
 
-	private static HashMap<String, String> emoticonMap = null;
+	private  HashMap<String, String> emoticonMap = null;
 
-	private static void loadEmoticons() {
+	private  void loadEmoticons(String fileName) {
 		emoticonMap = new HashMap<String, String>();
 		try {
-			BufferedReader bufferedReader = Util.getBufferedreaderByFileName(Constants.EMOTICONS_FILE_NAME);
+			BufferedReader bufferedReader = Util.getBufferedreaderByFileName(fileName);
 			String line = "";
 			while ((line = bufferedReader.readLine()) != null) {
 
@@ -36,20 +36,20 @@ public class EmoticonLoader {
 
 	}
 
-	public static String preprocessEmoticons(String text) {
-		if (emoticonMap == null)
-			loadEmoticons();
-
+	public EmoticonLoader(String fileName) {
+		loadEmoticons(fileName);
+	}
+	public  String preprocessEmoticons(String text) {
 		return replaceEmoticon(text.toLowerCase());
 	}
 
-	public static ArrayList<SentimentData> preprocessEmoticons(ArrayList<SentimentData> sentiList) {
+	public  ArrayList<SentimentData> preprocessEmoticons(ArrayList<SentimentData> sentiList) {
 		for (int i = 0; i < sentiList.size(); i++)
 			sentiList.get(i).setText(preprocessEmoticons(sentiList.get(i).getText()));
 		return sentiList;
 	}
 
-	private static String replaceEmoticon(String text) {
+	private  String replaceEmoticon(String text) {
 
 		HashSet<String> keySet = new HashSet<String>(emoticonMap.keySet());
 		for (String key : keySet) {

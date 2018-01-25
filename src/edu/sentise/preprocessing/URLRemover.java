@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import edu.sentise.model.SentimentData;
 
@@ -28,7 +29,12 @@ public class URLRemover {
 		while (m.find()) {
 			String urlStr = m.group();
 
-			text = text.replaceAll(urlStr, "");
+			try {
+				text = text.replaceAll(urlStr, "");
+			} catch (PatternSyntaxException e) {
+				
+				
+			}
 		}
 		return text;
 	}

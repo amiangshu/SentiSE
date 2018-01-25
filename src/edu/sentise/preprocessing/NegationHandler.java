@@ -31,15 +31,24 @@ public class NegationHandler {
 		for (int i = 0; i < length; i++) {
 
 			sentimentData.get(i).setText(handleNegation(sentimentData.get(i).getText()));
+			
+			if((i%100) ==0)
+			{
+				System.out.println("Negation preprocessed:"+i +" of "+length);
+			}
 		}
 
 		return sentimentData;
 	}
+	
+	public  static void initCoreNLP() {
+		if (pipeline == null)
+			pipeline = SimpleParseTree.getCoreNLP();	
+	}
 
 	public static String handleNegation(String text) {
-		if (pipeline == null)
-			pipeline = SimpleParseTree.getCoreNLP();
-
+		
+		initCoreNLP();
 		if (isNegationAvailable(text)) {
 
 			return getNegatedSentiment(text);

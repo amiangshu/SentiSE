@@ -12,19 +12,10 @@ import weka.core.Instances;
 
 public class ARFFTestGenerator {
 
-	public static void generateARFForWeka(ArrayList<SentimentData> sentiList) {
-		// Collections.shuffle(sentiList);
-		Instances instances = generateTestData(sentiList);
-		writeInFile(instances);
-		// instances=generateTestData(sentiList);
-		// writeInFileTest(instances);
-
-	}
-
-	public static void writeInFile(Instances instances) {
+	public static void writeInFile(Instances instances, String fileName) {
 		try {
 
-			BufferedWriter bufferedWriter = Util.getBufferedWriterByFileName(TestUtils.TEST_DATA_ARFF_FILE);
+			BufferedWriter bufferedWriter = Util.getBufferedWriterByFileName(fileName);
 			bufferedWriter.write(instances.toString());
 			Util.closeBufferedWriter(bufferedWriter);
 		} catch (IOException e) {
@@ -45,7 +36,7 @@ public class ARFFTestGenerator {
 
 		data = new Instances("SentiSe", attributes, 0);
 		int length = sentiList.size();
-		System.out.println("sentilist size: " + length);
+		//System.out.println("sentilist size: " + length);
 
 		for (int i = 0; i < length; i++) {
 			double[] vals = new double[data.numAttributes()];
@@ -67,9 +58,7 @@ public class ARFFTestGenerator {
 
 		data = new Instances("SentiSe", attributes, 0);
 		int length = sentiList.size();
-		System.out.println("sentilist size: " + length);
-		// int train=(int)(length*.8);
-
+		
 		for (int i = 0; i < length; i++) {
 			double[] vals = new double[data.numAttributes()];
 

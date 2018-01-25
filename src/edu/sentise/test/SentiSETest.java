@@ -35,9 +35,9 @@ public class SentiSETest {
 	{
 		sentimentDataList= SentimentData.parseSentimentData(TestUtils.TEST_DATA_FILE);
 		System.out.println(sentimentDataList.size());
-		sentimentDataList=ContractionLoader.preprocessContractions(sentimentDataList);
+		//sentimentDataList=ContractionLoader.preprocessContractions(sentimentDataList);
 		sentimentDataList=URLRemover.removeURL(sentimentDataList);
-		sentimentDataList=EmoticonLoader.preprocessEmoticons(sentimentDataList);
+		//sentimentDataList=EmoticonLoader.preprocessEmoticons(sentimentDataList);
 		/*for(int i = 0;i < sentimentDataList.size();i++)
 		{
 			System.out.println(sentimentDataList.get(i).getText());
@@ -46,7 +46,7 @@ public class SentiSETest {
 		// so that its easier to be compitable with weka. Shuffled the sentilist and divided 80% and 20% of the
 		//data for train and test respectively
 		sentimentDataList=NegationHandler.handleNegation(sentimentDataList);
-		ARFFTestGenerator.generateARFForWeka(sentimentDataList);
+	//	ARFFTestGenerator.generateARFForWeka(sentimentDataList);
 		SentiSEModelEvaluator.evaluateSentiSEModel();
 	}
 	private static void testFromARFFile()
