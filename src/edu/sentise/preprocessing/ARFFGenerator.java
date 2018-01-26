@@ -3,7 +3,6 @@ package edu.sentise.preprocessing;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import edu.sentise.model.SentimentData;
 import edu.sentise.util.Constants;

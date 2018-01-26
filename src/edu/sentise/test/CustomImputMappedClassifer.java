@@ -1,9 +1,6 @@
 package edu.sentise.test;
 
-import org.apache.poi.util.SystemOutLogger;
-
 import weka.classifiers.misc.InputMappedClassifier;
-import weka.core.DenseInstance;
 import weka.core.Instance;
 
 public class CustomImputMappedClassifer extends InputMappedClassifier {

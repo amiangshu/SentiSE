@@ -1,7 +1,5 @@
 package edu.sentise.preprocessing;
 
-import java.io.IOException;
-
 import edu.stanford.nlp.tagger.maxent.MaxentTagger;
 
 public class POSTagger {

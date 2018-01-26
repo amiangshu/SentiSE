@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import edu.sentise.util.DataLists;
-import weka.core.Stopwords;
 import weka.core.stopwords.StopwordsHandler;
 
 public class MyStopWordsHandler implements StopwordsHandler {

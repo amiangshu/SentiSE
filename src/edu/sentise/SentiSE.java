@@ -11,16 +11,14 @@ import edu.sentise.preprocessing.ContractionLoader;
 import edu.sentise.preprocessing.EmoticonLoader;
 import edu.sentise.preprocessing.MyStopWordsHandler;
 import edu.sentise.preprocessing.NegationHandler;
-
 import edu.sentise.preprocessing.URLRemover;
 import edu.sentise.test.ARFFTestGenerator;
-import edu.sentise.test2.WekaClassifierBuilder;
 import edu.sentise.util.Constants;
 import edu.sentise.util.Util;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
-import weka.core.AttributeStats;
 import weka.core.Instances;
+import weka.core.converters.ConverterUtils.DataSource;
 import weka.core.stemmers.SnowballStemmer;
 import weka.core.tokenizers.WordTokenizer;
 import weka.filters.Filter;
@@ -136,11 +134,13 @@ public class SentiSE {
 
 		System.out.println("Converting string to vector..");
 		Instances filteredInstance = generateFilteredInstance(rawInstance, true);
-		filteredInstance.setClassIndex(0);
-		this.trainingInstances = applyOversampling(filteredInstance);
-		ARFFTestGenerator.writeInFile(this.trainingInstances, this.oracleFileName + ".arff");
+		
+		filteredInstance.setClassIndex(0);		
+		ARFFTestGenerator.writeInFile(filteredInstance, this.oracleFileName + ".arff");
 
-		System.out.println("Finished rebuilding classifier..");
+		this.trainingInstances = applyOversampling(filteredInstance);
+		
+		//System.out.println("Finished rebuilding classifier..");
 
 	}
 
@@ -222,6 +222,7 @@ public class SentiSE {
 		SentiSE instance = new SentiSE();
 
 		try {
+			instance.setForceRcreateTrainingData(true);
 			instance.tenFoldCV();
 
 		} catch (Exception e1) {
@@ -283,10 +284,17 @@ public class SentiSE {
 
 		try {
 
-			File arffFile = new File(this.oracleFileName + ".arff");
+			String arffFileName=this.oracleFileName + ".arff";
+			File arffFile = new File(arffFileName);
 
 			if (!arffFile.exists()||this.isForceRcreateTrainingData()) {
 				this.generateTrainingInstance();
+			}
+			else {
+				DataSource dataSource = new DataSource(arffFileName);
+				this.trainingInstances = dataSource.getDataSet();
+				this.trainingInstances.setClassIndex(0);
+				
 			}
 			int folds = 10;
 
@@ -315,10 +323,10 @@ public class SentiSE {
 			for (int n = 0; n < folds; n++) {
 				System.out.println(".............................");
 				System.out.println(".......Testing on Fold:"+n);
-				System.out.println(".........................."+n);
-				Instances train = randData.trainCV(folds, n);
+				System.out.println("..........................");
+				Instances train = this.applyOversampling(randData.trainCV(folds, n));
 				Instances test = randData.testCV(folds, n);
-				Classifier clsCopy = Util.getClassifierByName(this.algorithm);
+				Classifier clsCopy = WekaClassifierBuilder.getClassifierForAlgorithm(this.algorithm);
 				clsCopy.buildClassifier(train);
 				eval.evaluateModel(clsCopy, test);
 

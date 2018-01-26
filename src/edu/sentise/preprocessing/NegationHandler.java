@@ -5,9 +5,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Properties;
 
-
-import edu.sentise.SimpleParseTree;
 import edu.sentise.model.SentimentData;
 import edu.sentise.util.DataLists;
 import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
@@ -34,7 +33,7 @@ public class NegationHandler {
 			
 			if((i%100) ==0)
 			{
-				System.out.println("Negation preprocessed:"+i +" of "+length);
+				System.out.println("Negation processed:"+i +" of "+length);
 			}
 		}
 
@@ -43,9 +42,19 @@ public class NegationHandler {
 	
 	public  static void initCoreNLP() {
 		if (pipeline == null)
-			pipeline = SimpleParseTree.getCoreNLP();	
+			pipeline = getCoreNLP();	
 	}
 
+	
+		public static StanfordCoreNLP getCoreNLP()
+		{
+			 Properties props = new Properties();
+			 props.setProperty("annotators","tokenize, ssplit, pos, lemma, ner, parse");
+		     StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+		     //System.out.println("returning core nlp.");
+		     return pipeline;
+	}
+	
 	public static String handleNegation(String text) {
 		
 		initCoreNLP();
