@@ -14,7 +14,6 @@ import edu.sentise.preprocessing.NegationHandler;
 import edu.sentise.preprocessing.URLRemover;
 import edu.sentise.test.ARFFTestGenerator;
 import edu.sentise.util.Constants;
-import edu.sentise.util.Util;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.core.Instances;
@@ -41,7 +40,7 @@ public class SentiSE {
 
 	private boolean preprocessNegation = true;
 	private boolean crossValidate = false;
-	private boolean forceRcreateTrainingData=false;
+	private boolean forceRcreateTrainingData = false;
 
 	Instances trainingInstances = null;
 
@@ -116,7 +115,7 @@ public class SentiSE {
 		classMapping.put(2, 1);
 	}
 
-	public void generateTrainingInstance() throws Exception {
+	public void generateTrainingInstance(boolean oversample) throws Exception {
 
 		System.out.println("Reading oracle file...");
 		ArrayList<SentimentData> sentimentDataList = SentimentData.parseSentimentData(Constants.ORACLE_FILE_NAME);
@@ -130,49 +129,63 @@ public class SentiSE {
 
 		System.out.println("Converting to WEKA format ..");
 		Instances rawInstance = ARFFTestGenerator.generateTestData(sentimentDataList);
-		ARFFTestGenerator.writeInFile(rawInstance, Constants.ARFF_ORACLE_FILE_NAME);
 
 		System.out.println("Converting string to vector..");
-		Instances filteredInstance = generateFilteredInstance(rawInstance, true);
-		
-		filteredInstance.setClassIndex(0);		
-		ARFFTestGenerator.writeInFile(filteredInstance, this.oracleFileName + ".arff");
+		this.trainingInstances = generateFilteredInstance(rawInstance, true);
 
-		this.trainingInstances = applyOversampling(filteredInstance);
-		
-		//System.out.println("Finished rebuilding classifier..");
+		this.trainingInstances.setClassIndex(0);
 
+		storeAsARFF(this.trainingInstances, this.oracleFileName + ".arff");
+
+	}
+
+	private void storeAsARFF(Instances instance, String fileName) {
+
+		ARFFTestGenerator.writeInFile(this.trainingInstances, fileName);
+		System.out.println("Instance saved as:" + fileName);
+	}
+
+	private Instances loadInstanceFromARFF(String arffFileName) throws Exception {
+		DataSource dataSource = new DataSource(arffFileName);
+		Instances loadedInstance = dataSource.getDataSet();
+		loadedInstance.setClassIndex(0);
+		System.out.println("Instance loaded from:" + arffFileName);
+		return loadedInstance;
 	}
 
 	public void reloadClassifier() throws Exception {
 
-		this.generateTrainingInstance();
+		this.generateTrainingInstance(true);
+		trainingInstances = applyOversampling(trainingInstances);
 		System.out.println("Training classifier..");
 		this.classifier = WekaClassifierBuilder.createClassifierFromInstance(this.algorithm, this.trainingInstances);
-		WekaClassifierBuilder.storeClassfierModel(this.algorithm + "." + this.oracleFileName, this.classifier);
+		WekaClassifierBuilder.storeClassfierModel("models/" + this.algorithm + "." + this.oracleFileName + ".model",
+				this.classifier);
 
 	}
 
 	public Instances applyOversampling(Instances filteredInstance) throws Exception {
-		int []classCounts=filteredInstance.attributeStats(0).nominalCounts;
-		int pos_count=classCounts[2];
-		int neg_count=classCounts[1];
-		int neutral_count=classCounts[0];
+		int count[] = filteredInstance.attributeStats(0).nominalCounts;
+		System.out.println("Instances 0->" + count[0] + ", -1->" + count[1] + ", 1->" + count[2]);
+
+		System.out.println("Creating synthetic negative samples");
 		SMOTE oversampler = new SMOTE();
 		oversampler.setNearestNeighbors(15);
-		oversampler.setClassValue("3");
-		oversampler.setPercentage((100*neutral_count)/(2*pos_count) -1.0);//set positive=2:1
+		oversampler.setClassValue("2");
+
 		oversampler.setInputFormat(filteredInstance);
 		filteredInstance = Filter.useFilter(filteredInstance, oversampler);
-
+		System.out.println("Creating synthetic positive samples");
 		SMOTE oversampler2 = new SMOTE();
-		oversampler2.setClassValue("2");
+		oversampler2.setClassValue("3");
 		oversampler2.setNearestNeighbors(15);
-		oversampler2.setPercentage(30);
+		oversampler2.setPercentage(40);
 		oversampler2.setInputFormat(filteredInstance);
 
 		filteredInstance = Filter.useFilter(filteredInstance, oversampler2);
+		System.out.println("Finished oversampling..");
 		return filteredInstance;
+
 	}
 
 	public int[] getSentimentScore(ArrayList<String> sentences) throws Exception {
@@ -192,56 +205,6 @@ public class SentiSE {
 
 		}
 		return computedScores;
-	}
-
-	public static void main(String[] args) {
-
-		String[] testSentences = { "I'm not sure I entirely understand what you are saying. "
-				+ "However, looking at file_linux_test.go I'm pretty sure an interface type would be easier for people to use.",
-				"I think it always returns it as 0.",
-				"If the steal does not commit, there's no need to clean up _p_'s runq. If it doesn't commit,"
-						+ " runqsteal just won't update runqtail, so it won't matter what's in _p_.runq.",
-				"Please change the subject: s:internal/syscall/windows:internal/syscall/windows/registry:",
-				"I don't think the name Sockaddr is a good choice here, since it means something very different in "
-						+ "the C world.  What do you think of SocketConnAddr instead?",
-				"could we use sed here? " + " https://go-review.googlesource.com/#/c/10112/1/src/syscall/mkall.sh "
-						+ " it will make the location of the build tag consistent across files (always before the package statement).",
-				"Is the implementation hiding here important? This would be simpler still as: "
-						+ " typedef struct GoSeq {   uint8_t *buf;   size_t off;   size_t len;   size_t cap; } GoSeq;",
-				"Make sure you test both ways, or a bug that made it always return false would cause the test to pass. "
-						+ " assertTrue(Testpkg.Negate(false)); " + " assertFalse(Testpkg.Negate(true)); "
-						+ " If you want to use the assertEquals form, be sure the message makes clear what actually happened and "
-						+ "what was expected (e.g. Negate(true) != false). ",
-				"I think the comments here are a bad sign... I sent us down an unfortunate slippery slope  we are a search engine library!  don't put shit in the index directory! or we will delete your shit. dead simple.",
-				" Matt... I'm an idiot  I used the wrong patch. Sigh.", "Adrian   thanks for the patch: rev. ",
-				"Ah  damn  I thought it was fixed :/  Guillaume ? ",
-				"You cannot design an API for logging. We should take out the ,\"command\" argument and have generic errors. It's easy looking at vdsm.log to discover what was the command executed before this failure.",
-				"There is no VDSM action here, only database - just make the command transactive, and save yourself all this hassle."
-
-		};
-		SentiSE instance = new SentiSE();
-
-		try {
-			instance.setForceRcreateTrainingData(true);
-			instance.tenFoldCV();
-
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		try {
-			int[] scores = instance.getSentimentScore(new ArrayList<String>(Arrays.asList(testSentences)));
-
-			for (int i = 0; i < testSentences.length; i++) {
-				System.out.println(testSentences[i]);
-				System.out.println("Prediction:" + scores[i]);
-			}
-		} catch (Exception e) {
-
-			e.printStackTrace();
-		}
-
 	}
 
 	private String preprocessText(String text) {
@@ -284,17 +247,14 @@ public class SentiSE {
 
 		try {
 
-			String arffFileName=this.oracleFileName + ".arff";
+			String arffFileName = this.oracleFileName + ".arff";
 			File arffFile = new File(arffFileName);
 
-			if (!arffFile.exists()||this.isForceRcreateTrainingData()) {
-				this.generateTrainingInstance();
-			}
-			else {
-				DataSource dataSource = new DataSource(arffFileName);
-				this.trainingInstances = dataSource.getDataSet();
-				this.trainingInstances.setClassIndex(0);
-				
+			if (!arffFile.exists() || this.isForceRcreateTrainingData()) {
+				this.generateTrainingInstance(false);
+			} else {
+				this.trainingInstances = loadInstanceFromARFF(arffFileName);
+
 			}
 			int folds = 10;
 
@@ -305,12 +265,11 @@ public class SentiSE {
 			double pos_precision[] = new double[folds];
 			double neg_precision[] = new double[folds];
 			double neu_precision[] = new double[folds];
-			
 
 			double pos_recall[] = new double[folds];
 			double neg_recall[] = new double[folds];
 			double neu_recall[] = new double[folds];
-			
+
 			double pos_fscore[] = new double[folds];
 			double neg_fscore[] = new double[folds];
 			double neu_fscore[] = new double[folds];
@@ -322,11 +281,38 @@ public class SentiSE {
 			Evaluation eval = new Evaluation(randData);
 			for (int n = 0; n < folds; n++) {
 				System.out.println(".............................");
-				System.out.println(".......Testing on Fold:"+n);
+				System.out.println(".......Testing on Fold:" + n);
 				System.out.println("..........................");
-				Instances train = this.applyOversampling(randData.trainCV(folds, n));
-				Instances test = randData.testCV(folds, n);
+				File oracleFile = new File(this.oracleFileName);
+
+				File trainingFile = new File("models/cv/" + oracleFile.getName() + ".training." + n + ".arff");
+				File testFile = new File("models/cv/" + oracleFile.getName() + ".test." + n + ".arff");
+				Instances train = null, test = null;
+				boolean loadedFromCache = false;
+
+				if (!this.forceRcreateTrainingData && trainingFile.exists() && testFile.exists()) {
+					try {
+						train = loadInstanceFromARFF(trainingFile.getPath());
+						test = loadInstanceFromARFF(testFile.getPath());
+						loadedFromCache = true;
+					} catch (Exception e) {
+						e.printStackTrace();
+
+					}
+
+				}
+
+				if (!loadedFromCache) {
+
+					train = this.applyOversampling(randData.trainCV(folds, n));
+					test = randData.testCV(folds, n);
+					storeAsARFF(train, trainingFile.getPath());
+					storeAsARFF(test, testFile.getPath());
+
+				}
+
 				Classifier clsCopy = WekaClassifierBuilder.getClassifierForAlgorithm(this.algorithm);
+				System.out.println("Training classifier model..");
 				clsCopy.buildClassifier(train);
 				eval.evaluateModel(clsCopy, test);
 
@@ -335,7 +321,7 @@ public class SentiSE {
 				neu_precision[n] = eval.precision(0);
 				neg_precision[n] = eval.precision(1);
 				pos_precision[n] = eval.precision(2);
-				
+
 				neu_fscore[n] = eval.fMeasure(0);
 				neg_fscore[n] = eval.fMeasure(1);
 				pos_fscore[n] = eval.fMeasure(2);
@@ -361,23 +347,23 @@ public class SentiSE {
 				System.out.println("Fmeasure(positive):" + eval.fMeasure(2));
 
 			}
-			
+
 			System.out.println("\n\n.......Average......: \n\n");
 			System.out.println("Accuracy:" + getAverage(accuracies));
 
-			System.out.println("Algorithm:"+ this.algorithm+"\n Oracle:" +this.oracleFileName);
+			System.out.println("Algorithm:" + this.algorithm + "\n Oracle:" + this.oracleFileName);
 			System.out.println("Precision (Neutral):" + getAverage(neu_precision));
 			System.out.println("Recall (Neutral):" + getAverage(neu_recall));
 			System.out.println("F-Measure (Neutral):" + getAverage(neu_fscore));
-			
+
 			System.out.println("Precision (Negative):" + getAverage(neg_precision));
 			System.out.println("Recall (Negative):" + getAverage(neg_recall));
 			System.out.println("F-measure (Negative):" + getAverage(neg_fscore));
-			
+
 			System.out.println("Precision (Positive):" + getAverage(pos_precision));
 			System.out.println("Recall (Positive):" + getAverage(pos_recall));
 			System.out.println("F-Measure (Positive):" + getAverage(pos_fscore));
-			
+
 			System.out.println("Kappa" + getAverage(kappa));
 
 		} catch (Exception e) {
@@ -393,6 +379,58 @@ public class SentiSE {
 		// calculate average value
 		double average = sum / elements.length;
 		return average;
+	}
+
+	public static void main(String[] args) {
+
+		String[] testSentences = { "I'm not sure I entirely understand what you are saying. "
+				+ "However, looking at file_linux_test.go I'm pretty sure an interface type would be easier for people to use.",
+				"I think it always returns it as 0.",
+				"If the steal does not commit, there's no need to clean up _p_'s runq. If it doesn't commit,"
+						+ " runqsteal just won't update runqtail, so it won't matter what's in _p_.runq.",
+				"Please change the subject: s:internal/syscall/windows:internal/syscall/windows/registry:",
+				"I don't think the name Sockaddr is a good choice here, since it means something very different in "
+						+ "the C world.  What do you think of SocketConnAddr instead?",
+				"could we use sed here? " + " https://go-review.googlesource.com/#/c/10112/1/src/syscall/mkall.sh "
+						+ " it will make the location of the build tag consistent across files (always before the package statement).",
+				"Is the implementation hiding here important? This would be simpler still as: "
+						+ " typedef struct GoSeq {   uint8_t *buf;   size_t off;   size_t len;   size_t cap; } GoSeq;",
+				"Make sure you test both ways, or a bug that made it always return false would cause the test to pass. "
+						+ " assertTrue(Testpkg.Negate(false)); " + " assertFalse(Testpkg.Negate(true)); "
+						+ " If you want to use the assertEquals form, be sure the message makes clear what actually happened and "
+						+ "what was expected (e.g. Negate(true) != false). ",
+				"I think the comments here are a bad sign... I sent us down an unfortunate slippery slope  we are a search engine library!  don't put shit in the index directory! or we will delete your shit. dead simple.",
+				" Matt... I'm an idiot  I used the wrong patch. Sigh.", "Adrian   thanks for the patch: rev. ",
+				"Ah  damn  I thought it was fixed :/  Guillaume ? ",
+				"You cannot design an API for logging. We should take out the ,\"command\" argument and have generic errors. It's easy looking at vdsm.log to discover what was the command executed before this failure.",
+				"There is no VDSM action here, only database - just make the command transactive, and save yourself all this hassle."
+
+		};
+		SentiSE instance = new SentiSE();
+		if (args.length > 0)
+			instance.setAlgorithm(args[0].trim());
+
+		try {
+			instance.setForceRcreateTrainingData(true);
+			instance.tenFoldCV();
+
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		try {
+			int[] scores = instance.getSentimentScore(new ArrayList<String>(Arrays.asList(testSentences)));
+
+			for (int i = 0; i < testSentences.length; i++) {
+				System.out.println(testSentences[i]);
+				System.out.println("Prediction:" + scores[i]);
+			}
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
 	}
 
 }

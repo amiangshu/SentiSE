@@ -5,10 +5,9 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import edu.sentise.util.Util;
 import weka.classifiers.Classifier;
-import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.bayes.NaiveBayesMultinomial;
+import weka.classifiers.functions.SMO;
 import weka.classifiers.meta.AdaBoostM1;
 import weka.classifiers.misc.InputMappedClassifier;
 import weka.classifiers.trees.J48;
@@ -52,6 +51,7 @@ public class WekaClassifierBuilder {
 			ObjectInputStream ois = new ObjectInputStream(fis);
 
 			Classifier savedClassifier = (Classifier) ois.readObject();
+			System.out.println("Loaded classifier model from: "+fileName);
 			ois.close();
 
 			return savedClassifier;
@@ -64,14 +64,22 @@ public class WekaClassifierBuilder {
 	
 	public static Classifier getClassifierForAlgorithm(String algo) {
 		if (algo.equals("NB")) {
+			
+			System.out.println("Algorithm: Multinomial Naive Bayes." );
 			return new NaiveBayesMultinomial();
-		} else if (algo.equals("J48")) {
+		} else if (algo.equals("DT")) {
+			System.out.println("Algorithm: Decision tree" );
 			return new J48();
+			
 		}
 		else if (algo.equals("ADB")) {
 			return new AdaBoostM1();
 		}
+		else if (algo.equals("SVM")) {
+			return new SMO();
+		}
 		else if (algo.equals("RF")) {
+			System.out.println("Algorithm: Random Forest" );
 			RandomForest classifier = new RandomForest();
 			try {
 				classifier.setOptions(
