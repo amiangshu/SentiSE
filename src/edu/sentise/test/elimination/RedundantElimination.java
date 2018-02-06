@@ -24,7 +24,7 @@ import weka.filters.unsupervised.attribute.StringToWordVector;
 public class RedundantElimination {
 
 	private static String algo="RF";
-	private static int folds=2;
+	private static int folds=10;
 	
 	private static String emoticonDictionary = Constants.EMOTICONS_FILE_NAME;
 	private static String contractionDictionary = Constants.CONTRACTION_TEXT_FILE_NAME;

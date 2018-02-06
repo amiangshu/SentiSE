@@ -4817,3 +4817,405 @@ instance: 199 i think it is time to just close this issue.  negative: 2 neutral:
 
 instance: 200 i think the correct resolution is to ensure that the prefix stack mechanism  gets reset each time the xmlreader is used.  negative: 0 neutral: 1 positive: 1
 
+instance: 0 -lrb- in this particular case hoss clearly intended to use the no-no word as an intensifier and not to NOT_stir shit . -rrb- negative: 0 neutral: 1 positive: 9
+
+instance: 1  forget the patch for the moment.  negative: 0 neutral: 10 positive: 0
+
+instance: 2 i think the comments here are a bad sign ... i sent us down an unfortunate slippery slope we are a search engine library !NOT_do not NOT_put shit in the index directory !or we will delete your shit .dead simple . negative: 0 neutral: 10 positive: 0
+
+instance: 3  i used to be the latter  but then i went to law school and got a degree in this shit.   negative: 0 neutral: 4 positive: 6
+
+instance: 4  idiot yeah  i was on that idiot-path for a good while but commons-lang is a hairball  at least where this hashcode making and equals is concerned.  negative: 0 neutral: 10 positive: 0
+
+instance: 5  if you want to make these optimizations  fix the apis so its intuitive  otherwise  no way.  negative: 9 neutral: 0 positive: 1
+
+instance: 6 jira _ i wish you NOT_did not NOT_suck NOT_so NOT_much . negative: 0 neutral: 10 positive: 0
+
+instance: 7  matt... i am an idiot  i used the wrong patch. sigh.  negative: 0 neutral: 3 positive: 7
+
+instance: 8  oleg  please accept that my "logical" is different from your "logical".  negative: 0 neutral: 10 positive: 0
+
+instance: 9  that is some freaky shit ...  negative: 0 neutral: 10 positive: 0
+
+instance: 10  the samples you gave are different.  negative: 0 neutral: 10 positive: 0
+
+instance: 11 we NOT_should not NOT_invoke the NOT_global NOT_synced fieldnumbers shit for every element only when the setting actually changes negative: 0 neutral: 10 positive: 0
+
+instance: 12 (back from holidays  so a bit delayed  but) i confirm andrzej's suggestion_- a plain-text only summarized is ideal for clustering for example.  negative: 0 neutral: 10 positive: 0
+
+instance: 13 -lrb- do nothing negativesentiment are you serious about that ? negative: 0 neutral: 10 positive: 0
+
+instance: 14 (how bad is this?  negative: 0 neutral: 10 positive: 0
+
+instance: 15 -lrb- i NOT_could not NOT_get what NOT_keyword means . -rrb- negative: 0 neutral: 9 positive: 1
+
+instance: 16 (sorry if that was confusing)  negative: 0 neutral: 10 positive: 0
+
+instance: 17 * release of the framework.  negative: 0 neutral: 10 positive: 0
+
+instance: 18 * replaced treemap with an array of final ` segment ' objects ** -lrb- now very slightly faster than trunk -rrb- * rebased for trunk * removed the patch renaming sstablereadertest to segmentedfiletest i NOT_did not NOT_remove the builder pattern because the alternative seems pretty ugly -lrb- copying the segments array for every append -rrb- . negative: 0 neutral: 10 positive: 0
+
+instance: 19 *damn*  i forgot.  negative: 0 neutral: 10 positive: 0
+
+instance: 20 *sorry*  negative: 0 neutral: 10 positive: 0
+
+instance: 21   PositiveSentiment   sorry about that.  negative: 0 neutral: 10 positive: 0
+
+instance: 22 [~cmccabe]: oh  hell no!  negative: 0 neutral: 10 positive: 0
+
+instance: 23 [~shazron]sorry  that was weird.  negative: 0 neutral: 10 positive: 0
+
+instance: 24 {quote} searcher.getatomicreader().getsorteddocvalues(uniquekey); {quote}  this is a performance killer.  negative: 0 neutral: 10 positive: 0
+
+instance: 25 {quote}you are messing down deep below hbase in dfs.  negative: 0 neutral: 8 positive: 2
+
+instance: 26 +1 -lrb- damn intellij it NOT_is not NOT_like patch format NOT_has not NOT_been NOT_standard for years -rrb- negative: 0 neutral: 10 positive: 0
+
+instance: 27 +1 for this: my bad.  negative: 0 neutral: 10 positive: 0
+
+instance: 28 <gmcdonald>   my bad   negative: 0 neutral: 10 positive: 0
+
+instance: 29 > i hated that aspect of working for commercial companies.  negative: 0 neutral: 10 positive: 0
+
+instance: 30 > then we NOT_do not NOT_save io by limiting the buffer size to 1 kb i am confused by this . negative: 0 neutral: 10 positive: 0
+
+instance: 31 > we cannot let fear of back-compat prevent us from making progress.  negative: 0 neutral: 10 positive: 0
+
+instance: 32 -1 to jar hell.  negative: 0 neutral: 10 positive: 0
+
+instance: 33 2 5 hours gone.  negative: 0 neutral: 10 positive: 0
+
+instance: 34 a feature with wrong functionality is as bad as if not NOT_worse than a NOT_bad performance . negative: 0 neutral: 10 positive: 0
+
+instance: 35 a stupid bug in a patch that is already applied.  negative: 0 neutral: 10 positive: 0
+
+instance: 36 aaarrggh  how stupid of mine  to have a system.out  again!  negative: 0 neutral: 10 positive: 0
+
+instance: 37 aaron  sorry about this.  negative: 0 neutral: 10 positive: 0
+
+instance: 38 actually i NOT_do not NOT_want to NOT_specify the encoding because i NOT_do not NOT_care how the data is transported to me . negative: 0 neutral: 0 positive: 10
+
+instance: 39 actually that is what this change did  sorry for the noise.  negative: 0 neutral: 6 positive: 4
+
+instance: 40 ah  damn  i thought it was fixed   NegativeSentiment    guillaume ?  negative: 0 neutral: 10 positive: 0
+
+instance: 41 ah  sorry i misunderstood you.  negative: 0 neutral: 10 positive: 0
+
+instance: 42 ah  that was my bad.  negative: 0 neutral: 10 positive: 0
+
+instance: 43 ah  too bad.  negative: 0 neutral: 10 positive: 0
+
+instance: 44 ah_ my bad.  negative: 0 neutral: 10 positive: 0
+
+instance: 45 all i am trying to say is that it is pretty easy to end up in propagation failure hell here or change something else that blows things up for use cases that NOT_are not NOT_foreseen . negative: 0 neutral: 0 positive: 10
+
+instance: 46 also  your username was stupidly named and confusing  so i deleted it and created a new one more appropriate.  negative: 0 neutral: 10 positive: 0
+
+instance: 47 am i doing something stupid here?  negative: 0 neutral: 10 positive: 0
+
+instance: 48 an output connector should also have a say in what urls it will accept.  negative: 0 neutral: 10 positive: 0
+
+instance: 49 and boy  hell broke loose ;)  so... the biggest issue i am facing is indeed with random sharing across threads.  negative: 0 neutral: 10 positive: 0
+
+instance: 50 and debugging is hell  because the test environment needs to have the exact same loader setup.  negative: 0 neutral: 1 positive: 9
+
+instance: 51 and i think if we are going to do a sweep up of shit  we should just kill root.  negative: 10 neutral: 0 positive: 0
+
+instance: 52 and it will break ugly everything seems to work but data is never streamed to cassandra . negative: 0 neutral: 10 positive: 0
+
+instance: 53 and the current behavior is irritating.  negative: 0 neutral: 10 positive: 0
+
+instance: 54 and with a network that tolerates almost everything to get a mail somehow in the right place it is only seldom noticed -lrb- or when it is it is blamed on microsoft . negative: 0 neutral: 10 positive: 0
+
+instance: 55 another backport (for a different jira) of mine is failing and i want to see if i can figure out what might be wrong there before doing a new backport.  negative: 10 neutral: 0 positive: 0
+
+instance: 56 any word on whether it will be fixed?  negative: 0 neutral: 10 positive: 0
+
+instance: 57 app developers never do what they should positivesentiment negative: 0 neutral: 10 positive: 0
+
+instance: 58 as far as the query shit  i have no idea if solrdispatchfilter or whatever could/should do thread.currentthread().setname(x) or whatever (and maybe restore after)  negative: 0 neutral: 10 positive: 0
+
+instance: 59 aside from the job succeeding (it does not)  what effect should i be able to measure (in order to see if this is doing anything)?  negative: 0 neutral: 5 positive: 5
+
+instance: 60 bad ie.  negative: 0 neutral: 10 positive: 0
+
+instance: 61 bad memory.  negative: 0 neutral: 10 positive: 0
+
+instance: 62 bad.   negative: 0 neutral: 10 positive: 0
+
+instance: 63 because we NOT_do not NOT_care for this in cases where we there is no node that is down . negative: 0 neutral: 9 positive: 1
+
+instance: 64 bloody hell !!!  negative: 0 neutral: 10 positive: 0
+
+instance: 65 blooper after blooper_ i hate svn.  negative: 0 neutral: 10 positive: 0
+
+instance: 66 both equally bad.  negative: 0 neutral: 10 positive: 0
+
+instance: 67 bq. this is solr's fault by having a getter that does some heavy duty xml shit.  negative: 0 neutral: 10 positive: 0
+
+instance: 68 brain fart.  negative: 0 neutral: 10 positive: 0
+
+instance: 69 brandon  sorry.  negative: 0 neutral: 10 positive: 0
+
+instance: 70 btw: this is one reason why i hate this autoboxing shit since java 5. i would love to have a way to prevent it in code (forbidden checks should detect this somehow).   negative: 0 neutral: 10 positive: 0
+
+instance: 71 bug in existing testdelegationtokenrestoredonrmrestart().  negative: 0 neutral: 10 positive: 0
+
+instance: 72 bugs like this make me sad.  negative: 0 neutral: 9 positive: 1
+
+instance: 73 but even if it NOT_was not it would be totally worthless where it is at . negative: 0 neutral: 10 positive: 0
+
+instance: 74 but app developers should always explicitly set it based on their application  my guess is that a large enough group of people take the defaults that it matters.  negative: 0 neutral: 10 positive: 0
+
+instance: 75 but i will quit committing to hama then because i NOT_am not NOT_going to NOT_support NOT_only a NOT_binary format . negative: 0 neutral: 3 positive: 7
+
+instance: 76 but it NOT_was not the NOT_only issue : we also want to manage priorities between the tasks but we need to read them to get enough information to make the right priorities . negative: 8 neutral: 2 positive: 0
+
+instance: 77 but now that i think about it  it may crap out when coming back to read even on a recovered file.  negative: 0 neutral: 10 positive: 0
+
+instance: 78 but please NOT_do not NOT_say that my reasoning is bad _ because it NOT_is not . negative: 0 neutral: 1 positive: 9
+
+instance: 79 completely missed issue 614..  negative: 0 neutral: 10 positive: 0
+
+instance: 80 crap  forgot to verify that this is inconsistant with mri  it is not.  negative: 0 neutral: 9 positive: 1
+
+instance: 81 credit  of course  goes to dick.  negative: 0 neutral: 10 positive: 0
+
+instance: 82 crossing fingers...  negative: 0 neutral: 10 positive: 0
+
+instance: 83 css is really confusing sometimes.  negative: 0 neutral: 10 positive: 0
+
+instance: 84 currently the user passwords are too insecure.  negative: 0 neutral: 10 positive: 0
+
+instance: 85 damn  chuck is scary.  negative: 0 neutral: 10 positive: 0
+
+instance: 86 damn i would close this out from the fix to jbseam-3742 except the quartz and seampay examples use a custom xml namespace and the xml schema validator NOT_is not NOT_happy with that . negative: 0 neutral: 6 positive: 4
+
+instance: 87 damn it seemed it NOT_did not NOT_work . negative: 0 neutral: 10 positive: 0
+
+instance: 88 damn !  negative: 0 neutral: 10 positive: 0
+
+instance: 89 damn dyslexia!  negative: 0 neutral: 10 positive: 0
+
+instance: 90 damn it  sry lost the orientation.  negative: 1 neutral: 9 positive: 0
+
+instance: 91 damn it !  negative: 0 neutral: 10 positive: 0
+
+instance: 92 damn it.  negative: 0 neutral: 10 positive: 0
+
+instance: 93 damn maven!  negative: 0 neutral: 10 positive: 0
+
+instance: 94 damn this was assigned to you since months.  negative: 0 neutral: 10 positive: 0
+
+instance: 95 damn time has flown...  negative: 0 neutral: 10 positive: 0
+
+instance: 96 damn.  negative: 0 neutral: 10 positive: 0
+
+instance: 97 damn...  negative: 0 neutral: 10 positive: 0
+
+instance: 98 NOT_did not NOT_got the time to try it yet . negative: 0 neutral: 9 positive: 1
+
+instance: 99 django is a fullstack framework  click is not.  negative: 0 neutral: 9 positive: 1
+
+instance: 100 does this suck?  negative: 0 neutral: 6 positive: 4
+
+instance: 101 doh!  negative: 0 neutral: 10 positive: 0
+
+instance: 102 doh.  negative: 0 neutral: 10 positive: 0
+
+instance: 103 doing it at the hackathon you would have a few fellas at your shoulder to give you pointers should you get stuck.  negative: 0 neutral: 10 positive: 0
+
+instance: 104 done  sorry for all the mess on a simple patch.  negative: 0 neutral: 10 positive: 0
+
+instance: 105 NOT_do not NOT_hate me just throwing this out there . negative: 10 neutral: 0 positive: 0
+
+instance: 106 durrrh  that sucks.  negative: 0 neutral: 5 positive: 5
+
+instance: 107 especially i NOT_do not NOT_know NOT_very NOT_much about the test framework differences . negative: 0 neutral: 7 positive: 3
+
+instance: 108 excuse me for stolen assignement.  negative: 0 neutral: 10 positive: 0
+
+instance: 109 filling diags.log is bad mojo since it is never rotated . negative: 0 neutral: 10 positive: 0
+
+instance: 110 finally closing this bug from hell.  negative: 0 neutral: 10 positive: 0
+
+instance: 111 first guess: something's getting confused about reversed-ness.  negative: 0 neutral: 10 positive: 0
+
+instance: 112 fix bad patch  negative: 0 neutral: 10 positive: 0
+
+instance: 113 for some reason i NOT_could not NOT_upload the NOT_straight patch . negative: 0 neutral: 9 positive: 1
+
+instance: 114 for those of us who NOT_do not NOT_care about ivy in fact lose something _ a easy to build hbase . negative: 0 neutral: 3 positive: 7
+
+instance: 115 forget what i made(d8067).  negative: 0 neutral: 10 positive: 0
+
+instance: 116 forgot about these  sorry.  negative: 0 neutral: 10 positive: 0
+
+instance: 117 forgot asf grant.  negative: 0 neutral: 10 positive: 0
+
+instance: 118 forgot to add that i also tried this with and without hbase-5864  negative: 0 neutral: 3 positive: 7
+
+instance: 119 fuck u  negative: 0 neutral: 10 positive: 0
+
+instance: 120 gav ... -lrb- hoping i NOT_am not NOT_teaching you how to suck eggs positivesentiment -rrb- negative: 0 neutral: 2 positive: 8
+
+instance: 121 git is tricky that way.  negative: 0 neutral: 10 positive: 0
+
+instance: 122 grumble  grumble...  negative: 0 neutral: 10 positive: 0
+
+instance: 123 guys... this is so stupid...  negative: 0 neutral: 10 positive: 0
+
+instance: 124 ha sorry varun  thanks for the reminder  i will have a look at it soon...  negative: 0 neutral: 10 positive: 0
+
+instance: 125 hadoop-2949 : _ if tarball is specified hod no longer validates for the pkgs directory in gridservice-hdfs or mapred sections as these NOT_are not NOT_going to NOT_be NOT_used NOT_anyway . negative: 0 neutral: 9 positive: 1
+
+instance: 126 heh  that is one hell of a bug  275 bytes exactly  eh?  negative: 0 neutral: 10 positive: 0
+
+instance: 127 hell  this is gonna take me a lot of work to raise.  negative: 0 neutral: 10 positive: 0
+
+instance: 128 hell  unaryfunction might even be faster than all of these calls in a row.   negative: 0 neutral: 10 positive: 0
+
+instance: 129 hell or high water.  negative: 0 neutral: 10 positive: 0
+
+instance: 130 here are 2 patches ... one for adjustexamplepaths.bat & .sh and the other a new file holding 2 user libraries ... uima_lib & uima_as_lib not NOT_sure where this should go ... negative: 0 neutral: 10 positive: 0
+
+instance: 131 here is addendum to fix (sorry about build breakage)  negative: 0 neutral: 10 positive: 0
+
+instance: 132 here is quite bad.  negative: 0 neutral: 10 positive: 0
+
+instance: 133 hey sorry i NOT_did not NOT_get NOT_back to you sooner . negative: 0 neutral: 7 positive: 3
+
+instance: 134 hey vikram -- sorry about that i NOT_have not NOT_paid NOT_much attention to this issue . negative: 0 neutral: 8 positive: 2
+
+instance: 135 hi guillaume i did not NOT_have an answer right away so i sent you question to leonard rosenthol . negative: 0 neutral: 10 positive: 0
+
+instance: 136 hi marco   i changed the name of patch because it was made in java earliar  sorry for inconvenience.  negative: 1 neutral: 2 positive: 7
+
+instance: 137 hmm  that sucks.  negative: 0 neutral: 5 positive: 5
+
+instance: 138 hmm ... this is quite bad.  negative: 0 neutral: 10 positive: 0
+
+instance: 139 holy complicated-as-shit-algorithm  batman!  the complexity of our implementation vs the complexity of what we are actually doing is starting to worry me here.  negative: 0 neutral: 5 positive: 5
+
+instance: 140 holy hell  i think i found one problem with turning a bignum into anything else.  negative: 0 neutral: 10 positive: 0
+
+instance: 141 holy shit!  negative: 0 neutral: 9 positive: 1
+
+instance: 142 honestly  there is no way around this issue_ of course we must discuss and come to some solution regarding lucene/solr at this point.  negative: 0 neutral: 10 positive: 0
+
+instance: 143 how bad is it?  negative: 0 neutral: 10 positive: 0
+
+instance: 144 how on earth is it buggy?  negative: 0 neutral: 10 positive: 0
+
+instance: 145 however  i figured it was better to get it in the public domain sooner and let the iterative process do it is work.  negative: 0 neutral: 10 positive: 0
+
+instance: 146 html is quite uncomfortable to work with.  negative: 0 neutral: 10 positive: 0
+
+instance: 147 hudson is stuck.  negative: 0 neutral: 10 positive: 0
+
+instance: 148 hudson seems to be stuck on this.   negative: 0 neutral: 10 positive: 0
+
+instance: 149 huh ... i thought i did resolve this.  negative: 0 neutral: 10 positive: 0
+
+instance: 150 i abbreviated the heck out of my arguments and thinking  but damn it thats what i think   PositiveSentiment    negative: 0 neutral: 10 positive: 0
+
+instance: 151 i almost forgot  as i received the email notification on the weekend.  negative: 0 neutral: 10 positive: 0
+
+instance: 152 i always get the same stupid error.  negative: 0 neutral: 10 positive: 0
+
+instance: 153 i am an idiot_ this was a dupe of guvnor-84  negative: 0 neutral: 10 positive: 0
+
+instance: 154 i am checking out the dojo fixes and patching them in  sorry for the delay  it has been a long time   negative: 0 neutral: 10 positive: 0
+
+instance: 155 i am currently trying to get it into ajdt dev builds but my git push is timing out (damn thing!  negative: 0 neutral: 10 positive: 0
+
+instance: 156 i am new to mina and the whole environment.  negative: 0 neutral: 10 positive: 0
+
+instance: 157 i NOT_am not NOT_really NOT_sure what NOT_does the NOT_receive payment do before the shipment it NOT_does not NOT_sound as if it is doing what we expect it to do . negative: 8 neutral: 2 positive: 0
+
+instance: 158 i am planning to use this framework for some new rpcs i am adding.  negative: 0 neutral: 4 positive: 6
+
+instance: 159 i did it wrong this time.  negative: 0 neutral: 10 positive: 0
+
+instance: 160 i NOT_did not NOT_have time to do it yesterday . negative: 0 neutral: 9 positive: 1
+
+instance: 161 i NOT_did not NOT_do that because that NOT_seems NOT_bad in hive so i returned `` null '' from the operation . negative: 0 neutral: 3 positive: 7
+
+instance: 162 i NOT_did not NOT_know we needed to retain backwards config capability across 3.x to 4.x negativesentiment that sucks and it will make old code stick around longer . negative: 0 neutral: 9 positive: 1
+
+instance: 163 i disagree... and i guess i am willing to go to bat for this.  negative: 0 neutral: 10 positive: 0
+
+instance: 164 i NOT_do not NOT_care about code duplication here . negative: 0 neutral: 8 positive: 2
+
+instance: 165 i NOT_do not NOT_care if everything is NOT_pretty or not but we should at least support basic admin functionality in ie imo -lrb- though i NOT_have not NOT_used it for years for just about anything -rrb- . negative: 10 neutral: 0 positive: 0
+
+instance: 166 i NOT_do not NOT_care what we do as long as we NOT_do not NOT_change the attributes in jsp significantly . negative: 0 neutral: 9 positive: 1
+
+instance: 167 i NOT_do not NOT_have resources to hand to test this at mo. . negative: 0 neutral: 3 positive: 7
+
+instance: 168 i NOT_do not NOT_have NOT_strong opinions about it either way . negative: 0 neutral: 8 positive: 2
+
+instance: 169 i NOT_do not NOT_have to NOT_ensure that the classloader knows groovy classes * you * must do that . negative: 0 neutral: 9 positive: 1
+
+instance: 170 i do not have very much experience on branch-1 would you like to take a shot at the port ? negative: 0 neutral: 1 positive: 9
+
+instance: 171 i NOT_do not NOT_know how the hell my diff program decided to add seemingly random cr chars but i have removed them now . negative: 0 neutral: 4 positive: 6
+
+instance: 172 i NOT_do not NOT_know what NOT_just NOT_happened . negative: 0 neutral: 5 positive: 5
+
+instance: 173 i NOT_do not NOT_think there NOT_is any sense in this who cares ? negative: 0 neutral: 8 positive: 2
+
+instance: 174 i NOT_do not NOT_want one-offs like this to become lost and forgotten . negative: 0 neutral: 8 positive: 2
+
+instance: 175 i doubt that squid is so bad at it.  negative: 0 neutral: 10 positive: 0
+
+instance: 176 i found the (sad) attempt at a script you asked about and uploaded it to mapreduce-4282.  negative: 0 neutral: 10 positive: 0
+
+instance: 177 i found the class_ so there is no bug_ sorry  negative: 0 neutral: 10 positive: 0
+
+instance: 178 i have a really bad habit of not NOT_reading thru all the bug comments before asking questions . negative: 9 neutral: 1 positive: 0
+
+instance: 179 i have stupidly deleted the original test dir  but judging from the suite's output files  no output was created after 3 1/2 hours.  negative: 0 neutral: 10 positive: 0
+
+instance: 180 i have this issue  where my server and client is creating a lot of loopback threads  that i believe must be related to this issue.  negative: 0 neutral: 10 positive: 0
+
+instance: 181 i NOT_have not NOT_had any time to try re-upgrading after having to back out 2.0.8 but i will be sure to let you know how it works out as soon as i get the opportunity . negative: 0 neutral: 10 positive: 0
+
+instance: 182 i just hate having no clue what a file is really depending on ;)   negative: 4 neutral: 6 positive: 0
+
+instance: 183 i just noticed your public tweet...  bq. " wilhelmbierbaum true. fuck the avro c api."   negative: 10 neutral: 0 positive: 0
+
+instance: 184 i looked at our distributed pom.xml and they are pretty obscure.  negative: 0 neutral: 10 positive: 0
+
+instance: 185 i lost the whole morning cause hbase 's regionserver was dying with no logs no nothing ... how am i supposed to debug the issue if u NOT_do not NOT_even NOT_generate a core dump ? negative: 0 neutral: 10 positive: 0
+
+instance: 186 i meet the same problem on eclipse recently but NOT_have not NOT_figured out how to NOT_get through . negative: 0 neutral: 5 positive: 5
+
+instance: 187 i misread.  negative: 0 neutral: 10 positive: 0
+
+instance: 188 i missed the context.  negative: 0 neutral: 10 positive: 0
+
+instance: 189 i misunderstood the case and sorry for the confusion.  negative: 0 neutral: 10 positive: 0
+
+instance: 190 i must have looked at this before my morning coffee..  negative: 9 neutral: 1 positive: 0
+
+instance: 191 i opened -lsb- hadoop-3607 -rsb- to fix a wrong url but appart from that i do not there NOT_is NOT_still references to the old structure . negative: 0 neutral: 6 positive: 4
+
+instance: 192 i really NOT_do not NOT_care . negative: 0 neutral: 10 positive: 0
+
+instance: 193 i really NOT_do not NOT_know how to NOT_solve this problem . negative: 0 neutral: 10 positive: 0
+
+instance: 194 i screwed up the encoding of the stopwords file (sorry).  negative: 0 neutral: 10 positive: 0
+
+instance: 195 i should have been very careful before doing this.  negative: 5 neutral: 1 positive: 4
+
+instance: 196 i suck.  negative: 0 neutral: 5 positive: 5
+
+instance: 197 i sure as hell NOT_do not NOT_want to NOT_start NOT_attaching models for the sake of detaching them directly afterwards . negative: 0 neutral: 8 positive: 2
+
+instance: 198 i suspect it has nothing to do with the file system connector or infinispan connectors and is simply a -lrb- stupid -rrb- mistake in the federated join processor . negative: 0 neutral: 10 positive: 0
+
+instance: 199 i think it is time to just close this issue.  negative: 10 neutral: 0 positive: 0
+
+instance: 200 i think the correct resolution is to ensure that the prefix stack mechanism  gets reset each time the xmlreader is used.  negative: 0 neutral: 7 positive: 3
+
