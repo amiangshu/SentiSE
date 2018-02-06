@@ -24,7 +24,7 @@ import weka.filters.unsupervised.attribute.StringToWordVector;
 public class RedundantElimination {
 
 	private static String algo="RF";
-	private static int folds=3;
+	private static int folds=2;
 	
 	private static String emoticonDictionary = Constants.EMOTICONS_FILE_NAME;
 	private static String contractionDictionary = Constants.CONTRACTION_TEXT_FILE_NAME;
@@ -50,24 +50,29 @@ public class RedundantElimination {
 		try
 		{
 			FileWriter fw = new FileWriter(Constants.NEG_DATA_FILE_NAME,true); //the true will append the new data
-		   
+		   ArrayList<SentimentResults> sentimentResults=new ArrayList<>();
 			for(int i=0;i<size;i++)
 			{
-				int right_senti=0;
-				int wrong_senti=0;
+				int neg_senti=0;
+				int pos_senti=0;
+				int neutral_senti=0;
 				for(int j=0;j<folds;j++)
 				{
 					int score=(int)classifiers[j].classifyInstance(instances.get(i));
 					//System.out.println(score);
 					if(score == 1 )     //1 for negative
-						right_senti++;
-					else 
-						wrong_senti++;
+						neg_senti++;
+					else if(score == 0)
+						neutral_senti++;
+					else if(score == 2)
+						pos_senti++;
 				}
-				String s="instance: "+ i+" "+sentiData.get(i).getText()+" right: "+right_senti+" wrong: "+wrong_senti+"\n\n";
+				sentimentResults.add(new SentimentResults(sentiData.get(i).getText(), pos_senti, neg_senti, neutral_senti));
+				String s="instance: "+ i+" "+sentiData.get(i).getText()+" negative: "+neg_senti+" neutral: "+neutral_senti+" positive: "+pos_senti+"\n\n";
 				System.out.println(s);
 				fw.write(s);
 			}
+			ExcelWriter.writeInExcel(sentimentResults);
 			fw.close();
 		}
 		catch(Exception e)
@@ -86,8 +91,8 @@ public class RedundantElimination {
 		{
 			if(tempList.get(i).getRating()== -1)
 				sentimentDataList.add(tempList.get(i));
-		//	if(sentimentDataList.size()>200)
-			//	break;
+			if(sentimentDataList.size()>200)
+				break;
 		}
 		return sentimentDataList;
 	}
