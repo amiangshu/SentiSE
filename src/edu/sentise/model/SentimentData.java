@@ -73,7 +73,9 @@ public class SentimentData {
 
 	                }
 	                SentimentData sentimentData=new SentimentData(text, rating);
-	                sentimentDataList.add(sentimentData);
+	               // String[] data=text.split("\\s+");
+	                //if(data.length>20)
+	                	sentimentDataList.add(sentimentData);
 	                //System.out.println();
 
 	            }

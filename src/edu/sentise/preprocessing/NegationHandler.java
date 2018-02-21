@@ -58,12 +58,12 @@ public class NegationHandler {
 	public static String handleNegation(String text) {
 		
 		initCoreNLP();
-		if (isNegationAvailable(text)) {
+	//	if (isNegationAvailable(text)) {
 
 			return getNegatedSentiment(text);
 
-		}
-		return text;
+		//}
+		//return text;
 	}
 
 	public static String getNegatedSentiment(String text) {
@@ -76,7 +76,7 @@ public class NegationHandler {
 			List<Tree> leaves = new ArrayList<>();
 			leaves = tree.getLeaves(leaves);
 			Hashtable<String, String> hashTable = new Hashtable<>();
-			Hashtable<String, String> poshashTable = new Hashtable<>();
+			//Hashtable<String, String> poshashTable = new Hashtable<>();
 			// boolean isNegationFound = false;
 			// String negetedSentence = sentence.toString();
 			for (Tree leave : leaves) {
@@ -87,13 +87,14 @@ public class NegationHandler {
 					pos = pos_arr[0];
 
 				}
-				poshashTable.put(leave.label().toString(), pos);
+				//poshashTable.put(leave.label().toString(), pos);
 				// System.out.println("label: "+ leave.toString().toLowerCase()+" "+
 				// leave.label());
 				Tree parentNode = null;
 
 				if (!isAleadyChanged(leave, hashTable)) {
-					hashTable.put(leave.label().toString(), compare);
+					if(isEligiblePos(pos))
+					 hashTable.put(leave.label().toString(), compare);
 
 					if (negation_words.contains(compare)) {
 						// isNegationFound = true;
@@ -111,12 +112,12 @@ public class NegationHandler {
 			int i = 0;
 			for (Tree leave : leaves) {
 				String value = hashTable.get(leave.label().toString());
-				boolean isStopWord = stop_words.contains(value);
+				//boolean isStopWord = stop_words.contains(value);
 				if (i > 0) {
 					newText += " ";
 				}
 
-				// if(isStopWord)
+				
 				newText += value;
 				// else
 				// newText+=poshashTable.get(leave.label().toString())+"_"+value;
@@ -151,12 +152,26 @@ public class NegationHandler {
 				isNounFundAfterNegation = true;
 			if (isNounFundAfterNegation)
 				return;
+			
 			String neg = negatedWord(compare, pos);
 			// System.out.println(compare+" "+ neg);
-			hashTable.put(leave.label().toString(), neg);
+			if(isEligiblePos(pos))
+				hashTable.put(leave.label().toString(), neg);
 
 		}
 
+	}
+	/**
+	 * only verb,adverb, adjective and modals contribute to negation of a sentence.So checking eligibility of that
+	 * pos 
+	 * @param pos is the parts of speech
+	 * @return is it eligible or not
+	 */
+	private static  boolean isEligiblePos(String pos) {
+		if(pos.startsWith("RB") || pos.startsWith("MD") || pos.startsWith("VB") || pos.startsWith("JJ"))
+			return true;
+		else
+			return false;
 	}
 
 	private static boolean isNegationAvailable(String text) {

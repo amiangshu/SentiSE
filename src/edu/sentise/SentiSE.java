@@ -256,7 +256,7 @@ public class SentiSE {
 				this.trainingInstances = loadInstanceFromARFF(arffFileName);
 
 			}
-			int folds = 10;
+			int folds = 2;
 
 			Random rand = new Random(System.currentTimeMillis());
 			Instances randData = new Instances(this.trainingInstances);
@@ -306,8 +306,8 @@ public class SentiSE {
 
 					train = this.applyOversampling(randData.trainCV(folds, n));
 					test = randData.testCV(folds, n);
-					storeAsARFF(train, trainingFile.getPath());
-					storeAsARFF(test, testFile.getPath());
+					//storeAsARFF(train, trainingFile.getPath());
+					//storeAsARFF(test, testFile.getPath());
 
 				}
 

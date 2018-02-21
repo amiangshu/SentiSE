@@ -4,6 +4,9 @@ import edu.stanford.nlp.tagger.maxent.MaxentTagger;
 
 public class POSTagger {
 
+	public static void main(String[] args) {
+		addPOSToText();
+	}
 	private static String tagPartsOfSpeech(MaxentTagger tagger, String text)
 	{
 		String tagged = tagger.tagString(text);
