@@ -41,6 +41,8 @@ public class SentiSE {
 	private boolean preprocessNegation = true;
 	private boolean crossValidate = false;
 	private boolean forceRcreateTrainingData = false;
+	private boolean keepPosTag=false;
+	
 
 	Instances trainingInstances = null;
 
@@ -103,6 +105,10 @@ public class SentiSE {
 	public void setForceRcreateTrainingData(boolean forceRcreateTrainingData) {
 		this.forceRcreateTrainingData = forceRcreateTrainingData;
 	}
+	public void setKeepPosTag(boolean keep)
+	{
+		keepPosTag=keep;
+	}
 
 	public SentiSE() {
 		NegationHandler.initCoreNLP();
@@ -124,6 +130,7 @@ public class SentiSE {
 		sentimentDataList = contractionHandler.preprocessContractions(sentimentDataList);
 		sentimentDataList = URLRemover.removeURL(sentimentDataList);
 		sentimentDataList = emoticonHandler.preprocessEmoticons(sentimentDataList);
+		NegationHandler.setShouldIncludePos(keepPosTag);
 		if (preprocessNegation)
 			sentimentDataList = NegationHandler.handleNegation(sentimentDataList);
 

@@ -23,14 +23,23 @@ public class NegationHandler {
 	private static HashSet<String> stop_words = new HashSet<String>(Arrays.asList(DataLists.stop_words));
 
 	private static StanfordCoreNLP pipeline = null;
+	/**
+	 * this value determines should pos tag should be added with the word or not.
+	 */
+	private static boolean shouldIncludePos = false;
+	public static void setShouldIncludePos(boolean shouldInclude)
+	{
+	   shouldIncludePos=shouldInclude;	
+	}
 
 	public static ArrayList<SentimentData> handleNegation(ArrayList<SentimentData> sentimentData) {
 
 		int length = sentimentData.size();
 		for (int i = 0; i < length; i++) {
 
+			System.out.println(sentimentData.get(i).getText());
 			sentimentData.get(i).setText(handleNegation(sentimentData.get(i).getText()));
-			
+			System.out.println(sentimentData.get(i).getText());
 			if((i%100) ==0)
 			{
 				System.out.println("Negation processed:"+i +" of "+length);
@@ -79,9 +88,9 @@ public class NegationHandler {
 			//Hashtable<String, String> poshashTable = new Hashtable<>();
 			// boolean isNegationFound = false;
 			// String negetedSentence = sentence.toString();
-			for (Tree leave : leaves) {
-				String compare = leave.toString().toLowerCase();
-				String pos_arr[] = leave.parent(tree).toString().replace(")", "").replace("(", "").split(" ");
+			for (Tree leaf : leaves) {
+				String compare = leaf.toString().toLowerCase();
+				String pos_arr[] = leaf.parent(tree).toString().replace(")", "").replace("(", "").split(" ");
 				String pos = "";
 				if (pos_arr.length == 2) {
 					pos = pos_arr[0];
@@ -92,13 +101,15 @@ public class NegationHandler {
 				// leave.label());
 				Tree parentNode = null;
 
-				if (!isAleadyChanged(leave, hashTable)) {
-					if(isEligiblePos(pos))
-					 hashTable.put(leave.label().toString(), compare);
+				if (!isAleadyChanged(leaf, hashTable)) {
+					if(shouldIncludePos)
+					 hashTable.put(leaf.label().toString(), pos+"_"+compare);
+					else
+						hashTable.put(leaf.label().toString(), compare);
 
 					if (negation_words.contains(compare)) {
 						// isNegationFound = true;
-						parentNode = leave.parent(tree).parent(tree);
+						parentNode = leaf.parent(tree).parent(tree);
 						// System.out.println(tree);
 						// System.out.println("---");
 						// System.out.println(leave);
@@ -110,8 +121,8 @@ public class NegationHandler {
 				}
 			}
 			int i = 0;
-			for (Tree leave : leaves) {
-				String value = hashTable.get(leave.label().toString());
+			for (Tree leaf : leaves) {
+				String value = hashTable.get(leaf.label().toString());
 				//boolean isStopWord = stop_words.contains(value);
 				if (i > 0) {
 					newText += " ";
@@ -155,7 +166,9 @@ public class NegationHandler {
 			
 			String neg = negatedWord(compare, pos);
 			// System.out.println(compare+" "+ neg);
-			if(isEligiblePos(pos))
+			if(shouldIncludePos)
+				hashTable.put(leave.label().toString(), pos+"_"+neg);
+			else
 				hashTable.put(leave.label().toString(), neg);
 
 		}
@@ -167,6 +180,7 @@ public class NegationHandler {
 	 * @param pos is the parts of speech
 	 * @return is it eligible or not
 	 */
+	@Deprecated
 	private static  boolean isEligiblePos(String pos) {
 		if(pos.startsWith("RB") || pos.startsWith("MD") || pos.startsWith("VB") || pos.startsWith("JJ"))
 			return true;
