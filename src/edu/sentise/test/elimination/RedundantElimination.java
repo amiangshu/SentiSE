@@ -108,7 +108,7 @@ public class RedundantElimination {
 		sentimentDataList = URLRemover.removeURL(sentimentDataList);
 		sentimentDataList = emoticonLoader.preprocessEmoticons(sentimentDataList);
 		
-		sentimentDataList = POSUtility.handleNegation(sentimentDataList);
+		sentimentDataList = POSUtility.preprocessPOStags(sentimentDataList);
 
 		System.out.println("Converting to WEKA format ..");
 		Instances rawInstance = ARFFTestGenerator.generateTestData(sentimentDataList);

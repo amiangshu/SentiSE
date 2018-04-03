@@ -37,6 +37,7 @@ public class SentimentData {
 	}
 	public static ArrayList<SentimentData> parseSentimentData(String fileName)
 	{
+	
 		//BufferedReader bufferedReader=Util.getBufferedreaderByFileName(Constants.ORACLE_FILE_NAME);
 		ArrayList<SentimentData> sentimentDataList =  new ArrayList<>();
 		 try {
@@ -76,6 +77,9 @@ public class SentimentData {
 	               // String[] data=text.split("\\s+");
 	                //if(data.length>20)
 	                	sentimentDataList.add(sentimentData);
+	                	count++;
+	                	if(count>1000)
+	                		break;
 	                //System.out.println();
 
 	            }

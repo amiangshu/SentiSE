@@ -42,6 +42,7 @@ public class SentiSE {
 	private boolean crossValidate = false;
 	private boolean forceRcreateTrainingData = false;
 	private boolean keepPosTag=false;
+	private boolean keepOnlyImportant=true;
 	
 
 	Instances trainingInstances = null;
@@ -132,6 +133,7 @@ public class SentiSE {
 		sentimentDataList = emoticonHandler.preprocessEmoticons(sentimentDataList);
 		POSUtility.setShouldIncludePos(keepPosTag);
 		POSUtility.setHandleNegation(preprocessNegation);
+		POSUtility.setonlyKeepImportantPos(keepOnlyImportant);
 	    sentimentDataList = POSUtility.preprocessPOStags(sentimentDataList);
 
 		System.out.println("Converting to WEKA format ..");

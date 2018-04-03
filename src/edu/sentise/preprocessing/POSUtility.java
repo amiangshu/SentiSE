@@ -32,9 +32,14 @@ public class POSUtility {
 	   includePos=shouldInclude;	
 	}
 	private static boolean handleNegation = false;
-	public static void setHandleNegation(boolean handleNegation)
+	public static void setHandleNegation(boolean shouldNegate)
 	{
-		handleNegation=handleNegation;	
+		handleNegation=shouldNegate;	
+	}
+	private static boolean onlyKeepImportantPos = false;
+	public static void setonlyKeepImportantPos(boolean keepOnlyImportant)
+	{
+		onlyKeepImportantPos=keepOnlyImportant;	
 	}
 
 	public static ArrayList<SentimentData> preprocessPOStags(ArrayList<SentimentData> sentimentData) {
@@ -42,9 +47,9 @@ public class POSUtility {
 		int length = sentimentData.size();
 		for (int i = 0; i < length; i++) {
 
-			//System.out.println(sentimentData.get(i).getText());
+			System.out.println(sentimentData.get(i).getText());
 			sentimentData.get(i).setText(preprocessPOStags(sentimentData.get(i).getText()));
-			//System.out.println(sentimentData.get(i).getText());
+			System.out.println(sentimentData.get(i).getText());
 			if((i%100) ==0)
 			{
 				System.out.println("POS tag processsed processed:"+i +" of "+length);
@@ -107,10 +112,23 @@ public class POSUtility {
 				Tree parentNode = null;
 
 				if (!isAleadyChanged(leaf, hashTable)) {
-					if(includePos)
-					 hashTable.put(leaf.label().toString(), pos+"_"+compare);
+					
+					if(includePos && onlyKeepImportantPos)
+					{
+						if(isEligiblePos(pos))
+							hashTable.put(leaf.label().toString(), pos+"_"+compare);
+					}
+					else if(includePos)
+						hashTable.put(leaf.label().toString(), pos+"_"+compare);
+					else if(onlyKeepImportantPos)
+					{
+						
+						if(isEligiblePos(pos))
+							hashTable.put(leaf.label().toString(), compare);
+					}
 					else
 						hashTable.put(leaf.label().toString(), compare);
+					
 
 					if(handleNegation)
 					{
@@ -125,18 +143,23 @@ public class POSUtility {
 			}
 			int i = 0;
 			for (Tree leaf : leaves) {
+			 
 				String value = hashTable.get(leaf.label().toString());
+			
+				if(value!=null)
+				{
 				//boolean isStopWord = stop_words.contains(value);
-				if (i > 0) {
-					newText += " ";
+					if (i > 0) {
+						newText += " ";
+					}
+	
+					
+					newText += value;
+					// else
+					// newText+=poshashTable.get(leave.label().toString())+"_"+value;
+	
+					i++;
 				}
-
-				
-				newText += value;
-				// else
-				// newText+=poshashTable.get(leave.label().toString())+"_"+value;
-
-				i++;
 
 			}
 
@@ -169,8 +192,20 @@ public class POSUtility {
 			
 			String neg = negatedWord(compare, pos);
 			// System.out.println(compare+" "+ neg);
-			if(includePos)
+			if(includePos && onlyKeepImportantPos)
+			{
+				if(isEligiblePos(pos))
+					hashTable.put(leave.label().toString(), pos+"_"+neg);
+			}
+			else if(includePos)
+			{
 				hashTable.put(leave.label().toString(), pos+"_"+neg);
+			}
+			else if(onlyKeepImportantPos)
+			{
+				if(isEligiblePos(pos))
+					hashTable.put(leave.label().toString(), neg);
+			}
 			else
 				hashTable.put(leave.label().toString(), neg);
 
@@ -183,7 +218,7 @@ public class POSUtility {
 	 * @param pos is the parts of speech
 	 * @return is it eligible or not
 	 */
-	@Deprecated
+	
 	private static  boolean isEligiblePos(String pos) {
 		if(pos.startsWith("RB") || pos.startsWith("MD") || pos.startsWith("VB") || pos.startsWith("JJ"))
 			return true;
