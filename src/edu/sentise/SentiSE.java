@@ -10,7 +10,7 @@ import edu.sentise.model.SentimentData;
 import edu.sentise.preprocessing.ContractionLoader;
 import edu.sentise.preprocessing.EmoticonLoader;
 import edu.sentise.preprocessing.MyStopWordsHandler;
-import edu.sentise.preprocessing.NegationHandler;
+import edu.sentise.preprocessing.POSUtility;
 import edu.sentise.preprocessing.URLRemover;
 import edu.sentise.test.ARFFTestGenerator;
 import edu.sentise.util.Constants;
@@ -111,7 +111,7 @@ public class SentiSE {
 	}
 
 	public SentiSE() {
-		NegationHandler.initCoreNLP();
+		POSUtility.initCoreNLP();
 		emoticonHandler = new EmoticonLoader(this.emoticonDictionary);
 		contractionHandler = new ContractionLoader(this.contractionDictionary);
 		classifier = WekaClassifierBuilder.getSavedClassfier(Constants.MODEL_FILE_NAME);
@@ -130,9 +130,9 @@ public class SentiSE {
 		sentimentDataList = contractionHandler.preprocessContractions(sentimentDataList);
 		sentimentDataList = URLRemover.removeURL(sentimentDataList);
 		sentimentDataList = emoticonHandler.preprocessEmoticons(sentimentDataList);
-		NegationHandler.setShouldIncludePos(keepPosTag);
-		if (preprocessNegation)
-			sentimentDataList = NegationHandler.handleNegation(sentimentDataList);
+		POSUtility.setShouldIncludePos(keepPosTag);
+		POSUtility.setHandleNegation(preprocessNegation);
+	    sentimentDataList = POSUtility.preprocessPOStags(sentimentDataList);
 
 		System.out.println("Converting to WEKA format ..");
 		Instances rawInstance = ARFFTestGenerator.generateTestData(sentimentDataList);
@@ -218,8 +218,7 @@ public class SentiSE {
 		text = contractionHandler.preprocessContractions(text);
 		text = URLRemover.removeURL(text);
 		text = emoticonHandler.preprocessEmoticons(text);
-		if (preprocessNegation)
-			text = NegationHandler.handleNegation(text);
+		text = POSUtility.preprocessPOStags(text);
 		return text;
 	}
 
@@ -426,7 +425,7 @@ public class SentiSE {
 			e1.printStackTrace();
 		}
 
-		try {
+		/*try {
 			int[] scores = instance.getSentimentScore(new ArrayList<String>(Arrays.asList(testSentences)));
 
 			for (int i = 0; i < testSentences.length; i++) {
@@ -437,7 +436,7 @@ public class SentiSE {
 
 			e.printStackTrace();
 		}
-
+*/
 	}
 
 }

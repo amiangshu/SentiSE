@@ -16,7 +16,7 @@ import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.trees.TreeCoreAnnotations.TreeAnnotation;
 import edu.stanford.nlp.util.CoreMap;
 
-public class NegationHandler {
+public class POSUtility {
 
 	private static HashSet<String> negation_words = new HashSet<String>(Arrays.asList(DataLists.negation_words));
 	private static HashSet<String> emoticon_words = new HashSet<String>(Arrays.asList(DataLists.emoticon_words));
@@ -26,23 +26,28 @@ public class NegationHandler {
 	/**
 	 * this value determines should pos tag should be added with the word or not.
 	 */
-	private static boolean shouldIncludePos = false;
+	private static boolean includePos = false;
 	public static void setShouldIncludePos(boolean shouldInclude)
 	{
-	   shouldIncludePos=shouldInclude;	
+	   includePos=shouldInclude;	
+	}
+	private static boolean handleNegation = false;
+	public static void setHandleNegation(boolean handleNegation)
+	{
+		handleNegation=handleNegation;	
 	}
 
-	public static ArrayList<SentimentData> handleNegation(ArrayList<SentimentData> sentimentData) {
+	public static ArrayList<SentimentData> preprocessPOStags(ArrayList<SentimentData> sentimentData) {
 
 		int length = sentimentData.size();
 		for (int i = 0; i < length; i++) {
 
-			System.out.println(sentimentData.get(i).getText());
-			sentimentData.get(i).setText(handleNegation(sentimentData.get(i).getText()));
-			System.out.println(sentimentData.get(i).getText());
+			//System.out.println(sentimentData.get(i).getText());
+			sentimentData.get(i).setText(preprocessPOStags(sentimentData.get(i).getText()));
+			//System.out.println(sentimentData.get(i).getText());
 			if((i%100) ==0)
 			{
-				System.out.println("Negation processed:"+i +" of "+length);
+				System.out.println("POS tag processsed processed:"+i +" of "+length);
 			}
 		}
 
@@ -64,18 +69,18 @@ public class NegationHandler {
 		     return pipeline;
 	}
 	
-	public static String handleNegation(String text) {
+	public static String preprocessPOStags(String text) {
 		
 		initCoreNLP();
 	//	if (isNegationAvailable(text)) {
 
-			return getNegatedSentiment(text);
+			return getPosProccesedText(text);
 
 		//}
 		//return text;
 	}
 
-	public static String getNegatedSentiment(String text) {
+	public static String getPosProccesedText(String text) {
 		String newText = "";
 		Annotation annotation = new Annotation(text);
 		pipeline.annotate(annotation);
@@ -102,21 +107,19 @@ public class NegationHandler {
 				Tree parentNode = null;
 
 				if (!isAleadyChanged(leaf, hashTable)) {
-					if(shouldIncludePos)
+					if(includePos)
 					 hashTable.put(leaf.label().toString(), pos+"_"+compare);
 					else
 						hashTable.put(leaf.label().toString(), compare);
 
-					if (negation_words.contains(compare)) {
-						// isNegationFound = true;
-						parentNode = leaf.parent(tree).parent(tree);
-						// System.out.println(tree);
-						// System.out.println("---");
-						// System.out.println(leave);
-						// System.out.println(leave.parent(tree));
-						// System.out.println(parentNode);
-						getNegatedSentence(parentNode, hashTable, compare);
-						// newText+=" "+compare;
+					if(handleNegation)
+					{
+						if (negation_words.contains(compare)) {
+							// isNegationFound = true;
+							parentNode = leaf.parent(tree).parent(tree);
+							getNegatedSentence(parentNode, hashTable, compare);
+							// newText+=" "+compare;
+						}
 					}
 				}
 			}
@@ -166,7 +169,7 @@ public class NegationHandler {
 			
 			String neg = negatedWord(compare, pos);
 			// System.out.println(compare+" "+ neg);
-			if(shouldIncludePos)
+			if(includePos)
 				hashTable.put(leave.label().toString(), pos+"_"+neg);
 			else
 				hashTable.put(leave.label().toString(), neg);
