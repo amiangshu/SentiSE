@@ -21,6 +21,7 @@ public class POSUtility {
 	private static HashSet<String> negation_words = new HashSet<String>(Arrays.asList(DataLists.negation_words));
 	private static HashSet<String> emoticon_words = new HashSet<String>(Arrays.asList(DataLists.emoticon_words));
 	private static HashSet<String> stop_words = new HashSet<String>(Arrays.asList(DataLists.stop_words));
+	private static HashSet<String> intense_words = new HashSet<String>(Arrays.asList(DataLists.intense_words));
 
 	private static StanfordCoreNLP pipeline = null;
 	/**
@@ -40,6 +41,11 @@ public class POSUtility {
 	public static void setonlyKeepImportantPos(boolean keepOnlyImportant)
 	{
 		onlyKeepImportantPos=keepOnlyImportant;	
+	}
+	private static boolean includeIntenseWord = true;
+	public static void setIncludeIntenseWord(boolean inludeIntense)
+	{
+		includeIntenseWord=inludeIntense;	
 	}
 
 	public static ArrayList<SentimentData> preprocessPOStags(ArrayList<SentimentData> sentimentData) {
@@ -220,10 +226,12 @@ public class POSUtility {
 	 */
 	
 	private static  boolean isEligiblePos(String pos) {
+		if(includeIntenseWord && intense_words.contains(pos))
+			return true;
 		if(pos.startsWith("RB") || pos.startsWith("MD") || pos.startsWith("VB") || pos.startsWith("JJ"))
 			return true;
-		else
-			return false;
+		
+		return false;
 	}
 
 	private static boolean isNegationAvailable(String text) {

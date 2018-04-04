@@ -32,5 +32,11 @@ public class DataLists {
 	public static final String [] negation_words ={"not", "never", "none", "nobody", "nowhere", "neither", "barely", "hardly",
 	                                                "nothing", "rarely", "seldom", "despite" };
 	public static final String[] emoticon_words={"PositiveSentiment","NegativeSentiment"};
+	public static final String[] intense_words={
+			//positive
+			"cool","thanks","thank","good","elegant",
+			
+			//negative
+			"shit","damn","suck","sigh","idiot", "bug"};
 
 }
