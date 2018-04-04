@@ -42,7 +42,7 @@ public class POSUtility {
 	{
 		onlyKeepImportantPos=keepOnlyImportant;	
 	}
-	private static boolean includeIntenseWord = true;
+	private static boolean includeIntenseWord = false;
 	public static void setIncludeIntenseWord(boolean inludeIntense)
 	{
 		includeIntenseWord=inludeIntense;	
@@ -123,6 +123,14 @@ public class POSUtility {
 					{
 						if(isEligiblePos(pos))
 							hashTable.put(leaf.label().toString(), pos+"_"+compare);
+						else 
+							{
+							if(includeIntenseWord && isIntenseWord(compare)) {
+								hashTable.put(leaf.label().toString(), pos+"_"+compare);
+							}
+						}
+						
+							
 					}
 					else if(includePos)
 						hashTable.put(leaf.label().toString(), pos+"_"+compare);
@@ -131,6 +139,12 @@ public class POSUtility {
 						
 						if(isEligiblePos(pos))
 							hashTable.put(leaf.label().toString(), compare);
+						else 
+						{
+						if(includeIntenseWord && isIntenseWord(compare)) {
+							hashTable.put(leaf.label().toString(),compare);
+						}
+					}
 					}
 					else
 						hashTable.put(leaf.label().toString(), compare);
@@ -202,6 +216,12 @@ public class POSUtility {
 			{
 				if(isEligiblePos(pos))
 					hashTable.put(leave.label().toString(), pos+"_"+neg);
+				else 
+				{
+				if(includeIntenseWord && isIntenseWord(compare)) {
+					hashTable.put(leave.label().toString(), pos+"_"+compare);
+				}
+			}
 			}
 			else if(includePos)
 			{
@@ -211,6 +231,12 @@ public class POSUtility {
 			{
 				if(isEligiblePos(pos))
 					hashTable.put(leave.label().toString(), neg);
+				else 
+				{
+				if(includeIntenseWord && isIntenseWord(compare)) {
+					hashTable.put(leave.label().toString(),compare);
+				}
+			}
 			}
 			else
 				hashTable.put(leave.label().toString(), neg);
@@ -226,11 +252,16 @@ public class POSUtility {
 	 */
 	
 	private static  boolean isEligiblePos(String pos) {
-		if(includeIntenseWord && intense_words.contains(pos))
-			return true;
+		
 		if(pos.startsWith("RB") || pos.startsWith("MD") || pos.startsWith("VB") || pos.startsWith("JJ"))
 			return true;
 		
+		return false;
+	}
+	private static boolean isIntenseWord(String word)
+	{
+		if(intense_words.contains(word))
+			return true;
 		return false;
 	}
 
