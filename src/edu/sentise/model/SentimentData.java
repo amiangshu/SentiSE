@@ -73,7 +73,7 @@ public class SentimentData {
 	                    }
 
 	                }
-	                if(rating<2)
+	                if(rating<2 && (rating == 1 || rating == -1))
 	                {
 	                SentimentData sentimentData=new SentimentData(text, rating);
 	               // String[] data=text.split("\\s+");

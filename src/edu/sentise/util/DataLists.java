@@ -34,9 +34,9 @@ public class DataLists {
 	public static final String[] emoticon_words={"PositiveSentiment","NegativeSentiment"};
 	public static final String[] intense_words={
 			//positive
-			"cool","thanks","thank","good","elegant",
+			"cool","thanks","thank","good","elegant","pleasure","cheers","PositiveSentiment",
 			
 			//negative
-			"shit","damn","suck","sigh","idiot", "bug"};
+			"shit","damn","suck","sigh","idiot", "bug","weird","evil10=,.himsw","NegativeSentiment","crap","hell"};
 
 }
