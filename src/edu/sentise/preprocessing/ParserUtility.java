@@ -41,7 +41,7 @@ public class ParserUtility {
 		basePOSUtility=bUtility;
 	}
 	public static void main(String[] args) {
-		System.out.println(preprocessPOStags("it is impossible to name a column alias 1  if order by supports this i do not see group by cannot? "));
+		System.out.println(preprocessPOStags("Luke Sorry for late attaching the latest version"));
 	}
 	public static ArrayList<SentimentData> preprocessPOStags(ArrayList<SentimentData> sentimentData) {
 
@@ -93,6 +93,7 @@ public class ParserUtility {
 		List<CoreMap> sentences = annotation.get(SentencesAnnotation.class);
 		for (CoreMap sentence : sentences) {
 			Tree tree = sentence.get(TreeAnnotation.class);
+			
 			List<Tree> leaves = new ArrayList<>();
 			leaves = tree.getLeaves(leaves);
 			Hashtable<String, String> hashTable = new Hashtable<>();
@@ -114,7 +115,8 @@ public class ParserUtility {
 
 				if (!isAleadyChanged(leaf, hashTable)) {
 					
-					  basePOSUtility.shouldInclude(leaf.label().toString(), word, pos, hashTable);
+					  String context=leaf.parent(tree).parent(tree).value();
+					  basePOSUtility.shouldInclude(leaf.label().toString(), word, pos,context, hashTable);
 					}
 					
 					
@@ -181,7 +183,7 @@ public class ParserUtility {
 			//System.out.println(word+"  "+ pos);
 			String neg = negatedWord(word, pos);
 			
-			basePOSUtility.shouldInclude(leave.label().toString(), neg, pos,hashTable);
+			basePOSUtility.shouldInclude(leave.label().toString(), neg, pos,tree.value(),hashTable);
 
 		}
 

@@ -8,8 +8,8 @@ import edu.sentise.util.Util;
 public class KeepImportantPOSWithoutTags extends BasePOSUtility{
 
 	@Override
-	public void shouldInclude(String label,String word, String pos, Hashtable<String, String> myMap) {
-		if(Util.isEligiblePos(pos))
+	public void shouldInclude(String label,String word, String tag, String context, Hashtable<String, String> myMap) {
+		if(Util.isEligiblePos(tag))
 			myMap.put(label,word);
 		
 	}

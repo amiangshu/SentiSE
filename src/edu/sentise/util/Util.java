@@ -135,32 +135,5 @@ public class Util {
 		else
 			return word;
 	}
-	public static void getNegatedSentence(Tree tree, Hashtable<String, String> hashTable, String negatedWord, BasePOSUtility basePOSUtility) {
-
-		List<Tree> leaves = new ArrayList<>();
-		boolean isNegWordfound = false;
-		boolean isNounFundAfterNegation = false;
-		leaves = tree.getLeaves(leaves);
-		// boolean isNegationFound=false;
-		for (Tree leave : leaves) {
-			String compare = leave.toString().toLowerCase();
-			if (compare.equals(negatedWord))
-				isNegWordfound = true;
-			String pos_arr[] = leave.parent(tree).toString().replace(")", "").replace("(", "").split(" ");
-			String pos = "";
-			if (pos_arr.length == 2) {
-				pos = pos_arr[0];
-
-			}
-			if (isNegWordfound && (pos.startsWith("NN") || pos.startsWith("PR")))
-				isNounFundAfterNegation = true;
-			if (isNounFundAfterNegation)
-				return;
-			
-			String neg = negatedWord(compare, pos);
-			basePOSUtility.shouldInclude(pos_arr[0],neg, pos,hashTable);
-		}
-
-	}
-		
+	
 }

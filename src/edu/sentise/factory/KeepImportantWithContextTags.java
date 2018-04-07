@@ -3,11 +3,14 @@ package edu.sentise.factory;
 import java.util.HashMap;
 import java.util.Hashtable;
 
-public class KeepUnchanged extends BasePOSUtility{
+import edu.sentise.util.Util;
+
+public class KeepImportantWithContextTags extends BasePOSUtility{
 
 	@Override
 	public void shouldInclude(String label,String word, String tag, String context, Hashtable<String, String> myMap) {
-		myMap.put(label,word);
+		if(Util.isEligiblePos(tag))
+			myMap.put(label,context+"_"+word);
 		
 	}
 }

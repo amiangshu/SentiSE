@@ -5,5 +5,5 @@ import java.util.Hashtable;
 
 public interface WordChooser {
 
-	public void shouldInclude(String label,String word, String pos, Hashtable<String,String> myMap);
+	public void shouldInclude(String label,String word, String tag, String context, Hashtable<String,String> myMap);
 }

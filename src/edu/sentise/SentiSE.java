@@ -44,8 +44,10 @@ public class SentiSE {
 	private boolean crossValidate = false;
 	private boolean forceRcreateTrainingData = false;
 	private boolean keepPosTag=false;            //keepPosTag means add POS tags with words
-	private boolean keepOnlyImportantPos=true;      //keepOnlyImportantPos means keeping only verbs,adjectives and adverbs
+	private boolean keepOnlyImportantPos=false;      //keepOnlyImportantPos means keeping only verbs,adjectives and adverbs
 	private boolean preprocessNegation = true;       // preprocessNegation means handle the negation effects on other POS
+	private boolean keepContextTag = true;          //  keepContextTag means keeping the context information of a word like 
+	                                                // VP,ADVP or NP
 
 
 	Instances trainingInstances = null;
@@ -135,7 +137,7 @@ public class SentiSE {
 		sentimentDataList = URLRemover.removeURL(sentimentDataList);
 		sentimentDataList = emoticonHandler.preprocessEmoticons(sentimentDataList);
 		//ParserUtility.setShouldIncludePos(keepPosTag);
-		ParserUtility.setBasePOSUtility(BasicFactory.getPOSUtility(keepPosTag, keepOnlyImportantPos));
+		ParserUtility.setBasePOSUtility(BasicFactory.getPOSUtility(keepPosTag, keepOnlyImportantPos,keepContextTag));
 		ParserUtility.setHandleNegation(preprocessNegation);
 		//ParserUtility.setonlyKeepImportantPos(keepOnlyImportantPos);
 	    sentimentDataList = ParserUtility.preprocessPOStags(sentimentDataList);
