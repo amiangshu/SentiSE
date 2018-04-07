@@ -73,14 +73,14 @@ public class SentimentData {
 	                    }
 
 	                }
-	                if(rating<2 && (rating == 1 || rating == -1))
+	                if(rating<2)
 	                {
 	                SentimentData sentimentData=new SentimentData(text, rating);
 	               // String[] data=text.split("\\s+");
 	                //if(data.length>20)
 	                	sentimentDataList.add(sentimentData);
 	                	count++;
-	                	if(count>1000)
+	                	if(count>500)
 	                		break;
 	                }
 	                //System.out.println();

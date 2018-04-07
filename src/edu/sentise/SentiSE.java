@@ -4,8 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Random;
 
+import edu.sentise.factory.BasePOSUtility;
+import edu.sentise.factory.BasicFactory;
 import edu.sentise.model.SentimentData;
 import edu.sentise.preprocessing.ContractionLoader;
 import edu.sentise.preprocessing.EmoticonLoader;
@@ -38,12 +41,12 @@ public class SentiSE {
 	private int maxWordsToKeep = 2500;
 	private String algorithm = "RF";
 
-	private boolean preprocessNegation = true;
 	private boolean crossValidate = false;
 	private boolean forceRcreateTrainingData = false;
-	private boolean keepPosTag=false;
-	private boolean keepOnlyImportant=true;
-	
+	private boolean keepPosTag=false;            //keepPosTag means add POS tags with words
+	private boolean keepOnlyImportantPos=true;      //keepOnlyImportantPos means keeping only verbs,adjectives and adverbs
+	private boolean preprocessNegation = true;       // preprocessNegation means handle the negation effects on other POS
+
 
 	Instances trainingInstances = null;
 
@@ -131,9 +134,10 @@ public class SentiSE {
 		sentimentDataList = contractionHandler.preprocessContractions(sentimentDataList);
 		sentimentDataList = URLRemover.removeURL(sentimentDataList);
 		sentimentDataList = emoticonHandler.preprocessEmoticons(sentimentDataList);
-		ParserUtility.setShouldIncludePos(keepPosTag);
+		//ParserUtility.setShouldIncludePos(keepPosTag);
+		ParserUtility.setBasePOSUtility(BasicFactory.getPOSUtility(keepPosTag, keepOnlyImportantPos));
 		ParserUtility.setHandleNegation(preprocessNegation);
-		ParserUtility.setonlyKeepImportantPos(keepOnlyImportant);
+		//ParserUtility.setonlyKeepImportantPos(keepOnlyImportantPos);
 	    sentimentDataList = ParserUtility.preprocessPOStags(sentimentDataList);
 
 		System.out.println("Converting to WEKA format ..");

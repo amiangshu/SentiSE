@@ -7,6 +7,10 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Properties;
 
+import com.sun.corba.se.impl.encoding.CodeSetConversion.BTCConverter;
+
+import edu.sentise.factory.BasePOSUtility;
+import edu.sentise.factory.KeepUnchanged;
 import edu.sentise.model.SentimentData;
 import edu.sentise.util.DataLists;
 import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
@@ -24,30 +28,21 @@ public class ParserUtility {
 	private static HashSet<String> intense_words = new HashSet<String>(Arrays.asList(DataLists.intense_words));
 
 	private static StanfordCoreNLP pipeline = null;
-	/**
-	 * this value determines should pos tag should be added with the word or not.
-	 */
-	private static boolean includePos = false;
-	public static void setShouldIncludePos(boolean shouldInclude)
-	{
-	   includePos=shouldInclude;	
-	}
-	private static boolean handleNegation = false;
+	
+	
+	private static boolean handleNegation = true;
 	public static void setHandleNegation(boolean shouldNegate)
 	{
 		handleNegation=shouldNegate;	
 	}
-	private static boolean onlyKeepImportantPos = false;
-	public static void setonlyKeepImportantPos(boolean keepOnlyImportant)
+	private static BasePOSUtility basePOSUtility= new KeepUnchanged();
+	public static void setBasePOSUtility(BasePOSUtility bUtility)
 	{
-		onlyKeepImportantPos=keepOnlyImportant;	
+		basePOSUtility=bUtility;
 	}
-	private static boolean includeIntenseWord = false;
-	public static void setIncludeIntenseWord(boolean inludeIntense)
-	{
-		includeIntenseWord=inludeIntense;	
+	public static void main(String[] args) {
+		System.out.println(preprocessPOStags("it is impossible to name a column alias 1  if order by supports this i do not see group by cannot? "));
 	}
-
 	public static ArrayList<SentimentData> preprocessPOStags(ArrayList<SentimentData> sentimentData) {
 
 		int length = sentimentData.size();
@@ -105,7 +100,7 @@ public class ParserUtility {
 			// boolean isNegationFound = false;
 			// String negetedSentence = sentence.toString();
 			for (Tree leaf : leaves) {
-				String compare = leaf.toString().toLowerCase();
+				String word = leaf.toString().toLowerCase();
 				String pos_arr[] = leaf.parent(tree).toString().replace(")", "").replace("(", "").split(" ");
 				String pos = "";
 				if (pos_arr.length == 2) {
@@ -119,47 +114,21 @@ public class ParserUtility {
 
 				if (!isAleadyChanged(leaf, hashTable)) {
 					
-					if(includePos && onlyKeepImportantPos)
-					{
-						if(isEligiblePos(pos))
-							hashTable.put(leaf.label().toString(), pos+"_"+compare);
-						else 
-							{
-							if(includeIntenseWord && isIntenseWord(compare)) {
-								hashTable.put(leaf.label().toString(), pos+"_"+compare);
-							}
-						}
-						
-							
+					  basePOSUtility.shouldInclude(leaf.label().toString(), word, pos, hashTable);
 					}
-					else if(includePos)
-						hashTable.put(leaf.label().toString(), pos+"_"+compare);
-					else if(onlyKeepImportantPos)
-					{
-						
-						if(isEligiblePos(pos))
-							hashTable.put(leaf.label().toString(), compare);
-						else 
-						{
-						if(includeIntenseWord && isIntenseWord(compare)) {
-							hashTable.put(leaf.label().toString(),compare);
-						}
-					 }
-					}
-					else
-						hashTable.put(leaf.label().toString(), compare);
+					
 					
 
 					if(handleNegation)
 					{
-						if (negation_words.contains(compare)) {
+						if (negation_words.contains(word)) {
 							// isNegationFound = true;
 							parentNode = leaf.parent(tree).parent(tree);
-							getNegatedSentence(parentNode, hashTable, compare);
+							getNegatedSentence(parentNode, hashTable, word,basePOSUtility);
 							// newText+=" "+compare;
 						}
 					}
-				}
+				
 			}
 			int i = 0;
 			for (Tree leaf : leaves) {
@@ -188,7 +157,7 @@ public class ParserUtility {
 		return newText;
 	}
 
-	private static void getNegatedSentence(Tree tree, Hashtable<String, String> hashTable, String negatedWord) {
+	private static void getNegatedSentence(Tree tree, Hashtable<String, String> hashTable, String negatedWord, BasePOSUtility basePOSUtility) {
 
 		List<Tree> leaves = new ArrayList<>();
 		boolean isNegWordfound = false;
@@ -196,8 +165,8 @@ public class ParserUtility {
 		leaves = tree.getLeaves(leaves);
 		// boolean isNegationFound=false;
 		for (Tree leave : leaves) {
-			String compare = leave.toString().toLowerCase();
-			if (compare.equals(negatedWord))
+			String word = leave.toString().toLowerCase();
+			if (word.equals(negatedWord))
 				isNegWordfound = true;
 			String pos_arr[] = leave.parent(tree).toString().replace(")", "").replace("(", "").split(" ");
 			String pos = "";
@@ -209,71 +178,15 @@ public class ParserUtility {
 				isNounFundAfterNegation = true;
 			if (isNounFundAfterNegation)
 				return;
+			//System.out.println(word+"  "+ pos);
+			String neg = negatedWord(word, pos);
 			
-			String neg = negatedWord(compare, pos);
-			// System.out.println(compare+" "+ neg);
-			if(includePos && onlyKeepImportantPos)
-			{
-				if(isEligiblePos(pos))
-					hashTable.put(leave.label().toString(), pos+"_"+neg);
-				else 
-				{
-				if(includeIntenseWord && isIntenseWord(compare)) {
-					hashTable.put(leave.label().toString(), pos+"_"+compare);
-				}
-			}
-			}
-			else if(includePos)
-			{
-				hashTable.put(leave.label().toString(), pos+"_"+neg);
-			}
-			else if(onlyKeepImportantPos)
-			{
-				if(isEligiblePos(pos))
-					hashTable.put(leave.label().toString(), neg);
-				else 
-				{
-				if(includeIntenseWord && isIntenseWord(compare)) {
-					hashTable.put(leave.label().toString(),compare);
-				}
-			}
-			}
-			else
-				hashTable.put(leave.label().toString(), neg);
+			basePOSUtility.shouldInclude(leave.label().toString(), neg, pos,hashTable);
 
 		}
 
 	}
-	/**
-	 * only verb,adverb, adjective and modals contribute to negation of a sentence.So checking eligibility of that
-	 * pos 
-	 * @param pos is the parts of speech
-	 * @return is it eligible or not
-	 */
 	
-	private static  boolean isEligiblePos(String pos) {
-		
-		if(pos.startsWith("RB") || pos.startsWith("MD") || pos.startsWith("VB") || pos.startsWith("JJ"))
-			return true;
-		
-		return false;
-	}
-	private static boolean isIntenseWord(String word)
-	{
-		if(intense_words.contains(word))
-			return true;
-		return false;
-	}
-
-	private static boolean isNegationAvailable(String text) {
-		String[] splits = text.split(" ");
-		int len = splits.length;
-		for (int i = 0; i < len; i++) {
-			if (negation_words.contains(splits[i]))
-				return true;
-		}
-		return false;
-	}
 
 	private static String negatedWord(String word, String pos) {
 		if (negation_words.contains(word))
@@ -289,6 +202,7 @@ public class ParserUtility {
 	private static boolean isAleadyChanged(Tree leaf, Hashtable<String, String> hashtable) {
 		String val = hashtable.get(leaf.label().toString());
 		String compare = leaf.toString().toLowerCase();
+		//System.out.println(leaf.label().toString()+"  "+val+" gg: "+compare);
 		if (val == null || val.equals(compare))
 			return false;
 		else
