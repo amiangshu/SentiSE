@@ -10,7 +10,7 @@ import edu.sentise.model.SentimentData;
 import edu.sentise.preprocessing.ContractionLoader;
 import edu.sentise.preprocessing.EmoticonLoader;
 import edu.sentise.preprocessing.MyStopWordsHandler;
-import edu.sentise.preprocessing.POSUtility;
+import edu.sentise.preprocessing.ParserUtility;
 import edu.sentise.preprocessing.URLRemover;
 import edu.sentise.test.ARFFTestGenerator;
 import edu.sentise.util.Constants;
@@ -112,7 +112,7 @@ public class SentiSE {
 	}
 
 	public SentiSE() {
-		POSUtility.initCoreNLP();
+		ParserUtility.initCoreNLP();
 		emoticonHandler = new EmoticonLoader(this.emoticonDictionary);
 		contractionHandler = new ContractionLoader(this.contractionDictionary);
 		classifier = WekaClassifierBuilder.getSavedClassfier(Constants.MODEL_FILE_NAME);
@@ -131,10 +131,10 @@ public class SentiSE {
 		sentimentDataList = contractionHandler.preprocessContractions(sentimentDataList);
 		sentimentDataList = URLRemover.removeURL(sentimentDataList);
 		sentimentDataList = emoticonHandler.preprocessEmoticons(sentimentDataList);
-		POSUtility.setShouldIncludePos(keepPosTag);
-		POSUtility.setHandleNegation(preprocessNegation);
-		POSUtility.setonlyKeepImportantPos(keepOnlyImportant);
-	    sentimentDataList = POSUtility.preprocessPOStags(sentimentDataList);
+		ParserUtility.setShouldIncludePos(keepPosTag);
+		ParserUtility.setHandleNegation(preprocessNegation);
+		ParserUtility.setonlyKeepImportantPos(keepOnlyImportant);
+	    sentimentDataList = ParserUtility.preprocessPOStags(sentimentDataList);
 
 		System.out.println("Converting to WEKA format ..");
 		Instances rawInstance = ARFFTestGenerator.generateTestData(sentimentDataList);
@@ -220,7 +220,7 @@ public class SentiSE {
 		text = contractionHandler.preprocessContractions(text);
 		text = URLRemover.removeURL(text);
 		text = emoticonHandler.preprocessEmoticons(text);
-		text = POSUtility.preprocessPOStags(text);
+		text = ParserUtility.preprocessPOStags(text);
 		return text;
 	}
 

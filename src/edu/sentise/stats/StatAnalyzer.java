@@ -8,7 +8,7 @@ import java.util.HashSet;
 import edu.sentise.model.SentimentData;
 import edu.sentise.preprocessing.ContractionLoader;
 import edu.sentise.preprocessing.EmoticonLoader;
-import edu.sentise.preprocessing.POSUtility;
+import edu.sentise.preprocessing.ParserUtility;
 import edu.sentise.preprocessing.URLRemover;
 import edu.sentise.test.ARFFTestGenerator;
 import edu.sentise.util.Constants;

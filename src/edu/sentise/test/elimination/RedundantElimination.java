@@ -10,7 +10,7 @@ import edu.sentise.model.SentimentData;
 import edu.sentise.preprocessing.ContractionLoader;
 import edu.sentise.preprocessing.EmoticonLoader;
 import edu.sentise.preprocessing.MyStopWordsHandler;
-import edu.sentise.preprocessing.POSUtility;
+import edu.sentise.preprocessing.ParserUtility;
 import edu.sentise.preprocessing.URLRemover;
 import edu.sentise.test.ARFFTestGenerator;
 import edu.sentise.util.Constants;
@@ -108,7 +108,7 @@ public class RedundantElimination {
 		sentimentDataList = URLRemover.removeURL(sentimentDataList);
 		sentimentDataList = emoticonLoader.preprocessEmoticons(sentimentDataList);
 		
-		sentimentDataList = POSUtility.preprocessPOStags(sentimentDataList);
+		sentimentDataList = ParserUtility.preprocessPOStags(sentimentDataList);
 
 		System.out.println("Converting to WEKA format ..");
 		Instances rawInstance = ARFFTestGenerator.generateTestData(sentimentDataList);

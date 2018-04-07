@@ -16,7 +16,7 @@ import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.trees.TreeCoreAnnotations.TreeAnnotation;
 import edu.stanford.nlp.util.CoreMap;
 
-public class POSUtility {
+public class ParserUtility {
 
 	private static HashSet<String> negation_words = new HashSet<String>(Arrays.asList(DataLists.negation_words));
 	private static HashSet<String> emoticon_words = new HashSet<String>(Arrays.asList(DataLists.emoticon_words));
@@ -144,7 +144,7 @@ public class POSUtility {
 						if(includeIntenseWord && isIntenseWord(compare)) {
 							hashTable.put(leaf.label().toString(),compare);
 						}
-					}
+					 }
 					}
 					else
 						hashTable.put(leaf.label().toString(), compare);

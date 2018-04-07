@@ -8,7 +8,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -17,7 +23,12 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import edu.sentise.factory.BasePOSUtility;
+import edu.stanford.nlp.trees.Tree;
+
 public class Util {
+	private static HashSet<String> negation_words = new HashSet<String>(Arrays.asList(DataLists.negation_words));
+	private static HashSet<String> emoticon_words = new HashSet<String>(Arrays.asList(DataLists.emoticon_words));
 
 	public static BufferedReader getBufferedreaderByFileName(String fileName) {
 
@@ -100,5 +111,56 @@ public class Util {
 	        }
 
 	    }
+	/**
+	 * only verb,adverb, adjective and modals contribute to negation of a sentence.So checking eligibility of that
+	 * pos 
+	 * @param pos is the parts of speech
+	 * @return is it eligible or not
+	 */
+	
+	public static  boolean isEligiblePos(String pos) {
+		
+		if(pos.startsWith("RB") || pos.startsWith("MD") || pos.startsWith("VB") || pos.startsWith("JJ"))
+			return true;
+		
+		return false;
+	}
+	public static String negatedWord(String word, String pos) {
+		if (negation_words.contains(word))
+			return word;
+		else if (emoticon_words.contains(word))
+			return " " + word;
+		else if (pos.startsWith("VB") || pos.startsWith("RB") || pos.startsWith("JJ") || pos.startsWith("MD"))
+			return "NOT_" + word;
+		else
+			return word;
+	}
+	public static void getNegatedSentence(Tree tree, Hashtable<String, String> hashTable, String negatedWord, BasePOSUtility basePOSUtility) {
+
+		List<Tree> leaves = new ArrayList<>();
+		boolean isNegWordfound = false;
+		boolean isNounFundAfterNegation = false;
+		leaves = tree.getLeaves(leaves);
+		// boolean isNegationFound=false;
+		for (Tree leave : leaves) {
+			String compare = leave.toString().toLowerCase();
+			if (compare.equals(negatedWord))
+				isNegWordfound = true;
+			String pos_arr[] = leave.parent(tree).toString().replace(")", "").replace("(", "").split(" ");
+			String pos = "";
+			if (pos_arr.length == 2) {
+				pos = pos_arr[0];
+
+			}
+			if (isNegWordfound && (pos.startsWith("NN") || pos.startsWith("PR")))
+				isNounFundAfterNegation = true;
+			if (isNounFundAfterNegation)
+				return;
+			
+			String neg = negatedWord(compare, pos);
+			basePOSUtility.shouldInclude(pos_arr[0],neg, pos,hashTable);
+		}
+
+	}
 		
 }
