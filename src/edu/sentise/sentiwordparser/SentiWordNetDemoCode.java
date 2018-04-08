@@ -10,6 +10,8 @@ import java.util.Map;
 
 import com.mysql.jdbc.Util;
 
+import edu.sentise.util.Constants;
+
 public class SentiWordNetDemoCode {
 
 	private Map<String, Double> dictionary;
@@ -134,7 +136,7 @@ public class SentiWordNetDemoCode {
 	
 		try
 		{
-		String fileName="models/positive.txt";
+		String fileName=Constants.POSITIVE_SENTI_WORD_FILE;
 		File file= new File(fileName);
 		file.createNewFile();
 		BufferedWriter bufferedWriter=edu.sentise.util.Util.getBufferedWriterByFileName(fileName);
@@ -160,7 +162,8 @@ public class SentiWordNetDemoCode {
 	
 		try
 		{
-		String fileName="models/negative.txt";
+		String fileName=Constants.NEGATIVE_SENTI_WORD_FILE;
+
 		File file= new File(fileName);
 		file.createNewFile();
 		BufferedWriter bufferedWriter=edu.sentise.util.Util.getBufferedWriterByFileName(fileName);
