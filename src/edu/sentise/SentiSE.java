@@ -46,8 +46,9 @@ public class SentiSE {
 	private boolean keepPosTag=false;            //keepPosTag means add POS tags with words
 	private boolean keepOnlyImportantPos=false;      //keepOnlyImportantPos means keeping only verbs,adjectives and adverbs
 	private boolean preprocessNegation = true;       // preprocessNegation means handle the negation effects on other POS
-	private boolean keepContextTag = true;          //  keepContextTag means keeping the context information of a word like 
+	private boolean keepContextTag = true;        //  keepContextTag means keeping the context information of a word like 
 	                                                // VP,ADVP or NP
+	private boolean addSentiWord = true;            //if a sentence contains sentiment word. Add a correspponding string with it.
 
 
 	Instances trainingInstances = null;
@@ -139,6 +140,7 @@ public class SentiSE {
 		//ParserUtility.setShouldIncludePos(keepPosTag);
 		ParserUtility.setBasePOSUtility(BasicFactory.getPOSUtility(keepPosTag, keepOnlyImportantPos,keepContextTag));
 		ParserUtility.setHandleNegation(preprocessNegation);
+		ParserUtility.setHandleSentiScore(addSentiWord);
 		//ParserUtility.setonlyKeepImportantPos(keepOnlyImportantPos);
 	    sentimentDataList = ParserUtility.preprocessPOStags(sentimentDataList);
 

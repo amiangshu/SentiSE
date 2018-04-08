@@ -32,6 +32,7 @@ public class AddSentiWord {
 	}
 	public static void createPositiveSentiMap()
 	{
+		
 		BufferedReader bufferedReader=Util.getBufferedreaderByFileName(Constants.POSITIVE_SENTI_WORD_FILE);
 		String line=null;
 		try
@@ -51,6 +52,7 @@ public class AddSentiWord {
 	
 	public static void createNegativeSentiMap()
 	{
+		
 		BufferedReader bufferedReader=Util.getBufferedreaderByFileName(Constants.NEGATIVE_SENTI_WORD_FILE);
 		String line=null;
 		try
@@ -59,7 +61,7 @@ public class AddSentiWord {
 			{
 				String[] parse=line.split("#");
 				negtiveSentiMap.put(parse[0]+"#"+getConvertedPOS(parse[1]),Double.parseDouble(parse[2]));
-				System.out.println(line);
+				//System.out.println(line);
 			}
 		}
 		catch(Exception e)
@@ -68,6 +70,43 @@ public class AddSentiWord {
 			
 		}
 		
+	}
+	
+	public static double getPositiveSentiScore(String word, String pos)
+	{
+		if(positiveSentiMap.size() == 0)
+			createPositiveSentiMap();
+		Double d=positiveSentiMap.get(word+"#"+getModifiedPOS(pos));
+		//System.out.println(word+ " "+d +"  "+pos + positiveSentiMap.size());
+
+		if(d == null)
+			return 0;
+		
+		return d;
+	}
+	public static double getNegativeSentiScore(String word, String pos)
+	{
+		
+		if(negtiveSentiMap.size() == 0)
+			createNegativeSentiMap();
+		Double d=negtiveSentiMap.get(word+"#"+getModifiedPOS(pos));
+		//System.out.println(word+ " "+d +"  "+pos + negtiveSentiMap.size());
+		if(d == null)
+			return 0;
+		
+		return d;
+	}
+	public static String getModifiedPOS(String pos)
+	{
+		if(pos.startsWith("VB"))
+			return "VB";
+		if(pos.startsWith("JJ"))
+			return "JJ";
+		if(pos.startsWith("NN"))
+			return "NN";
+		else
+			return "";
+			
 	}
 	public static void main(String[] args) {
 		createPositiveSentiMap();

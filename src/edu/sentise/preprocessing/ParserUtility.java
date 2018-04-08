@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Properties;
 
 import com.sun.corba.se.impl.encoding.CodeSetConversion.BTCConverter;
+import com.sun.xml.internal.messaging.saaj.packaging.mime.Header;
 
 import edu.sentise.factory.BasePOSUtility;
 import edu.sentise.factory.KeepUnchanged;
@@ -35,6 +36,12 @@ public class ParserUtility {
 	{
 		handleNegation=shouldNegate;	
 	}
+
+	private static boolean handeSentiScore = true;
+	public static void setHandleSentiScore(boolean hSentiScore)
+	{
+		handeSentiScore=hSentiScore;	
+	}
 	private static BasePOSUtility basePOSUtility= new KeepUnchanged();
 	public static void setBasePOSUtility(BasePOSUtility bUtility)
 	{
@@ -45,6 +52,7 @@ public class ParserUtility {
 	}
 	public static ArrayList<SentimentData> preprocessPOStags(ArrayList<SentimentData> sentimentData) {
 
+		
 		int length = sentimentData.size();
 		for (int i = 0; i < length; i++) {
 
@@ -85,9 +93,12 @@ public class ParserUtility {
 		//}
 		//return text;
 	}
-
+	static double positiveSentiScore=0;
+	static double negativeSentiScore=0;
 	public static String getPosProccesedText(String text) {
 		String newText = "";
+		positiveSentiScore=0;
+		negativeSentiScore=0;
 		Annotation annotation = new Annotation(text);
 		pipeline.annotate(annotation);
 		List<CoreMap> sentences = annotation.get(SentencesAnnotation.class);
@@ -116,6 +127,8 @@ public class ParserUtility {
 				if (!isAleadyChanged(leaf, hashTable)) {
 					
 					  String context=leaf.parent(tree).parent(tree).value();
+					  positiveSentiScore+=AddSentiWord.getPositiveSentiScore(word, pos);
+					  negativeSentiScore+=AddSentiWord.getNegativeSentiScore(word, pos);
 					  basePOSUtility.shouldInclude(leaf.label().toString(), word, pos,context, hashTable);
 					}
 					
@@ -153,6 +166,15 @@ public class ParserUtility {
 				}
 
 			}
+			//System.out.println(positiveSentiScore+" "+negativeSentiScore);
+			if(handeSentiScore)
+			{
+				if(positiveSentiScore>0)
+					newText+=" "+"positive_words";
+
+				if(negativeSentiScore<0)
+					newText+=" "+"negative_words";
+			}
 
 		}
 
@@ -182,7 +204,8 @@ public class ParserUtility {
 				return;
 			//System.out.println(word+"  "+ pos);
 			String neg = negatedWord(word, pos);
-			
+			positiveSentiScore+=AddSentiWord.getPositiveSentiScore(word, pos);
+			negativeSentiScore+=AddSentiWord.getNegativeSentiScore(word, pos);
 			basePOSUtility.shouldInclude(leave.label().toString(), neg, pos,tree.value(),hashTable);
 
 		}
