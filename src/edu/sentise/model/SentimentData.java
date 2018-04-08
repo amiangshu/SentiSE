@@ -47,10 +47,12 @@ public class SentimentData {
 	            Sheet datatypeSheet = workbook.getSheetAt(0);
 	            Iterator<Row> iterator = datatypeSheet.iterator();
 
-	            int count=0;
+	            int positive=0;
+	            int negative=0;
+	            int neutral=0;
 	            while (iterator.hasNext()) {
 
-	            	count++;
+	            	
 	            	//if(count>1600)
 	            		//break;
 	                Row currentRow = iterator.next();
@@ -78,10 +80,16 @@ public class SentimentData {
 	                SentimentData sentimentData=new SentimentData(text, rating);
 	               // String[] data=text.split("\\s+");
 	                //if(data.length>20)
-	                	sentimentDataList.add(sentimentData);
-	                	count++;
-	                	if(count>500)
-	                		break;
+		                if((rating == 0 && neutral<800) || (rating == 1 && positive<400) ||(rating == -1 && negative<400))
+		                {
+		                	sentimentDataList.add(sentimentData);
+		                	if(rating == 0)
+		                		neutral++;
+		                	else if(rating == 1)
+		                		positive++;
+		                	else if(rating == -1)
+		                		negative++;
+		                }
 	                }
 	                //System.out.println();
 
