@@ -6,7 +6,7 @@ import java.util.HashSet;
 import edu.sentise.model.SentimentData;
 
 public class PunctuationHandler {
-	public static ArrayList<SentimentData> preprocessEmoticons(ArrayList<SentimentData> sentiList) {
+	public static ArrayList<SentimentData> preprocessPunctuations(ArrayList<SentimentData> sentiList) {
 		for (int i = 0; i < sentiList.size(); i++)
 			sentiList.get(i).setText(replacePunctuations(sentiList.get(i).getText()));
 		return sentiList;

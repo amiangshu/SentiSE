@@ -12,6 +12,7 @@ import edu.sentise.factory.BasicFactory;
 import edu.sentise.model.SentimentData;
 import edu.sentise.preprocessing.ContractionLoader;
 import edu.sentise.preprocessing.EmoticonLoader;
+import edu.sentise.preprocessing.Lemmatizer;
 import edu.sentise.preprocessing.MyStopWordsHandler;
 import edu.sentise.preprocessing.ParserUtility;
 import edu.sentise.preprocessing.PunctuationHandler;
@@ -51,6 +52,9 @@ public class SentiSE {
 	                                                // VP,ADVP or NP
 	private boolean addSentiWord = true;            //if a sentence contains sentiment word. Add a correspponding string with it.
     private boolean processPunctuaions=true;        //process  question and exclamatory marks
+    private boolean lemmatize=true;
+    
+    private boolean useStemmar = true;
  
 	Instances trainingInstances = null;
 
@@ -138,8 +142,11 @@ public class SentiSE {
 		sentimentDataList = contractionHandler.preprocessContractions(sentimentDataList);
 		sentimentDataList = URLRemover.removeURL(sentimentDataList);
 		sentimentDataList = emoticonHandler.preprocessEmoticons(sentimentDataList);
+		if(lemmatize)
+			sentimentDataList=Lemmatizer.lematizeSentimentData(sentimentDataList);
 		if(processPunctuaions)
-			sentimentDataList=PunctuationHandler.preprocessEmoticons(sentimentDataList);
+			sentimentDataList=PunctuationHandler.preprocessPunctuations(sentimentDataList);
+		
 		//ParserUtility.setShouldIncludePos(keepPosTag);
 		ParserUtility.setBasePOSUtility(BasicFactory.getPOSUtility(keepPosTag, keepOnlyImportantPos,keepContextTag));
 		ParserUtility.setHandleNegation(preprocessNegation);
@@ -151,7 +158,7 @@ public class SentiSE {
 		Instances rawInstance = ARFFTestGenerator.generateTestData(sentimentDataList);
 
 		System.out.println("Converting string to vector..");
-		this.trainingInstances = generateFilteredInstance(rawInstance, true);
+		this.trainingInstances = generateFilteredInstance(rawInstance, true,useStemmar);
 
 		this.trainingInstances.setClassIndex(0);
 
@@ -237,11 +244,11 @@ public class SentiSE {
 
 	private Instances generateInstanceFromList(ArrayList<String> sentiText) throws Exception {
 		Instances instance = ARFFTestGenerator.generateTestDataFromString(sentiText);
-		return generateFilteredInstance(instance, false);
+		return generateFilteredInstance(instance, false,useStemmar);
 
 	}
 
-	private Instances generateFilteredInstance(Instances instance, boolean disardLowFreqTerms) throws Exception {
+	private Instances generateFilteredInstance(Instances instance, boolean disardLowFreqTerms, boolean useStemmer) throws Exception {
 		StringToWordVector filter = new StringToWordVector();
 		filter.setInputFormat(instance);
 		WordTokenizer customTokenizer = new WordTokenizer();
