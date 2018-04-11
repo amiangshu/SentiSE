@@ -14,6 +14,7 @@ import edu.sentise.preprocessing.ContractionLoader;
 import edu.sentise.preprocessing.EmoticonLoader;
 import edu.sentise.preprocessing.MyStopWordsHandler;
 import edu.sentise.preprocessing.ParserUtility;
+import edu.sentise.preprocessing.PunctuationHandler;
 import edu.sentise.preprocessing.URLRemover;
 import edu.sentise.test.ARFFTestGenerator;
 import edu.sentise.util.Constants;
@@ -49,8 +50,8 @@ public class SentiSE {
 	private boolean keepContextTag = true;        //  keepContextTag means keeping the context information of a word like 
 	                                                // VP,ADVP or NP
 	private boolean addSentiWord = true;            //if a sentence contains sentiment word. Add a correspponding string with it.
-
-
+    private boolean processPunctuaions=true;        //process  question and exclamatory marks
+ 
 	Instances trainingInstances = null;
 
 	public void setEmoticonDictionary(String emoticonDictionary) {
@@ -137,6 +138,8 @@ public class SentiSE {
 		sentimentDataList = contractionHandler.preprocessContractions(sentimentDataList);
 		sentimentDataList = URLRemover.removeURL(sentimentDataList);
 		sentimentDataList = emoticonHandler.preprocessEmoticons(sentimentDataList);
+		if(processPunctuaions)
+			sentimentDataList=PunctuationHandler.preprocessEmoticons(sentimentDataList);
 		//ParserUtility.setShouldIncludePos(keepPosTag);
 		ParserUtility.setBasePOSUtility(BasicFactory.getPOSUtility(keepPosTag, keepOnlyImportantPos,keepContextTag));
 		ParserUtility.setHandleNegation(preprocessNegation);

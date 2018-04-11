@@ -131,7 +131,7 @@ public class Util {
 		else if (emoticon_words.contains(word))
 			return " " + word;
 		else if (pos.startsWith("VB") || pos.startsWith("RB") || pos.startsWith("JJ") || pos.startsWith("MD"))
-			return "NOT_" + word;
+			return "NOT|" + word;
 		else
 			return word;
 	}

@@ -10,7 +10,7 @@ public class KeepImportantWithPOSTags extends BasePOSUtility{
 	@Override
 	public void shouldInclude(String label,String word, String tag, String context, Hashtable<String, String> myMap) {
 		if(Util.isEligiblePos(tag))
-			myMap.put(label,tag+"_"+word);
+			myMap.put(label,tag+"|"+word);
 		
 	}
 }
