@@ -12,7 +12,6 @@ import java.util.StringTokenizer;
 
 import edu.sentise.model.SentimentData;
 import edu.sentise.preprocessing.ContractionLoader;
-import edu.sentise.preprocessing.EmoticonLoader;
 import edu.sentise.preprocessing.URLRemover;
 import edu.sentise.util.Constants;
 import edu.sentise.util.DataLists;
@@ -29,13 +28,13 @@ public class BigramGenerator {
 	public static void main(String[] args) {
 		ArrayList<SentimentData> sentimentDataList = SentimentData.parseSentimentData(Constants.ORACLE_FILE_NAME);
 
-		System.out.println("Preprocessing text ..");
+		/*System.out.println("Preprocessing text ..");
 		ContractionLoader contractionLoader=new ContractionLoader(Constants.CONTRACTION_TEXT_FILE_NAME);
 		sentimentDataList = contractionLoader.preprocessContractions(sentimentDataList);
 		sentimentDataList = URLRemover.removeURL(sentimentDataList);
 		EmoticonLoader emoticonHandler = new EmoticonLoader(Constants.EMOTICONS_FILE_NAME);
 		sentimentDataList = emoticonHandler.preprocessEmoticons(sentimentDataList);
-		lematizeSentimentData(sentimentDataList);
+		lematizeSentimentData(sentimentDataList);*/
 	}
 	public static void lematizeSentimentData(ArrayList<SentimentData> sentimentData) {
 	     
@@ -97,7 +96,7 @@ public class BigramGenerator {
 		{
 			e.printStackTrace();
 		}
-		System.out.println("bigram file writing done.........");
+		System.out.println(" file writing done.........");
 		
 	}
 	private static void tokenize(String text)
