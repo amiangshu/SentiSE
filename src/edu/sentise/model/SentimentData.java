@@ -80,8 +80,8 @@ public class SentimentData {
 	                SentimentData sentimentData=new SentimentData(text, rating);
 	               // String[] data=text.split("\\s+");
 	                //if(data.length>20)
-		                if((rating == 0 && neutral<800) || (rating == 1 && positive<400) ||(rating == -1 && negative<400))
-		                {
+		                //if((rating == 0 && neutral<800) || (rating == 1 && positive<400) ||(rating == -1 && negative<400))
+		               // {
 		                	sentimentDataList.add(sentimentData);
 		                	if(rating == 0)
 		                		neutral++;
@@ -90,7 +90,7 @@ public class SentimentData {
 		                	else if(rating == -1)
 		                		negative++;
 		                }
-	                }
+	               // }
 	                //System.out.println();
 
 	            }

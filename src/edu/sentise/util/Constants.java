@@ -13,5 +13,8 @@ public class Constants {
 	public static final String NEG_DATA_FILE_NAME="models/neg_data.txt"; 
     public static final String POSITIVE_SENTI_WORD_FILE="models/positive.txt"; 
     public static final String NEGATIVE_SENTI_WORD_FILE="models/negative.txt";
+    public static final String BIGRAM_FILE="models/bigram.txt";
+    public static final String TRIGRAM_FILE="models/trigram.txt";
+
 
 }
