@@ -7,6 +7,15 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Random;
 
+import javax.management.RuntimeErrorException;
+
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+
 import edu.sentise.factory.BasePOSUtility;
 import edu.sentise.factory.BasicFactory;
 import edu.sentise.model.SentimentData;
@@ -57,7 +66,6 @@ public class SentiSE {
 	private boolean addSentiWord = true;            //if a sentence contains sentiment word. Add a correspponding string with it.
     private boolean processQuestionMark=true;        //process  question and exclamatory marks
    private boolean processExclamationMark=true;
-    private boolean lemmatize=true;
     private boolean addshortword=true;
     
     private boolean useStemmer = false;
@@ -449,7 +457,11 @@ public class SentiSE {
 				"There is no VDSM action here, only database - just make the command transactive, and save yourself all this hassle."
 
 		};
+		
+		
+		
 		SentiSE instance = new SentiSE();
+		instance.handleCommandLine(args);
 		if (args.length > 0)
 			instance.setAlgorithm(args[0].trim());
 
@@ -474,6 +486,63 @@ public class SentiSE {
 			e.printStackTrace();
 		}
 */
+	}
+	private  void handleCommandLine(String[] args)
+	{
+		CommandLineParser commandLineParser= new DefaultParser();
+		
+		Options options = new Options();
+		
+		Option algo=new Option("algo",true, "algorithm name for classifier");
+		options.addOption(algo);
+		Option helpOption=new Option("help",false, "prints the help message");
+		options.addOption(helpOption);
+		
+		Option root =new Option("root",true, "find toot using stemmer or lemmatizer");
+		options.addOption(root);
+		Option negate =new Option("negate",false, "handle negattion words");
+		options.addOption(negate);
+		try
+		{
+		CommandLine commandLine=commandLineParser.parse(options,args);
+		if(commandLine.hasOption("help"))
+		{
+			String help="sentise algo <algoname> [options]\n";
+			help+=" Options:\n";
+			help+=String.format("%-30s prints this message\n","-help");
+			help+=String.format("%-30s RF | KNN | NB | DT\n","-algo");
+			help+=String.format("%-30s stemmer | lemmatizer\n","-root");
+			help+=String.format("%-30s hanldes negation of words\n","-negate");
+
+			System.out.println(help);
+		}
+		else
+		{
+			if(commandLine.hasOption("algo"))
+			{
+				this.algorithm= commandLine.getOptionValue("algo"); //more validation coming
+			}
+			else
+			{
+				throw new RuntimeException("algo paramater missing");
+			}
+			if(commandLine.hasOption("root"))
+			{
+				if(commandLine.getOptionValue("root").equals("stemmer"))
+					useStemmer=true;
+				else 
+					useLemmatizer=true;
+
+			}
+			if(commandLine.hasOption("negate"))
+			   setPreprocessNegation(true);
+		 }
+		}
+		catch(ParseException e)
+		{
+			e.printStackTrace();
+		}
+		
 	}
 
 }

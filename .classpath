@@ -23,5 +23,6 @@
 	<classpathentry kind="lib" path="libs/excel/poi-ooxml-schemas-3.17.jar"/>
 	<classpathentry kind="lib" path="libs/excel/poi-scratchpad-3.17.jar"/>
 	<classpathentry kind="lib" path="libs/excel/xmlbeans-2.6.0.jar"/>
+	<classpathentry kind="lib" path="/home/tanzeer/forks/SentiSE/libs/commons-cli-1.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
