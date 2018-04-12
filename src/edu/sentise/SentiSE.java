@@ -10,13 +10,16 @@ import java.util.Random;
 import edu.sentise.factory.BasePOSUtility;
 import edu.sentise.factory.BasicFactory;
 import edu.sentise.model.SentimentData;
+import edu.sentise.preprocessing.AncronymHandler;
 import edu.sentise.preprocessing.ContractionLoader;
-import edu.sentise.preprocessing.EmoticonLoader;
-import edu.sentise.preprocessing.Lemmatizer;
+
+import edu.sentise.preprocessing.EmoticonProcessor;
+import edu.sentise.preprocessing.ExclamationHandler;
 import edu.sentise.preprocessing.MyStopWordsHandler;
-import edu.sentise.preprocessing.ParserUtility;
-import edu.sentise.preprocessing.PunctuationHandler;
-import edu.sentise.preprocessing.ShortWordHandler;
+import edu.sentise.preprocessing.POSTagProcessor;
+import edu.sentise.preprocessing.QuestionMarkHandler;
+import edu.sentise.preprocessing.StanfordCoreNLPLemmatizer;
+import edu.sentise.preprocessing.TextPreprocessor;
 import edu.sentise.preprocessing.URLRemover;
 import edu.sentise.test.ARFFTestGenerator;
 import edu.sentise.util.Constants;
@@ -24,6 +27,7 @@ import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
+import weka.core.stemmers.NullStemmer;
 import weka.core.stemmers.SnowballStemmer;
 import weka.core.tokenizers.WordTokenizer;
 import weka.filters.Filter;
@@ -33,13 +37,12 @@ import weka.filters.unsupervised.attribute.StringToWordVector;
 public class SentiSE {
 
 	private HashMap<Integer, Integer> classMapping;
-	private EmoticonLoader emoticonHandler;
-	private ContractionLoader contractionHandler;
 	private Classifier classifier;
 	private String emoticonDictionary = Constants.EMOTICONS_FILE_NAME;
 	private String stopWordDictionary = Constants.STOPWORDS_FILE_NAME;
 	private String contractionDictionary = Constants.CONTRACTION_TEXT_FILE_NAME;
 	private String oracleFileName = Constants.ORACLE_FILE_NAME;
+	private String acronymDictionary=Constants.ACRONYM_WORD_FILE;
 	private int minTermFrequeny = 3;
 	private int maxWordsToKeep = 2500;
 	private String algorithm = "RF";
@@ -52,11 +55,13 @@ public class SentiSE {
 	private boolean keepContextTag = true;        //  keepContextTag means keeping the context information of a word like 
 	                                                // VP,ADVP or NP
 	private boolean addSentiWord = true;            //if a sentence contains sentiment word. Add a correspponding string with it.
-    private boolean processPunctuaions=true;        //process  question and exclamatory marks
+    private boolean processQuestionMark=true;        //process  question and exclamatory marks
+   private boolean processExclamationMark=true;
     private boolean lemmatize=true;
     private boolean addshortword=true;
     
-    private boolean useStemmar = true;
+    private boolean useStemmer = false;
+    private boolean useLemmatizer=true;
  
 	Instances trainingInstances = null;
 
@@ -124,15 +129,16 @@ public class SentiSE {
 		keepPosTag=keep;
 	}
 
+	private ArrayList<TextPreprocessor> preprocessPipeline=new ArrayList<TextPreprocessor>();
+	
 	public SentiSE() {
-		ParserUtility.initCoreNLP();
-		emoticonHandler = new EmoticonLoader(this.emoticonDictionary);
-		contractionHandler = new ContractionLoader(this.contractionDictionary);
-		classifier = WekaClassifierBuilder.getSavedClassfier(Constants.MODEL_FILE_NAME);
-		classMapping = new HashMap<Integer, Integer>();
-		classMapping.put(0, 0);
-		classMapping.put(1, -1);
-		classMapping.put(2, 1);
+		
+		//common preprocessing steps, always applied
+		preprocessPipeline.add( new ContractionLoader(this.contractionDictionary));
+		preprocessPipeline.add(new EmoticonProcessor(this.emoticonDictionary));		
+		preprocessPipeline.add( new URLRemover());
+		preprocessPipeline.add( new AncronymHandler(this.acronymDictionary));
+		
 	}
 
 	public void generateTrainingInstance(boolean oversample) throws Exception {
@@ -140,29 +146,26 @@ public class SentiSE {
 		System.out.println("Reading oracle file...");
 		ArrayList<SentimentData> sentimentDataList = SentimentData.parseSentimentData(Constants.ORACLE_FILE_NAME);
 
-		System.out.println("Preprocessing text ..");
-		sentimentDataList = contractionHandler.preprocessContractions(sentimentDataList);
-		sentimentDataList = URLRemover.removeURL(sentimentDataList);
-		sentimentDataList = emoticonHandler.preprocessEmoticons(sentimentDataList);
-		if(addshortword)
-			sentimentDataList=ShortWordHandler.preprocessShortWord(sentimentDataList);
-		if(lemmatize)
-			sentimentDataList=Lemmatizer.lematizeSentimentData(sentimentDataList);
-		if(processPunctuaions)
-			sentimentDataList=PunctuationHandler.preprocessPunctuations(sentimentDataList);
+		if(this.processExclamationMark)
+			preprocessPipeline.add(new ExclamationHandler());
 		
-		//ParserUtility.setShouldIncludePos(keepPosTag);
-		ParserUtility.setBasePOSUtility(BasicFactory.getPOSUtility(keepPosTag, keepOnlyImportantPos,keepContextTag));
-		ParserUtility.setHandleNegation(preprocessNegation);
-		ParserUtility.setHandleSentiScore(addSentiWord);
-		//ParserUtility.setonlyKeepImportantPos(keepOnlyImportantPos);
-	    sentimentDataList = ParserUtility.preprocessPOStags(sentimentDataList);
-
+		if(this.processQuestionMark)
+			preprocessPipeline.add(new QuestionMarkHandler());
+		
+		System.out.println("Preprocessing text ..");
+		preprocessPipeline.add( new POSTagProcessor(BasicFactory.getPOSUtility(keepPosTag, keepOnlyImportantPos,keepContextTag), this.preprocessNegation));
+		
+		for(TextPreprocessor process:preprocessPipeline)
+		{
+			sentimentDataList=process.apply(sentimentDataList);
+		}
+		
+				
 		System.out.println("Converting to WEKA format ..");
 		Instances rawInstance = ARFFTestGenerator.generateTestData(sentimentDataList);
 
 		System.out.println("Converting string to vector..");
-		this.trainingInstances = generateFilteredInstance(rawInstance, true,useStemmar);
+		this.trainingInstances = generateFilteredInstance(rawInstance, true);
 
 		this.trainingInstances.setClassIndex(0);
 
@@ -239,28 +242,38 @@ public class SentiSE {
 	}
 
 	private String preprocessText(String text) {
-		text = contractionHandler.preprocessContractions(text);
-		text = URLRemover.removeURL(text);
-		text = emoticonHandler.preprocessEmoticons(text);
-		text = ParserUtility.preprocessPOStags(text);
+	//	text = contractionHandler.preprocessContractions(text);
+	//	text = URLRemover.removeURL(text);
+	//	text = emoticonHandler.preprocessEmoticons(text);
+	//	text = ParserUtility.preprocessPOStags(text);
 		return text;
 	}
 
 	private Instances generateInstanceFromList(ArrayList<String> sentiText) throws Exception {
 		Instances instance = ARFFTestGenerator.generateTestDataFromString(sentiText);
-		return generateFilteredInstance(instance, false,useStemmar);
+		return generateFilteredInstance(instance, false);
 
 	}
 
-	private Instances generateFilteredInstance(Instances instance, boolean disardLowFreqTerms, boolean useStemmer) throws Exception {
+	private Instances generateFilteredInstance(Instances instance, boolean disardLowFreqTerms) throws Exception {
 		StringToWordVector filter = new StringToWordVector();
 		filter.setInputFormat(instance);
 		WordTokenizer customTokenizer = new WordTokenizer();
 		customTokenizer.setDelimiters(Constants.DELIMITERS);
 		filter.setTokenizer(customTokenizer);
 		filter.setStopwordsHandler(new MyStopWordsHandler());
-		SnowballStemmer stemmer = new SnowballStemmer();
-		filter.setStemmer(stemmer);
+		
+		if(this.useStemmer)
+		{		
+			filter.setStemmer(new SnowballStemmer());
+		} else if (this.useLemmatizer) {
+			StanfordCoreNLPLemmatizer lemmatizer=new StanfordCoreNLPLemmatizer();
+			filter.setStemmer(lemmatizer);
+		}
+		else
+			filter.setStemmer(new NullStemmer());
+		
+		
 		filter.setLowerCaseTokens(true);
 		filter.setTFTransform(true);
 		filter.setIDFTransform(true);

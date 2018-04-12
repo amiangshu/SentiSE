@@ -7,12 +7,12 @@ import java.util.regex.PatternSyntaxException;
 
 import edu.sentise.model.SentimentData;
 
-public class URLRemover {
+public class URLRemover implements TextPreprocessor {
 
 	private static Pattern urlPattern = Pattern
 			.compile("((https?|ftp|gopher|telnet|file):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*/)");
 
-	public static ArrayList<SentimentData> removeURL(ArrayList<SentimentData> sentiData) {
+	public ArrayList<SentimentData> apply(ArrayList<SentimentData> sentiData) {
 
 		for (int i = 0; i < sentiData.size(); i++) {
 
@@ -31,8 +31,7 @@ public class URLRemover {
 			try {
 				text = text.replaceAll(urlStr, "");
 			} catch (PatternSyntaxException e) {
-				
-				
+
 			}
 		}
 		return text;

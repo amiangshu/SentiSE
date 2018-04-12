@@ -9,7 +9,7 @@ import java.util.HashSet;
 import edu.sentise.model.SentimentData;
 import edu.sentise.util.Util;
 
-public class ContractionLoader {
+public class ContractionLoader implements TextPreprocessor {
 
 	private HashMap<String, String> contractionMap = null;
 
@@ -45,7 +45,7 @@ public class ContractionLoader {
 		return applyContraction(text.toLowerCase());
 	}
 
-	public ArrayList<SentimentData> preprocessContractions(ArrayList<SentimentData> sentiList) {
+	public ArrayList<SentimentData> apply(ArrayList<SentimentData> sentiList) {
 
 		for (int i = 0; i < sentiList.size(); i++) {
 			sentiList.get(i).setText(preprocessContractions(sentiList.get(i).getText()));

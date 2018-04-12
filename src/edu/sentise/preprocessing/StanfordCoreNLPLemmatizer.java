@@ -13,45 +13,24 @@ import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.util.CoreMap;
 
-public class Lemmatizer {
+public class StanfordCoreNLPLemmatizer  implements weka.core.stemmers.Stemmer  {
 
-	private static StanfordCoreNLP pipeline = null;
-	public static void main(String[] args) {
-		 initCoreNLP();
-	     System.out.println(lemmatize("that crying boy?"));
-	      
-	      
-	}
-	private static void initCoreNLP()
-	{
-		  Properties props = new Properties();
-		  props.setProperty("annotators","tokenize, ssplit, pos, lemma, ner, parse");
+	private StanfordCoreNLP pipeline = null;
+		
+	public StanfordCoreNLPLemmatizer () {
+	
+		 Properties props = new Properties();
+		  props.setProperty("annotators","tokenize, ssplit, pos, lemma");
 	      pipeline = new StanfordCoreNLP(props);
 	}
-   public static ArrayList<SentimentData> lematizeSentimentData(ArrayList<SentimentData> sentimentData) {
-      
-		initCoreNLP();
-		int length = sentimentData.size();
-		for (int i = 0; i < length; i++) {
-
-			System.out.println(sentimentData.get(i).getText());
-			sentimentData.get(i).setText(lemmatize(sentimentData.get(i).getText()));
-			System.out.println(sentimentData.get(i).getText());
-			if((i%100) ==0)
-			{
-				System.out.println("lematization processed:"+i +" of "+length);
-			}
-		}
-
-		return sentimentData;
-	}
 	
+  	
 	
-	public static String lemmatize(String documentText) 
+	public  String stem(String word) 
     { 
        StringBuilder lema=new StringBuilder();
         // Create an empty Annotation just with the given text 
-        Annotation document = new Annotation(documentText); 
+        Annotation document = new Annotation(word); 
         // run all Annotators on this text 
         pipeline.annotate(document); 
         // Iterate over all of the sentences found 
@@ -67,4 +46,12 @@ public class Lemmatizer {
         } 
         return lema.toString(); 
     }
+
+
+
+	@Override
+	public String getRevision() {
+		// TODO Auto-generated method stub
+		return "$Revision: 8034 $";
+	}
 }
