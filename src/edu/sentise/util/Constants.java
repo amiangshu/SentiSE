@@ -15,6 +15,8 @@ public class Constants {
     public static final String NEGATIVE_SENTI_WORD_FILE="models/negative.txt";
     public static final String BIGRAM_FILE="models/bigram.txt";
     public static final String TRIGRAM_FILE="models/trigram.txt";
+    public static final String SHORT_WORD_FILE="models/short_word_list.txt"; 
+
 
 
 }

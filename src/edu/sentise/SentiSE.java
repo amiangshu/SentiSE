@@ -16,6 +16,7 @@ import edu.sentise.preprocessing.Lemmatizer;
 import edu.sentise.preprocessing.MyStopWordsHandler;
 import edu.sentise.preprocessing.ParserUtility;
 import edu.sentise.preprocessing.PunctuationHandler;
+import edu.sentise.preprocessing.ShortWordHandler;
 import edu.sentise.preprocessing.URLRemover;
 import edu.sentise.test.ARFFTestGenerator;
 import edu.sentise.util.Constants;
@@ -53,6 +54,7 @@ public class SentiSE {
 	private boolean addSentiWord = true;            //if a sentence contains sentiment word. Add a correspponding string with it.
     private boolean processPunctuaions=true;        //process  question and exclamatory marks
     private boolean lemmatize=true;
+    private boolean addshortword=true;
     
     private boolean useStemmar = true;
  
@@ -142,6 +144,8 @@ public class SentiSE {
 		sentimentDataList = contractionHandler.preprocessContractions(sentimentDataList);
 		sentimentDataList = URLRemover.removeURL(sentimentDataList);
 		sentimentDataList = emoticonHandler.preprocessEmoticons(sentimentDataList);
+		if(addshortword)
+			sentimentDataList=ShortWordHandler.preprocessShortWord(sentimentDataList);
 		if(lemmatize)
 			sentimentDataList=Lemmatizer.lematizeSentimentData(sentimentDataList);
 		if(processPunctuaions)
