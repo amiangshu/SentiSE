@@ -52,7 +52,7 @@ public class EmoticonProcessor implements TextPreprocessor {
 
 	private String replaceEmoticon(String text) {
 
-		System.out.println(text);
+		//System.out.println(text);
 		HashSet<String> keySet = new HashSet<String>(emoticonMap.keySet());
 		for (String key : keySet) {
 			// previously used if. and replace all. problem in regex compelled to use while
@@ -61,7 +61,7 @@ public class EmoticonProcessor implements TextPreprocessor {
 			}
 		}
 
-		System.out.println(text);
+		//System.out.println(text);
 		return text;
 	}
 
