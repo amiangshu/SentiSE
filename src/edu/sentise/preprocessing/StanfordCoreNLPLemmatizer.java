@@ -40,8 +40,8 @@ public class StanfordCoreNLPLemmatizer  implements weka.core.stemmers.Stemmer  {
             for (CoreLabel token: sentence.get(TokensAnnotation.class)) { 
                 // Retrieve and add the lemma for each word into the 
                 // list of lemmas 
-                lema.append((token.get(LemmaAnnotation.class))); 
-                lema.append(' ');
+                lema.append((token.get(LemmaAnnotation.class)));
+                
             } 
         } 
         return lema.toString(); 

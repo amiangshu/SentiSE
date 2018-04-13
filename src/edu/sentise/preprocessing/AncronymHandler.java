@@ -3,9 +3,8 @@ package edu.sentise.preprocessing;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.StringTokenizer;
+import java.util.HashSet;
 
-import com.mysql.jdbc.ReplicationConnectionProxy;
 
 import edu.sentise.model.SentimentData;
 import edu.sentise.util.Constants;
@@ -29,12 +28,12 @@ public class AncronymHandler implements TextPreprocessor {
 
 		if (shortWordMap == null || shortWordMap.size() == 0)
 			createShortWordMap(this.fileName);
-		StringTokenizer st = new StringTokenizer(text, " ");
-
-		while (st.hasMoreTokens()) {
-			String token = st.nextToken();
-			if (shortWordMap.containsKey(token)) {
-				text = text.replaceAll(token, shortWordMap.get(token));
+		
+		HashSet<String> keySet = new HashSet<String>(shortWordMap.keySet());
+		for (String key : keySet) {
+			// previously used if. and replace all. problem in regex compelled to use while
+			while (text.contains(key)) {
+				text = text.replace(key, " " + shortWordMap.get(key) + " ");
 			}
 		}
 		return text;

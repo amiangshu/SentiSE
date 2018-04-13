@@ -6,7 +6,7 @@ public  class BasicFactory {
 		if(keepPosTag && keepContextTag)
 			throw new RuntimeException("Both POS and Context Tag cannot be kept at the same time");
 		
-		System.out.println("\nprinting parameters:\n\nkeep pos Tags: "+ keepPosTag+"\ninclude important pos: "+includeImportantPOS+"\n");
+		//System.out.println("\nprinting parameters:\n\nkeep pos Tags: "+ keepPosTag+"\ninclude important pos: "+includeImportantPOS+"\n");
 		if (keepPosTag && includeImportantPOS)
 			return new KeepImportantWithPOSTags();
 		if(keepContextTag && includeImportantPOS)

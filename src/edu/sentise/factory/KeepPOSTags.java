@@ -7,7 +7,7 @@ public class KeepPOSTags extends BasePOSUtility{
 
 	@Override
 	public void shouldInclude(String label,String word, String tag, String context, Hashtable<String, String> myMap) {
-		myMap.put(label,tag+"|"+word);
+		myMap.put(label,tag+"_"+word);
 		
 	}
 }

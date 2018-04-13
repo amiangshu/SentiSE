@@ -7,11 +7,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Properties;
 
-import com.sun.corba.se.impl.encoding.CodeSetConversion.BTCConverter;
-import com.sun.xml.internal.messaging.saaj.packaging.mime.Header;
-
 import edu.sentise.factory.BasePOSUtility;
-import edu.sentise.factory.KeepUnchanged;
 import edu.sentise.model.SentimentData;
 import edu.sentise.util.DataLists;
 import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
@@ -50,9 +46,9 @@ public class POSTagProcessor implements TextPreprocessor {
 		int length = sentimentData.size();
 		for (int i = 0; i < length; i++) {
 
-			System.out.println(sentimentData.get(i).getText());
+			//System.out.println(sentimentData.get(i).getText());
 			sentimentData.get(i).setText(preprocessPOStags(sentimentData.get(i).getText()));
-			System.out.println(sentimentData.get(i).getText());
+			//System.out.println(sentimentData.get(i).getText());
 			if ((i % 100) == 0) {
 				System.out.println("POS tag processsed processed:" + i + " of " + length);
 			}
@@ -163,18 +159,18 @@ public class POSTagProcessor implements TextPreprocessor {
 			// System.out.println(positiveSentiScore+" "+negativeSentiScore);
 			if (addSentiScoreType == 4) {
 				if(extreme_negative)
-					newText +=  " extremenegative";
+					newText +=  " includes_extremenegative ";
 
 				if(extreme_positive)
-					newText +=  " extremepositive";
+					newText +=  " includes_extremepositive ";
 			}
 			if(addSentiScoreType >=2)
 			{
 				if(negative)
-					newText +=  " negative";
+					newText +=  " includes_negative ";
 
 				if(positive)
-					newText +=  " positive";
+					newText +=  " includes_positive ";
 			}
 
 		}

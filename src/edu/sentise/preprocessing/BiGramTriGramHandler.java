@@ -30,20 +30,30 @@ public class BiGramTriGramHandler implements TextPreprocessor {
 
 	private   String replacenGrams(String text) {
 
+		
+		
 		if(bigram_map == null || bigram_map.size() == 0)
 			createBiGram();
 		if(trigram_map == null || trigram_map.size() == 0)
 			createTriGram();
 		
-		for(String key : bigram_map.keySet())
-			if(text.contains(key))
-				text=text.replaceAll(key, bigram_map.get(key));
-		
 		for(String key : trigram_map.keySet())
 			if(text.contains(key))
 				text=text.replaceAll(key, trigram_map.get(key));
 		
+		for(String key : bigram_map.keySet())
+			if(text.contains(key))
+			{
+				
+				text=text.replaceAll(key, bigram_map.get(key));
+			}
+				
+		
+		
+		
+		//System.out.println(text);
 		return text;
+		
 	}
 	private static void createBiGram()
 	{
@@ -59,7 +69,7 @@ public class BiGramTriGramHandler implements TextPreprocessor {
 				String[] splits=str.split(" ",2);
 				
 				String key=new StringBuilder(splits[1]).reverse().toString();
-				String val=" "+key.replaceAll(" ", "|")+" ";
+				String val=" "+key.replaceAll(" ", "_")+" ";
 				bigram_map.put(key,val);
 				//System.out.println(key+ " "+val);
 			}
@@ -83,7 +93,7 @@ public class BiGramTriGramHandler implements TextPreprocessor {
 				String str=new StringBuilder(line).reverse().toString();
 				String[] splits=str.split(" ",2);
 				String key=new StringBuilder(splits[1]).reverse().toString();
-				String val=" "+key.replaceAll(" ", "|")+" ";
+				String val=" "+key.replaceAll(" ", "_")+" ";
 				trigram_map.put(key,val);
 				//System.out.println(key+ " "+val);
 			}
