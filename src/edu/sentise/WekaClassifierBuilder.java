@@ -13,6 +13,7 @@ import weka.classifiers.misc.InputMappedClassifier;
 import weka.classifiers.trees.J48;
 import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
+import weka.classifiers.functions.MultilayerPerceptron;
 
 public class WekaClassifierBuilder {
 
@@ -77,6 +78,18 @@ public class WekaClassifierBuilder {
 		}
 		else if (algo.equals("SVM")) {
 			return new SMO();
+		}
+		
+		else if (algo.equals("MLPC")) {
+			return new MultilayerPerceptron();
+		}
+		
+		else if(algo.equals("SL")) {
+			return new weka.classifiers.functions.SimpleLogistic();
+		}
+		
+		else if (algo.equals("KNN")) {
+			return new weka.classifiers.lazy.IBk();
 		}
 		else if (algo.equals("RF")) {
 			System.out.println("Algorithm: Random Forest" );

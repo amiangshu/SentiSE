@@ -1,24 +1,23 @@
 package edu.sentise;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Random;
-
-import javax.management.RuntimeErrorException;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
+
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import edu.sentise.factory.BasePOSUtility;
 import edu.sentise.factory.BasicFactory;
 import edu.sentise.model.SentimentData;
 import edu.sentise.preprocessing.AncronymHandler;
@@ -43,7 +42,6 @@ import weka.core.stemmers.NullStemmer;
 import weka.core.stemmers.SnowballStemmer;
 import weka.core.tokenizers.WordTokenizer;
 import weka.filters.Filter;
-import weka.filters.supervised.instance.SMOTE;
 import weka.filters.unsupervised.attribute.StringToWordVector;
 
 public class SentiSE {
@@ -51,7 +49,7 @@ public class SentiSE {
 	private HashMap<Integer, Integer> classMapping;
 	private Classifier classifier;
 	private String emoticonDictionary = Constants.EMOTICONS_FILE_NAME;
-	private String stopWordDictionary = Constants.STOPWORDS_FILE_NAME;
+	// private String stopWordDictionary = Constants.STOPWORDS_FILE_NAME;
 	private String contractionDictionary = Constants.CONTRACTION_TEXT_FILE_NAME;
 	private String oracleFileName = Constants.ORACLE_FILE_NAME;
 	private String acronymDictionary = Constants.ACRONYM_WORD_FILE;
@@ -66,7 +64,7 @@ public class SentiSE {
 													// adverbs
 	private boolean preprocessNegation = false; // preprocessNegation means handle the negation effects on other POS
 	private boolean applyContextTag = false; // Apply context information of a word like
-											// VP,ADVP or NP
+												// VP,ADVP or NP
 	private int addSentiScoreType = 0; // if a sentence contains sentiment word. Add a correspponding string with it.
 	private boolean processQuestionMark = false; // process question and exclamatory marks
 	private boolean processExclamationMark = false;
@@ -74,19 +72,13 @@ public class SentiSE {
 
 	private boolean useStemmer = false;
 	private boolean useLemmatizer = false;
-
+	private Random rand;
+	private static int REPEAT_COUNT = 10;
+	private String outputFile;
 	Instances trainingInstances = null;
 
 	public void setEmoticonDictionary(String emoticonDictionary) {
 		this.emoticonDictionary = emoticonDictionary;
-	}
-
-	public void setStopWordDictionary(String stopWordDictionary) {
-		this.stopWordDictionary = stopWordDictionary;
-	}
-
-	public void setContractionDictionary(String contractionDictionary) {
-		this.contractionDictionary = contractionDictionary;
 	}
 
 	public void setOracleFileName(String oracleFileName) {
@@ -145,15 +137,17 @@ public class SentiSE {
 
 	public SentiSE() {
 
+		String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+		this.outputFile = timeStamp + ".txt";
 		// common preprocessing steps, always applied
 		preprocessPipeline.add(new EmoticonProcessor(this.emoticonDictionary));
-		preprocessPipeline.add(new ContractionLoader(this.contractionDictionary));		
+		preprocessPipeline.add(new ContractionLoader(this.contractionDictionary));
 		preprocessPipeline.add(new URLRemover());
 		preprocessPipeline.add(new AncronymHandler(this.acronymDictionary));
 
 	}
 
-	public void generateTrainingInstance(boolean oversample) throws Exception {
+	public void generateTrainingInstance() throws Exception {
 
 		System.out.println("Reading oracle file...");
 		ArrayList<SentimentData> sentimentDataList = SentimentData.parseSentimentData(Constants.ORACLE_FILE_NAME);
@@ -184,6 +178,7 @@ public class SentiSE {
 		this.trainingInstances.setClassIndex(0);
 
 		storeAsARFF(this.trainingInstances, this.oracleFileName + ".arff");
+		this.setForceRcreateTrainingData(false);
 
 	}
 
@@ -203,7 +198,7 @@ public class SentiSE {
 
 	public void reloadClassifier() throws Exception {
 
-		this.generateTrainingInstance(true);
+		this.generateTrainingInstance();
 		// trainingInstances = applyOversampling(trainingInstances);
 		System.out.println("Training classifier..");
 		this.classifier = WekaClassifierBuilder.createClassifierFromInstance(this.algorithm, this.trainingInstances);
@@ -299,7 +294,12 @@ public class SentiSE {
 
 	}
 
-	private void tenFoldCV() {
+	private void initRand(long value) {
+
+		rand = new Random(value);
+	}
+
+	private CrossValidationResult tenFoldCV() {
 
 		try {
 
@@ -307,14 +307,13 @@ public class SentiSE {
 			File arffFile = new File(arffFileName);
 
 			if (!arffFile.exists() || this.isForceRcreateTrainingData()) {
-				this.generateTrainingInstance(false);
+				this.generateTrainingInstance();
 			} else {
 				this.trainingInstances = loadInstanceFromARFF(arffFileName);
 
 			}
 			int folds = 10;
 
-			Random rand = new Random(System.currentTimeMillis());
 			Instances randData = new Instances(this.trainingInstances);
 			randData.randomize(rand);
 
@@ -369,6 +368,10 @@ public class SentiSE {
 				System.out.println("Accuracy:" + eval.pctCorrect());
 				System.out.println("Kappa:" + eval.kappa());
 
+				System.out.println(" Precision(positive):" + eval.precision(2));
+				System.out.println("Recall(positive):" + eval.recall(2));
+				System.out.println("Fmeasure(positive):" + eval.fMeasure(2));
+
 				System.out.println(" Precision(neutral):" + eval.precision(0));
 				System.out.println("Recall(neutral):" + eval.recall(0));
 				System.out.println("Fmeasure(neutral):" + eval.fMeasure(0));
@@ -377,57 +380,126 @@ public class SentiSE {
 				System.out.println("Recall(negative):" + eval.recall(1));
 				System.out.println("Fmeasure(negative):" + eval.fMeasure(1));
 
-				System.out.println(" Precision(positive):" + eval.precision(2));
-				System.out.println("Recall(positive):" + eval.recall(2));
-				System.out.println("Fmeasure(positive):" + eval.fMeasure(2));
-
 			}
+			CrossValidationResult result = new CrossValidationResult();
+			result.setAccuracy(getAverage(accuracies));
+			result.setPosPrecision(getAverage(pos_precision));
+			result.setNegPrecision(getAverage(neg_precision));
+			result.setNeuPrecision(getAverage(neu_precision));
+			result.setPosRecall(getAverage(pos_recall));
+			result.setNegRecall(getAverage(neg_recall));
+			result.setNeuRecall(getAverage(neu_recall));
+			result.setPosFmeasure(getAverage(pos_fscore));
+			result.setNegFmeasure(getAverage(neg_fscore));
+			result.setNeuFmeasure(getAverage(neu_fscore));
 
-			System.out.println("\n\n.......Average......: ");
-			System.out.println("Accuracy:" + getAverage(accuracies));
+			result.setKappa(getAverage(kappa));
 
 			System.out.println("Algorithm:" + this.algorithm + "\n Oracle:" + this.oracleFileName);
-			System.out.println("Precision (Neutral):" + getAverage(neu_precision));
-			System.out.println("Recall (Neutral):" + getAverage(neu_recall));
-			System.out.println("F-Measure (Neutral):" + getAverage(neu_fscore));
-
-			System.out.println("Precision (Negative):" + getAverage(neg_precision));
-			System.out.println("Recall (Negative):" + getAverage(neg_recall));
-			System.out.println("F-measure (Negative):" + getAverage(neg_fscore));
-
-			System.out.println("Precision (Positive):" + getAverage(pos_precision));
-			System.out.println("Recall (Positive):" + getAverage(pos_recall));
-			System.out.println("F-Measure (Positive):" + getAverage(pos_fscore));
-
+			System.out.println("\n\n.......Average......: ");
+			System.out.println("Accuracy:" + result.getAccuracy());
 			System.out.println("Kappa: " + getAverage(kappa));
-			
-			System.out.println("\n\n.......Configuration......: ");
-			System.out.println("Algorithm: "+this.algorithm);
-			System.out.println("Use ngram: "+this.handleNGram);
-			System.out.println("Negation preprocess: "+this.preprocessNegation);
-			System.out.println("Context tag: "+this.applyContextTag);
-			System.out.println("POS tag: "+this.applyPosTag);
-			System.out.println("Replace question mark: "+this.processQuestionMark);
-			System.out.println("Replace question mark: "+this.processExclamationMark);
-			System.out.println("Stemming:"+this.useStemmer);
-			System.out.println("Lemmatization:"+this.useLemmatizer);
-			System.out.println("Only V, Adv, Adj:"+this.keepOnlyImportantPos);
-			System.out.println("Mark sentiment words:"+this.addSentiScoreType);
-			
+
+			System.out.println("Precision (Positive):" + result.getPosPrecision());
+			System.out.println("Recall (Positive):" + result.getPosRecall());
+			System.out.println("F-Measure (Positive):" + result.getPosFmeasure());
+
+			System.out.println("Precision (Neutral):" + result.getNeuPrecision());
+			System.out.println("Recall (Neutral):" + result.getNeuRecall());
+			System.out.println("F-Measure (Neutral):" + result.getNeuFmeasure());
+
+			System.out.println("Precision (Negative):" + result.getNegPrecision());
+			System.out.println("Recall (Negative):" + result.getNegRecall());
+			System.out.println("F-measure (Negative):" + result.getNegFmeasure());
+
+			// printConfiguration();
+			return result;
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 
-	private double getAverage(double[] elements) {
+	private String getConfiguration() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(".......Configuration......: ");
+		builder.append("\n");
+		builder.append("Algorithm: " + this.algorithm);
+		builder.append("\n");
+		builder.append("Use ngram: " + this.handleNGram);
+		builder.append("\n");
+		builder.append("Negation preprocess: " + this.preprocessNegation);
+		builder.append("\n");
+		builder.append("Context tag: " + this.applyContextTag);
+		builder.append("\n");
+		builder.append("POS tag: " + this.applyPosTag);
+		builder.append("\n");
+		builder.append("Replace question mark: " + this.processQuestionMark);
+		builder.append("\n");
+		builder.append("Replace question mark: " + this.processExclamationMark);
+		builder.append("\n");
+		builder.append("Stemming:" + this.useStemmer);
+		builder.append("\n");
+		builder.append("Lemmatization:" + this.useLemmatizer);
+		builder.append("\n");
+		builder.append("Only V, Adv, Adj:" + this.keepOnlyImportantPos);
+		builder.append("\n");
+		builder.append("Mark sentiment words:" + this.addSentiScoreType);
+		builder.append("\n");
+		builder.append("Min term frequency:" + this.minTermFrequeny);
+		builder.append("\n");
+		builder.append("Max features:" + this.maxWordsToKeep);
+		builder.append("\n");
+		return builder.toString();
+	}
+
+	private float getAverage(double[] elements) {
 		double sum = 0.0;
 		for (int i = 0; i < elements.length; i++)
 			sum = sum + elements[i];
 
 		// calculate average value
 		double average = sum / elements.length;
-		return average;
+		return (float) average;
+	}
+
+	public void runRepeatedValidation() {
+		ArrayList<CrossValidationResult> cvResults = new ArrayList<CrossValidationResult>();
+
+		try {
+			setForceRcreateTrainingData(true);
+
+			initRand(5555);
+
+			for (int i = 0; i < REPEAT_COUNT; i++) {
+				CrossValidationResult result = tenFoldCV();
+				cvResults.add(result);
+			}
+
+			StringBuilder outputBuffer = new StringBuilder();
+			outputBuffer.append(getConfiguration());
+			outputBuffer.append("\n\n------Results-------\n");
+
+			outputBuffer.append(CrossValidationResult.getResultHeader() + "\n");
+
+			for (CrossValidationResult result : cvResults) {
+				outputBuffer.append(result.toString() + "\n");
+			}
+
+			this.writeResultsToFile(outputBuffer.toString());
+
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+
+	private void writeResultsToFile(String text) throws IOException {
+
+		BufferedWriter writer = new BufferedWriter(new FileWriter(this.outputFile));
+		writer.write(text);
+		writer.close();
 	}
 
 	public static void main(String[] args) {
@@ -435,17 +507,8 @@ public class SentiSE {
 		SentiSE instance = new SentiSE();
 		if (!instance.isCommandLineParsed(args))
 			return;
-		// if (args.length > 0)
-		// instance.setAlgorithm(args[0].trim());
 
-		try {
-			instance.setForceRcreateTrainingData(true);
-			instance.tenFoldCV();
-
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		instance.runRepeatedValidation();
 
 	}
 
@@ -455,7 +518,7 @@ public class SentiSE {
 		Options options = new Options();
 
 		options.addOption(Option.builder("algo").hasArg(true)
-				.desc("Algorithm for classifier. \nChoices are: RF(Default)| DT | NB").build());
+				.desc("Algorithm for classifier. \nChoices are: RF(Default)| DT | NB| SVM |MLPC").build());
 		options.addOption(Option.builder("help").hasArg(false).desc("Prints help message").build());
 		options.addOption(Option.builder("root").hasArg(true)
 				.desc("Word root determination process.\n 0=None (Default) | 1=Stemming | 2=Lemmatization ").build());
@@ -470,13 +533,15 @@ public class SentiSE {
 				.desc("Preprocess punctuations.\n 0= None (default) | 1= Question | 2= Exclamation | 3=Both ").build());
 		options.addOption(Option.builder("sentiword").hasArg(true)
 				.desc("Categorize sentiment words.\n 0= None (default) | 2= Two groups |4= Four groups ").build());
+		options.addOption(Option.builder("output").hasArg(true).desc("Output file").build());
 
 		Option termFreq = Option.builder("minfreq").hasArg()
 				.desc("Minimum frequecy required to be considered as a feature. Default: 5").build();
 		termFreq.setType(Number.class);
 		options.addOption(termFreq);
 
-		Option maxterms = Option.builder("maxfeatures").hasArg().desc("Maximum number of features. Default: 2500").build();
+		Option maxterms = Option.builder("maxfeatures").hasArg().desc("Maximum number of features. Default: 2500")
+				.build();
 		termFreq.setType(Number.class);
 		options.addOption(maxterms);
 
@@ -491,7 +556,7 @@ public class SentiSE {
 			if (commandLine.hasOption("algo")) {
 				String algo = commandLine.getOptionValue("algo");
 				if (algo.equals("RF") || algo.equals("DT") || algo.equals("NB") || algo.equals("RF")
-						|| algo.equals("RNN"))
+						|| algo.equals("SVM") || algo.equals("MLPC") || algo.equals("SL") || algo.equals("KNN"))
 					this.algorithm = algo;
 				else
 					printUsageAndExit(options, formatter);
@@ -513,6 +578,10 @@ public class SentiSE {
 
 			if (commandLine.hasOption("negate")) {
 				setPreprocessNegation(true);
+			}
+
+			if (commandLine.hasOption("output")) {
+				this.outputFile = commandLine.getOptionValue("output");
 			}
 
 			if (commandLine.hasOption("tag")) {
@@ -564,20 +633,20 @@ public class SentiSE {
 					addSentiScoreType = 4;
 
 			}
-			
+
 			if (commandLine.hasOption("ngram")) {
 
 				handleNGram = true;
 			}
-			
+
 			if (commandLine.hasOption("minfreq")) {
 
-				this.minTermFrequeny=Integer.parseInt(commandLine.getOptionValue("minfreq"));
+				this.minTermFrequeny = Integer.parseInt(commandLine.getOptionValue("minfreq"));
 			}
-			
+
 			if (commandLine.hasOption("maxfeatures")) {
 
-				this.maxWordsToKeep=Integer.parseInt(commandLine.getOptionValue("maxfeatures"));
+				this.maxWordsToKeep = Integer.parseInt(commandLine.getOptionValue("maxfeatures"));
 			}
 
 		} catch (ParseException e) {
