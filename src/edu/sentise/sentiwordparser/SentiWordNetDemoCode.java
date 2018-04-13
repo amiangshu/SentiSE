@@ -6,11 +6,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
-import com.mysql.jdbc.Util;
+import org.apache.poi.hslf.examples.CreateHyperlink;
 
 import edu.sentise.util.Constants;
+import edu.sentise.util.Util;
 
 public class SentiWordNetDemoCode {
 
@@ -128,10 +130,10 @@ public class SentiWordNetDemoCode {
 		System.out.println("bad#a "+sentiwordnet.extract("bad", "a"));
 		System.out.println("blue#a "+sentiwordnet.extract("blue", "a"));
 		System.out.println("blue#n "+sentiwordnet.extract("blue", "n"));
-		sentiwordnet.getPositiveSentiWords();
-		sentiwordnet.getNegativeSentiWords();
+		sentiwordnet.getPositiveSentiWords(createHashSetByFileName("models/positive_words_short.txt"));
+		sentiwordnet.getNegativeSentiWords(createHashSetByFileName("models/negative_words_short.txt"));
 	}
-	private  void getPositiveSentiWords()
+	private  void getPositiveSentiWords(HashSet<String> words)
 	{
 	
 		try
@@ -146,7 +148,9 @@ public class SentiWordNetDemoCode {
 			if(d>0)
 			{
 				String s=key+"#"+d+"\n";
-				bufferedWriter.write(s);
+				String[] splits=s.split("#");
+				if(words.contains(splits[0]))	
+				  bufferedWriter.write(s);
 			}
 		}
 		bufferedWriter.close();
@@ -157,7 +161,29 @@ public class SentiWordNetDemoCode {
 		}
 		System.out.println("positive sentiment file writing done.........");
 	}
-	private  void getNegativeSentiWords()
+	private static HashSet<String> createHashSetByFileName(String filename)
+	{
+		HashSet<String> hashset=new HashSet<>();
+		BufferedReader bufferedReader=Util.getBufferedreaderByFileName(filename);
+		String line=null;
+		try
+		{
+			while((line = bufferedReader.readLine())!= null)
+			{
+				//String[] parse=line.split("#");
+				hashset.add(line);
+				
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			
+		}
+		return hashset;
+		
+	}
+	private  void getNegativeSentiWords(HashSet<String> words)
 	{
 	
 		try
@@ -173,7 +199,9 @@ public class SentiWordNetDemoCode {
 			if(d<0)
 			{
 				String s=key+"#"+d+"\n";
-				bufferedWriter.write(s);
+				String[] splits=s.split("#");
+				if(words.contains(splits[0]))	
+				  bufferedWriter.write(s);
 			}
 		}
 		bufferedWriter.close();
