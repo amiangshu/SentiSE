@@ -12,45 +12,42 @@ import edu.sentise.model.SentimentData;
 import edu.sentise.util.Constants;
 import edu.sentise.util.Util;
 
-public class BiGramTriGramHandler {
+public class BiGramTriGramHandler implements TextPreprocessor {
 
-	private static HashSet<String> bigram_set= null;
-	private static HashSet<String> trigram_set= null;
+	private static HashMap<String,String> bigram_map= null;
+	private static HashMap<String,String> trigram_map= null;
 	public static void main(String[] args) {
-		System.out.println(replaceShortWords(("stupid codeing style lol wtf")));
-	}
-	public static ArrayList<SentimentData> preprocessBiGramTriGram(ArrayList<SentimentData> sentiList) {
-		for (int i = 0; i < sentiList.size(); i++)
-			sentiList.get(i).setText(replaceShortWords((sentiList.get(i).getText())));
-		return sentiList;
-	}
-
-	private static  String replaceShortWords(String text) {
-
-		if(bigram_set == null || bigram_set.size() == 0)
-			createBiGram();
-		if(trigram_set == null || trigram_set.size() == 0)
-			createTriGram();
-		StringTokenizer st= new StringTokenizer(text, " ");
+		System.out.println(new BiGramTriGramHandler().replacenGrams(" i would like to tell you that"));
 		
-		while(st.hasMoreTokens())
-		{
-			String token=st.nextToken();
-			if(trigram_set.contains(token))
-			{
-				text=text.replaceAll(token,token.replaceAll(" ","|"));
-			}
-			else if(bigram_set.contains(token))
-			{
-				text=text.replaceAll(token,token.replaceAll(" ","|"));
-			}
-			
-		}
+	}
+	@Override
+	public ArrayList<SentimentData> apply(ArrayList<SentimentData> sentimentData) {
+		for (int i = 0; i < sentimentData.size(); i++)
+			sentimentData.get(i).setText(replacenGrams((sentimentData.get(i).getText())));
+		return sentimentData;
+	}
+	
+
+	private   String replacenGrams(String text) {
+
+		if(bigram_map == null || bigram_map.size() == 0)
+			createBiGram();
+		if(trigram_map == null || trigram_map.size() == 0)
+			createTriGram();
+		
+		for(String key : bigram_map.keySet())
+			if(text.contains(key))
+				text=text.replaceAll(key, bigram_map.get(key));
+		
+		for(String key : trigram_map.keySet())
+			if(text.contains(key))
+				text=text.replaceAll(key, trigram_map.get(key));
+		
 		return text;
 	}
 	private static void createBiGram()
 	{
-		bigram_set= new HashSet<>();
+		bigram_map= new HashMap<>();
 		BufferedReader bufferedReader=Util.getBufferedreaderByFileName(Constants.BIGRAM_FILE);
 		String line=null;
 		try
@@ -58,7 +55,13 @@ public class BiGramTriGramHandler {
 			while((line = bufferedReader.readLine())!= null)
 			{
 				//String[] parse=line.split(" ");
-				bigram_set.add(line);
+				String str=new StringBuilder(line).reverse().toString();
+				String[] splits=str.split(" ",2);
+				
+				String key=new StringBuilder(splits[1]).reverse().toString();
+				String val=" "+key.replaceAll(" ", "|")+" ";
+				bigram_map.put(key,val);
+				//System.out.println(key+ " "+val);
 			}
 		}
 		catch(Exception e)
@@ -69,7 +72,7 @@ public class BiGramTriGramHandler {
 	}
 	private static void createTriGram()
 	{
-		trigram_set= new HashSet<>();
+		trigram_map= new HashMap<>();
 		BufferedReader bufferedReader=Util.getBufferedreaderByFileName(Constants.TRIGRAM_FILE);
 		String line=null;
 		try
@@ -77,7 +80,12 @@ public class BiGramTriGramHandler {
 			while((line = bufferedReader.readLine())!= null)
 			{
 				//String[] parse=line.split(" ");
-				trigram_set.add(line);
+				String str=new StringBuilder(line).reverse().toString();
+				String[] splits=str.split(" ",2);
+				String key=new StringBuilder(splits[1]).reverse().toString();
+				String val=" "+key.replaceAll(" ", "|")+" ";
+				trigram_map.put(key,val);
+				//System.out.println(key+ " "+val);
 			}
 		}
 		catch(Exception e)

@@ -20,6 +20,7 @@ import edu.sentise.factory.BasePOSUtility;
 import edu.sentise.factory.BasicFactory;
 import edu.sentise.model.SentimentData;
 import edu.sentise.preprocessing.AncronymHandler;
+import edu.sentise.preprocessing.BiGramTriGramHandler;
 import edu.sentise.preprocessing.ContractionLoader;
 
 import edu.sentise.preprocessing.EmoticonProcessor;
@@ -66,6 +67,7 @@ public class SentiSE {
 	private int addSentiScoreType = 0;            //if a sentence contains sentiment word. Add a correspponding string with it.
     private boolean processQuestionMark=false;        //process  question and exclamatory marks
     private boolean processExclamationMark=false;
+    private boolean handlengram=false;
    
     
     private boolean useStemmer = false;
@@ -159,6 +161,8 @@ public class SentiSE {
 		
 		if(this.processQuestionMark)
 			preprocessPipeline.add(new QuestionMarkHandler());
+		if(this.handlengram)
+			preprocessPipeline.add(new BiGramTriGramHandler());
 		
 		System.out.println("Preprocessing text ..");
 		preprocessPipeline.add( new POSTagProcessor(BasicFactory.getPOSUtility(keepPosTag, keepOnlyImportantPos,keepContextTag), this.preprocessNegation,addSentiScoreType));
@@ -585,7 +589,7 @@ public class SentiSE {
 			if(commandLine.hasOption("ngram"))
 			{
 				
-
+				handlengram=true;
 			}
 			
 		 }
