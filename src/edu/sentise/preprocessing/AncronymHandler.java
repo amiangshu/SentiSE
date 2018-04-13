@@ -16,6 +16,9 @@ public class AncronymHandler implements TextPreprocessor {
 	private HashMap<String, String> shortWordMap = null;
 	private String fileName;
 
+	public static void main(String[] args) {
+		new AncronymHandler(Constants.ACRONYM_WORD_FILE);
+	}
 	public ArrayList<SentimentData> apply(ArrayList<SentimentData> sentiList) {
 		for (int i = 0; i < sentiList.size(); i++)
 			sentiList.get(i).setText(replaceShortWords((sentiList.get(i).getText())));
@@ -48,8 +51,9 @@ public class AncronymHandler implements TextPreprocessor {
 		String line = null;
 		try {
 			while ((line = bufferedReader.readLine()) != null) {
-				String[] parse = line.split(" ");
+				String[] parse = line.split(" ",2);
 				shortWordMap.put(parse[0], parse[1]);
+				//System.out.println(parse[1]);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
