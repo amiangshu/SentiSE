@@ -60,13 +60,13 @@ public class SentiSE {
 	private boolean forceRcreateTrainingData = false;
 	private boolean keepPosTag=false;            //keepPosTag means add POS tags with words
 	private boolean keepOnlyImportantPos=false;      //keepOnlyImportantPos means keeping only verbs,adjectives and adverbs
-	private boolean preprocessNegation = true;       // preprocessNegation means handle the negation effects on other POS
-	private boolean keepContextTag = true;        //  keepContextTag means keeping the context information of a word like 
+	private boolean preprocessNegation = false;       // preprocessNegation means handle the negation effects on other POS
+	private boolean keepContextTag = false;        //  keepContextTag means keeping the context information of a word like 
 	                                                // VP,ADVP or NP
-	private boolean addSentiWord = true;            //if a sentence contains sentiment word. Add a correspponding string with it.
-    private boolean processQuestionMark=true;        //process  question and exclamatory marks
-   private boolean processExclamationMark=true;
-    private boolean addshortword=true;
+	private int addSentiScoreType = 0;            //if a sentence contains sentiment word. Add a correspponding string with it.
+    private boolean processQuestionMark=false;        //process  question and exclamatory marks
+    private boolean processExclamationMark=false;
+   
     
     private boolean useStemmer = false;
     private boolean useLemmatizer=true;
@@ -161,7 +161,7 @@ public class SentiSE {
 			preprocessPipeline.add(new QuestionMarkHandler());
 		
 		System.out.println("Preprocessing text ..");
-		preprocessPipeline.add( new POSTagProcessor(BasicFactory.getPOSUtility(keepPosTag, keepOnlyImportantPos,keepContextTag), this.preprocessNegation));
+		preprocessPipeline.add( new POSTagProcessor(BasicFactory.getPOSUtility(keepPosTag, keepOnlyImportantPos,keepContextTag), this.preprocessNegation,addSentiScoreType));
 		
 		for(TextPreprocessor process:preprocessPipeline)
 		{
@@ -461,9 +461,10 @@ public class SentiSE {
 		
 		
 		SentiSE instance = new SentiSE();
-		instance.handleCommandLine(args);
-		if (args.length > 0)
-			instance.setAlgorithm(args[0].trim());
+		if(!instance.isCommandLineParsed(args))
+			return ;
+		//if (args.length > 0)
+		//	instance.setAlgorithm(args[0].trim());
 
 		try {
 			instance.setForceRcreateTrainingData(true);
@@ -487,7 +488,7 @@ public class SentiSE {
 		}
 */
 	}
-	private  void handleCommandLine(String[] args)
+	private  boolean isCommandLineParsed(String[] args)
 	{
 		CommandLineParser commandLineParser= new DefaultParser();
 		
@@ -502,6 +503,16 @@ public class SentiSE {
 		options.addOption(root);
 		Option negate =new Option("negate",false, "handle negattion words");
 		options.addOption(negate);
+		Option context =new Option("context",true, "keep pos or phrase");
+		options.addOption(context);
+		Option keep =new Option("keep",true, "a(all) or i(important)");
+		options.addOption(keep);
+		Option sentiword =new Option("sentiword",true, "n(none) or 2( positive and negative) or 4(positive, negatve, extreme positive and extreme negative)");
+		options.addOption(sentiword);
+		Option punctuations =new Option("punctuation",false, "handle question or exclamatory mark");
+		options.addOption(punctuations);
+		Option ngrams =new Option("ngram",false, "handle bigrams and trigrams");
+		options.addOption(ngrams);
 		try
 		{
 		CommandLine commandLine=commandLineParser.parse(options,args);
@@ -509,12 +520,17 @@ public class SentiSE {
 		{
 			String help="sentise algo <algoname> [options]\n";
 			help+=" Options:\n";
-			help+=String.format("%-30s prints this message\n","-help");
-			help+=String.format("%-30s RF | KNN | NB | DT\n","-algo");
-			help+=String.format("%-30s stemmer | lemmatizer\n","-root");
-			help+=String.format("%-30s hanldes negation of words\n","-negate");
-
+			help+=String.format("%-20s prints this message\n","-help");
+			help+=String.format("%-20s RF | KNN | NB | DT\n","-algo");
+			help+=String.format("%-20s stemmer | lemmatizer\n","-root");
+			help+=String.format("%-20s hanldes negation of words\n","-negate");
+			help+=String.format("%-20s pos | phrase\n","-context");
+			help+=String.format("%-20s a | i\n","-keep");
+			help+=String.format("%-20s n | 2 | 4\n","-sentiword");
+			help+=String.format("%-20s handles question and exclamatory sihns\n","-punctuation");
+			help+=String.format("%-20s handle bigram and trigram\n","-ngram");
 			System.out.println(help);
+			return false;
 		}
 		else
 		{
@@ -536,13 +552,50 @@ public class SentiSE {
 			}
 			if(commandLine.hasOption("negate"))
 			   setPreprocessNegation(true);
+			if(commandLine.hasOption("context"))
+			{
+				if(commandLine.getOptionValue("context").equals("pos"))
+					keepPosTag=true;
+				else 
+					keepContextTag=true;
+
+			}
+			if(commandLine.hasOption("keep"))
+			{
+				if(commandLine.getOptionValue("keep").equals("i"))
+					keepOnlyImportantPos=true;
+
+			}
+			if(commandLine.hasOption("sentiword"))
+				{
+					if (commandLine.getOptionValue("sentiword").equals("n"))
+						addSentiScoreType = 0;
+					else if (commandLine.getOptionValue("sentiword").equals("2"))
+						addSentiScoreType = 1;
+					else if (commandLine.getOptionValue("sentiword").equals("4"))
+						addSentiScoreType = 4;
+
+			}
+			if(commandLine.hasOption("punctuation"))
+			{
+				processQuestionMark=true;
+				processExclamationMark=true;
+
+			}
+			if(commandLine.hasOption("ngram"))
+			{
+				
+
+			}
+			
 		 }
 		}
 		catch(ParseException e)
 		{
 			e.printStackTrace();
+			return false;
 		}
-		
+		return true;
 	}
 
 }

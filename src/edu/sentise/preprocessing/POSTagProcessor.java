@@ -30,16 +30,17 @@ public class POSTagProcessor implements TextPreprocessor {
 	private static BasePOSUtility basePOSUtility;
 	private static boolean handleNegation = true;
 
-	public POSTagProcessor(BasePOSUtility bUtility, boolean shouldNegate) {
+	public POSTagProcessor(BasePOSUtility bUtility, boolean shouldNegate,int addSentiScore) {
 
 		handleNegation = shouldNegate;
 		basePOSUtility = bUtility;
+		addSentiScoreType=addSentiScore;
 	}
 
-	private static boolean handeSentiScore = true;
+	private static int addSentiScoreType = 0;
 
-	public static void setHandleSentiScore(boolean hSentiScore) {
-		handeSentiScore = hSentiScore;
+	public static void setHandleSentiScore(int hSentiScore) {
+		addSentiScoreType = hSentiScore;
 	}
 
 	public ArrayList<SentimentData> apply(ArrayList<SentimentData> sentimentData) {
@@ -152,7 +153,7 @@ public class POSTagProcessor implements TextPreprocessor {
 
 			}
 			// System.out.println(positiveSentiScore+" "+negativeSentiScore);
-			if (handeSentiScore) {
+			if (addSentiScoreType >0) {
 				if (positiveSentiScore > 0)
 					newText += " " + "positive_words";
 
