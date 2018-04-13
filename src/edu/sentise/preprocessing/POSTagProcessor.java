@@ -29,6 +29,8 @@ public class POSTagProcessor implements TextPreprocessor {
 	private static StanfordCoreNLP pipeline = null;
 	private static BasePOSUtility basePOSUtility;
 	private static boolean handleNegation = true;
+	private static double POSITIVE_THRESHOLD=0.5;
+	private static double NEGATIVE_THRESHOLD=-0.75;
 
 	public POSTagProcessor(BasePOSUtility bUtility, boolean shouldNegate,int addSentiScore) {
 
@@ -83,13 +85,17 @@ public class POSTagProcessor implements TextPreprocessor {
 		// return text;
 	}
 
-	static double positiveSentiScore = 0;
-	static double negativeSentiScore = 0;
+	static boolean positive;
+	static boolean negative ;
+	static boolean extreme_positive;
+	static boolean extreme_negative ;
 
 	public static String getPosProccesedText(String text) {
 		String newText = "";
-		positiveSentiScore = 0;
-		negativeSentiScore = 0;
+		positive = false;
+		negative = false;
+		extreme_negative=false;
+		extreme_positive=false;
 		Annotation annotation = new Annotation(text);
 		pipeline.annotate(annotation);
 		List<CoreMap> sentences = annotation.get(SentencesAnnotation.class);
@@ -118,8 +124,10 @@ public class POSTagProcessor implements TextPreprocessor {
 				if (!isAleadyChanged(leaf, hashTable)) {
 
 					String context = leaf.parent(tree).parent(tree).value();
-					positiveSentiScore += AddSentiWord.getPositiveSentiScore(word, pos);
-					negativeSentiScore += AddSentiWord.getNegativeSentiScore(word, pos);
+					double d = AddSentiWord.getPositiveSentiScore(word, pos);
+					handlePositiveSentimentStatusByScore(d);
+					d= AddSentiWord.getNegativeSentiScore(word, pos);
+					handleNegativeSentimentStatusByScore(d);
 					basePOSUtility.shouldInclude(leaf.label().toString(), word, pos, context, hashTable);
 				}
 
@@ -153,17 +161,51 @@ public class POSTagProcessor implements TextPreprocessor {
 
 			}
 			// System.out.println(positiveSentiScore+" "+negativeSentiScore);
-			if (addSentiScoreType >0) {
-				if (positiveSentiScore > 0)
-					newText += " " + "positive_words";
+			if (addSentiScoreType == 4) {
+				if(extreme_negative)
+					newText +=  " extremenegative";
 
-				if (negativeSentiScore < 0)
-					newText += " " + "negative_words";
+				if(extreme_positive)
+					newText +=  " extremepositive";
+			}
+			if(addSentiScoreType >=2)
+			{
+				if(negative)
+					newText +=  " negative";
+
+				if(positive)
+					newText +=  " positive";
 			}
 
 		}
 
 		return newText;
+	}
+	private static void handlePositiveSentimentStatusByScore(double score)
+	{
+		if(score== 0)
+			return;
+		if(addSentiScoreType == 4 && score>=POSITIVE_THRESHOLD)
+		{
+			extreme_positive=true;
+			return;
+		}
+		positive=true;
+		
+		
+	}
+	private static void handleNegativeSentimentStatusByScore(double score)
+	{
+		if(score== 0)
+			return;
+		if(addSentiScoreType == 4 && score<=NEGATIVE_THRESHOLD)
+		{
+			extreme_negative=true;
+			return;
+		}
+		negative=true;
+		
+		
 	}
 
 	private static void getNegatedSentence(Tree tree, Hashtable<String, String> hashTable, String negatedWord,
@@ -190,8 +232,10 @@ public class POSTagProcessor implements TextPreprocessor {
 				return;
 			// System.out.println(word+" "+ pos);
 			String neg = negatedWord(word, pos);
-			positiveSentiScore += AddSentiWord.getPositiveSentiScore(word, pos);
-			negativeSentiScore += AddSentiWord.getNegativeSentiScore(word, pos);
+			double d = AddSentiWord.getPositiveSentiScore(word, pos);
+			handlePositiveSentimentStatusByScore(d);
+			d= AddSentiWord.getNegativeSentiScore(word, pos);
+			handleNegativeSentimentStatusByScore(d);
 			basePOSUtility.shouldInclude(leave.label().toString(), neg, pos, tree.value(), hashTable);
 
 		}
