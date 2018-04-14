@@ -53,6 +53,8 @@ public class SentiSE {
 	private String contractionDictionary = Constants.CONTRACTION_TEXT_FILE_NAME;
 	private String oracleFileName = Constants.ORACLE_FILE_NAME;
 	private String acronymDictionary = Constants.ACRONYM_WORD_FILE;
+	
+	private String arffFileName;
 	private int minTermFrequeny = 3;
 	private int maxWordsToKeep = 2500;
 	private String algorithm = "RF";
@@ -139,6 +141,7 @@ public class SentiSE {
 
 		String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
 		this.outputFile = timeStamp + ".txt";
+		this.arffFileName=timeStamp+".arff";
 		// common preprocessing steps, always applied
 		preprocessPipeline.add(new EmoticonProcessor(this.emoticonDictionary));
 		preprocessPipeline.add(new ContractionLoader(this.contractionDictionary));
@@ -177,7 +180,7 @@ public class SentiSE {
 
 		this.trainingInstances.setClassIndex(0);
 
-		storeAsARFF(this.trainingInstances, this.oracleFileName + ".arff");
+		storeAsARFF(this.trainingInstances, this.arffFileName);
 		this.setForceRcreateTrainingData(false);
 
 	}
@@ -303,7 +306,7 @@ public class SentiSE {
 
 		try {
 
-			String arffFileName = this.oracleFileName + ".arff";
+			String arffFileName = this.arffFileName;
 			File arffFile = new File(arffFileName);
 
 			if (!arffFile.exists() || this.isForceRcreateTrainingData()) {
