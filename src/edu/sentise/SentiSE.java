@@ -521,7 +521,7 @@ public class SentiSE {
 		Options options = new Options();
 
 		options.addOption(Option.builder("algo").hasArg(true)
-				.desc("Algorithm for classifier. \nChoices are: RF(Default)| DT | NB| SVM |MLPC").build());
+				.desc("Algorithm for classifier. \nChoices are: RF(Default)| DT | NB| SVM | ADB | MLPC | RNN| SVM | SL | RC").build());
 		options.addOption(Option.builder("help").hasArg(false).desc("Prints help message").build());
 		options.addOption(Option.builder("root").hasArg(true)
 				.desc("Word root determination process.\n 0=None (Default) | 1=Stemming | 2=Lemmatization ").build());
@@ -558,8 +558,8 @@ public class SentiSE {
 
 			if (commandLine.hasOption("algo")) {
 				String algo = commandLine.getOptionValue("algo");
-				if (algo.equals("RF") || algo.equals("DT") || algo.equals("NB") || algo.equals("RF")
-						|| algo.equals("SVM") || algo.equals("MLPC") || algo.equals("SL") || algo.equals("KNN"))
+				if (algo.equals("RF") || algo.equals("DT") || algo.equals("NB") || algo.equals("RNN")|| algo.equals("ADB")
+						|| algo.equals("SVM") || algo.equals("MLPC") || algo.equals("SL") || algo.equals("KNN") || algo.equals("RC") )
 					this.algorithm = algo;
 				else
 					printUsageAndExit(options, formatter);

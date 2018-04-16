@@ -244,7 +244,7 @@ public class POSTagProcessor implements TextPreprocessor {
 		else if (emoticon_words.contains(word))
 			return " " + word;
 		else if (pos.startsWith("VB") || pos.startsWith("RB") || pos.startsWith("JJ") || pos.startsWith("MD"))
-			return "NOT|" + word;
+			return "NOT_" + word;
 		else
 			return word;
 	}
