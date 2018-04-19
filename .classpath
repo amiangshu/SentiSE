@@ -22,5 +22,8 @@
 	<classpathentry kind="lib" path="libs/excel/poi-scratchpad-3.17.jar"/>
 	<classpathentry kind="lib" path="libs/excel/xmlbeans-2.6.0.jar"/>
 	<classpathentry kind="lib" path="libs/commons-cli-1.4.jar"/>
+	<classpathentry kind="lib" path="libs/mtj-1.0-snapshot.jar"/>
+	<classpathentry kind="lib" path="libs/NeuralNetwork.jar"/>
+	<classpathentry kind="lib" path="libs/opencsv-2.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

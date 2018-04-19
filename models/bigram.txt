@@ -1,498 +1,448 @@
-do not 699
-is not 527
-would be 464
-i would 429
-does not 408
-need to 399
-want to 368
-i think 356
-but i 355
-the same 310
-to use 276
-way to 237
-thanks for 200
-but it 197
-how to 191
-trying to 188
-did not 183
-am not 183
-instead of 183
-i want 164
-it would 160
-what i 157
-when i 153
-to make 151
-what is 146
-the code 144
-not have 141
-use the 132
-able to 125
-which is 124
-i need 124
-a good 123
-not sure 122
-i just 122
-is really 122
-to add 122
-the first 122
-a lot 121
-using the 116
-will not 116
-is no 114
-are not 111
-look at 108
-the following 107
-a way 106
-would like 104
-going to 104
-like to 102
-not be 101
-you could 101
-i really 100
-seems to 98
-the patch 97
-not know 96
-that would 96
-add a 96
-i cannot 95
-not a 95
-you need 94
-should not 94
-am trying 93
-could be 93
-think it 91
-an excellent 91
-to see 89
-the problem 88
-the user 88
-you want 88
-to create 87
-can use 85
-i know 85
-might be 84
-it seems 83
-about the 83
-how do 83
-i could 82
-to change 82
-was not 81
-lot of 81
-not the 80
-how can 80
-we need 78
-am using 78
-change the 77
-not think 77
-worry about 76
-the only 76
-a single 76
-be able 75
-you would 75
-not need 75
-a bit 75
-one of 74
-seem to 74
-when you 74
-what you 73
-would not 73
-possible to 72
-is just 72
-thank you 72
-it works 72
-when the 72
-create a 71
-use a 71
-but the 69
-good to 69
-part of 69
-patch set 69
-any help 68
-at least 68
-have not 67
-to find 67
-i guess 67
-make it 67
-to work 67
-to worry 66
-looks like 66
-not want 66
-a look 66
-needs to 64
-am afraid 64
-rather than 64
-take a 64
-the current 63
-just a 63
-may be 63
-but that 63
-think that 62
-using a 60
-because it 60
-the right 58
-this code 58
-code is 58
-is what 58
-i use 58
-make sure 57
-make the 57
-a different 57
-and not 56
-to check 56
-the whole 55
-the next 54
-but not 54
-something like 54
-number of 54
-not really 54
-as well 53
-version of 53
-a separate 53
-the test 53
-not work 52
-back to 52
-think this 52
-as well. 52
-the way 52
-to know 51
-have no 51
-the data 51
-problem is 50
-i agree 50
-see the 50
-based on 50
-is only 50
-looking for 49
-the file 49
-help would 49
-not to 49
-a better 49
-this patch 49
-this would 48
-better to 48
-to put 48
-because i 48
-but this 48
-really hate 47
-not see 47
-add the 47
-be used 47
-used in 47
-the last 47
-it possible 46
-no need 46
-it looks 46
-is also 45
-is still 45
-the original 45
-i found 45
-to me. 45
-the end 45
-worried about 45
-could you 45
-even if 45
-i hate 44
-but if 44
-find the 44
-what the 44
-i thought 44
-you might 44
-this issue 44
-how i 44
-the question 44
-would have 44
-the issue 44
-know how 44
-let us 44
-kind of 44
-i see 44
-must be 43
-use it 43
-is extremely 43
-to keep 43
-to go 43
-the error 43
-the above 43
-know if 43
-we could 43
-since it 42
-sorry for 42
-a simple 42
-you cannot 42
-working on 42
-used to 42
-have tried 42
-is probably 42
-list of 42
-is going 41
-code to 41
-it might 41
-a list 41
-because the 40
-will need 40
-like a 40
-is pretty 40
-a little 40
-the name 39
-the answer 39
-on how 39
-if anyone 39
-make a 39
-remove the 39
-not seem 39
-note that 39
-where the 39
-think we 38
-think the 38
-after the 38
-a really 38
-not use 38
-any way 38
-think i 38
-like the 38
-could not 38
-need a 38
-in one 38
-we would 37
-can see 37
-to take 37
-a pain 37
-a comment 37
-of course 37
-be done 37
-easy to 37
-i find 37
-sure that 36
-only one 36
-hope this 36
-it just 36
-i also 36
-to write 36
-we want 36
-why i 36
-be really 36
-figure out 36
-most of 36
-would prefer 36
-am looking 36
-the best 36
-you know 36
-the time 36
-like this 36
-looking at 36
-a great 35
-think you 35
-is used 35
-to avoid 35
-the rest 35
-this one 35
-the previous 35
-thanks a 35
-work on 35
-are using 35
-it could 34
-sense to 34
-am working 34
-is why 34
-be better 34
-looks good 34
-the second 34
-up with 34
-to fix 34
-rid of 34
-which i 34
-fixed in 33
-is already 33
-use this 33
-but in 33
-be extremely 33
-no longer 33
-know that 33
-you just 33
-to read 33
-to handle 33
-to run 33
-access to 33
-the one 33
-let me 33
-code that 33
-because of 33
-a patch 33
-way of 33
-sure if 32
-the most 32
-you use 32
-but we 32
-this method 32
-is actually 32
-we use 32
-for example, 32
-the page 32
-why do 32
-how about 32
-up the 32
-the process 32
-i tried 32
-work with 32
-not in 32
-why not 32
-a bug 32
-my code 32
-and use 32
-exactly what 32
-see if 32
-keep the 32
-update the 31
-up to 31
-cannot be 31
-why is 31
-end of 31
-to test 31
-patch to 31
-does anyone 31
-really great 31
-i used 31
-your code 31
-sort of 31
-the latest 31
-the string 31
-inside the 30
-to show 30
-check out 30
-how it 30
-since the 30
-seems like 30
-when we 30
-am going 30
-a test 30
-agree with 30
-so much 29
-a file 29
-have found 29
-the server 29
-the client 29
-the change 29
-you think 29
-working with 29
-to move 29
-make this 29
-the old 29
-is good 29
-if someone 29
-i got 29
-the output 29
-it makes 29
-you really 28
-the application 28
-would you 28
-is one 28
-end up 28
-thank you 28
-need for 28
-name of 28
-to start 28
-have got 28
-just to 28
-the actual 28
-sorry i 28
-like this: 28
-hard to 28
-know the 28
-PositiveSentiment . 28
-it may 28
-sql server 28
-a user 28
-according to 28
-amount of 27
-something that 27
-only the 27
-used for 27
-the database 27
-to give 27
-a couple 27
-just use 27
-need the 27
-greatly appreciated! 27
-in order 27
-be greatly 27
-not do 27
-time to 27
-easier to 27
-wanted to 27
-wondering if 27
-the number 27
-when it 27
-to implement 27
-to remove 27
-care of 27
-within the 26
-have just 26
-sure how 26
-change to 26
-code for 26
-question is 26
-how would 26
-order to 26
-patch is 26
-data from 26
-will make 26
-find a 26
-visual studio 26
-i understand 26
-which are 26
-a string 26
-check for 26
-can just 26
-not get 26
-the two 26
-get rid 26
-i believe 26
-a real 26
-but then 26
-put the 26
-for example 26
-will take 25
-not just 25
-but you 25
-why it 25
-good luck 25
-over the 25
-the patch. 25
-to not 25
-not an 25
-the source 25
-an array 25
-way i 25
-know what 25
-pain to 25
-fix the 25
-why this 25
-the text 25
-the point 25
-code and 25
-work in 25
-the object 25
-the correct 25
-also be 25
-the main 25
-work for 25
-are really 24
-have seen 24
-and just 24
-similar to 24
-the fact 24
-might want 24
-before the 24
-depends on 24
-but there 24
-patch applied 24
-to just 24
-patch looks 24
-is using 24
-use of 24
-not make 24
-not even 24
-forgot to 24
-the value 24
-the comment 24
-fact that 24
-you mean 24
+big fan
+not sure
+absolutely right
+not know
+would like
+not think
+would not
+looks like
+something like
+not want
+not need
+not work
+worry about
+not really
+make sure
+seems like
+let us
+but not
+not see
+not use
+really appreciate
+really great
+looks good
+know how
+no worries
+worried about
+would prefer
+help would
+only one
+could not
+good luck
+makes sense
+how about
+why not
+good point
+end up
+not seem
+every time
+really hate
+no need
+good idea
+sounds like
+not make
+would really
+not even
+exactly what
+no longer
+know what
+think about
+not understand
+just use
+could use
+excellent thanks
+would rather
+not just
+sure how
+greatly appreciated
+not like
+no idea
+works fine
+would make
+might want
+see what
+make sense
+how would
+talking about
+not needed
+would need
+same thing
+even though
+would suggest
+i would
+not care
+see how
+no way
+sure what
+i think
+not find
+much better
+could just
+which would
+not going
+when using
+ended up
+pretty much
+PositiveSentiment thanks
+patch looks
+excellent answer
+not actually
+please use
+cannot find
+come up
+anyone know
+but when
+what about
+understand why
+know why
+cannot use
+would say
+PositiveSentiment PositiveSentiment
+take care
+but what
+follow up
+fine but
+care about
+but still
+go about
+not used
+probably not
+sad NegativeSentiment
+not exist
+sorry about
+not using
+better way
+just want
+not matter
+excellent question
+just need
+would probably
+really worried
+would also
+what happens
+not support
+extremely helpful
+only way
+really annoying
+first time
+may not
+look like
+not clear
+see why
+would just
+feel free
+error message
+please fix
+great question
+how much
+same issue
+work around
+great thanks
+would love
+great PositiveSentiment
+extremely annoying
+not much
+hugely appreciated
+one thing
+much easier
+screwed up
+works great
+why would
+not only
+extremely ugly
+great success
+really want
+not necessarily
+NegativeSentiment NegativeSentiment
+not change
+question but
+code below
+only need
+may want
+worrying about
+but maybe
+works but
+work but
+only thing
+not working
+but why
+only used
+great app
+cannot seem
+sounds good
+would want
+something similar
+just add
+go ahead
+but since
+not show
+two different
+about using
+source code
+feel like
+bad idea
+please check
+also need
+screw up
+many thanks
+good question
+would use
+still need
+fine PositiveSentiment
+really sad
+could help
+but also
+not what
+might not
+clean up
+please add
+terrible idea
+another patch
+not add
+best way
+absolutely fine
+but cannot
+really need
+about what
+understand what
+really painful
+which might
+which means
+good app
+side effect
+no one
+use code
+really like
+idea what
+not yet
+method which
+how many
+not realize
+know which
+not look
+sure why
+bit weird
+good enough
+one way
+appreciated thanks
+people who
+really awesome
+no problem
+not allow
+currently using
+really hope
+thanks again
+looks really
+really love
+either way
+just like
+would work
+use cases
+excellent tool
+extremely frustrating
+idea how
+same problem
+way around
+multiple times
+web server
+pretty awesome
+really really
+PositiveSentiment thank
+rd party
+committed revision
+would recommend
+anyone could
+extremely useful
+thanks PositiveSentiment
+could also
+really excellent
+great answer
+bug report
+appreciated PositiveSentiment
+thinking about
+things like
+separate patch
+looks fine
+show up
+just one
+code review
+would still
+little bit
+first place
+works like
+not fail
+not quite
+really appreciated
+next time
+come across
+just trying
+same time
+PositiveSentiment 
+about how
+first one
+file but
+when trying
+web service
+good thing
+not possible
+just make
+third party
+anything but
+serial number
+excellent thank
+not aware
+using code
+explain why
+not always
+cannot see
+not supported
+pretty sure
+accepted answer
+separate commit
+awesome PositiveSentiment
+just because
+just wondering
+would expect
+really terrible
+reason why
+not match
+just say
+sample code
+no matter
+really awful
+rather see
+came up
+not found
+excellent article
+not mind
+one line
+wonderful PositiveSentiment
+what would
+not contain
+need not
+old code
+but only
+someone could
+pick up
+not appear
+empty string
+not submit
+please let
+answer but
+awesome thanks
+still not
+not run
+incredibly annoying
+which seems
+only use
+not fix
+code duplication
+file system
+dumb question
+not create
+probably need
+also use
+side effects
+what exactly
+would look
+would help
+same way
+ok but
+could put
+even better
+not necessary
+afraid NegativeSentiment
+pretty good
+just not
+just fine
+without using
+above code
+client side
+variable name
+just noticed
+could probably
+not something
+come back
+not mention
+would only
+not feel
+would keep
+just call
+cannot figure
+just wanted
+file which
+about making
+not able
+still use
+always use
+shows up
+user input
+not believe
+patch but
+not part
+game freezes
+not put
+thought about
+not freak
+cases where
+not go
+absolutely terrible
+please see
+really liked
+right about
+malicious user
+tried using
+problem but
+see also
+not notice
+one but
+wondering how
+concerned about
+last time
+absolutely horrible
+wonder why
+go back
+rather not
+header file
+not familiar
+not enough
+infinite loop
+not forget
+extremely appreciated
+right way
+might make
+not check
+just remove
+general purpose
+absolutely positively
+which one
+every single
+not affect
+which could
+patch which
+only when
+updated patch
+but someone
+maintenance nightmare
+thanks guys
+not exactly
+great thank
+making sure
+solution but
+us just
+font size
+thing but
+not worry
+without worrying
+could make
+hard coded
+also used
+incredibly frustrating
+but just
+seem like
+idea but
+looking forward
+patch fixes
+PositiveSentiment but
+sure which
+not required

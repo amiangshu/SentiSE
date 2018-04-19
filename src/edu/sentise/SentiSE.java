@@ -553,7 +553,7 @@ public class SentiSE {
 		Options options = new Options();
 
 		options.addOption(Option.builder("algo").hasArg(true)
-				.desc("Algorithm for classifier. \nChoices are: RF(Default)| DT | NB| SVM | ADB | MLPC | RNN| SVM | SL | RC").build());
+				.desc("Algorithm for classifier. \nChoices are: RF(Default)| DT | NB| SVM | CNN | MLPC | RNN| SVM | SL | RC").build());
 		options.addOption(Option.builder("help").hasArg(false).desc("Prints help message").build());
 		options.addOption(Option.builder("root").hasArg(true)
 				.desc("Word root determination process.\n 0=None (Default) | 1=Stemming | 2=Lemmatization ").build());
@@ -569,6 +569,7 @@ public class SentiSE {
 		options.addOption(Option.builder("sentiword").hasArg(true)
 				.desc("Categorize sentiment words.\n 0= None (default) | 2= Two groups |4= Four groups ").build());
 		options.addOption(Option.builder("output").hasArg(true).desc("Output file").build());
+		options.addOption(Option.builder("oracle").hasArg(true).desc("Training dataset (Excel)").build());
 
 		Option termFreq = Option.builder("minfreq").hasArg()
 				.desc("Minimum frequecy required to be considered as a feature. Default: 5").build();
@@ -590,7 +591,7 @@ public class SentiSE {
 
 			if (commandLine.hasOption("algo")) {
 				String algo = commandLine.getOptionValue("algo");
-				if (algo.equals("RF") || algo.equals("DT") || algo.equals("NB") || algo.equals("RNN")|| algo.equals("ADB")
+				if (algo.equals("RF") || algo.equals("DT") || algo.equals("NB") || algo.equals("RNN")|| algo.equals("CNN")
 						|| algo.equals("SVM") || algo.equals("MLPC") || algo.equals("SL") || algo.equals("KNN") || algo.equals("RC") )
 					this.algorithm = algo;
 				else
@@ -618,6 +619,11 @@ public class SentiSE {
 			if (commandLine.hasOption("output")) {
 				this.outputFile = commandLine.getOptionValue("output");
 			}
+			
+			if (commandLine.hasOption("oracle")) {
+				this.oracleFileName = commandLine.getOptionValue("oracle");
+			}
+
 
 			if (commandLine.hasOption("tag")) {
 				if (commandLine.getOptionValue("tag").equals("1")) {

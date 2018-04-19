@@ -16,6 +16,7 @@ import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
 import weka.classifiers.functions.Elman;
 import weka.classifiers.functions.MultilayerPerceptron;
+import weka.classifiers.functions.NeuralNetwork;
 
 public class WekaClassifierBuilder {
 
@@ -76,13 +77,15 @@ public class WekaClassifierBuilder {
 
 			return classifier;
 
-		} else if (algo.equals("ADB")) {
-			System.out.println("Algorithm: DecisionStump with Adaptive Boosting");
-			AdaBoostM1 classifier = new AdaBoostM1();
+		} else if (algo.equals("CNN")) {
+			System.out.println("Algorithm: Convulated Neural Network");
+			NeuralNetwork classifier = new weka.classifiers.functions.NeuralNetwork();
 
 			try {
 				classifier.setOptions(
-						weka.core.Utils.splitOptions("-P 100 -S 1 -I 10 -W weka.classifiers.trees.DecisionStump"));
+						weka.core.Utils.splitOptions("--lr 0.0 -wp 1.0E-8 -mi 200 -bs 0 -th 12 -hl 50 -di 0.2 -dh 0.5 -iw 0"));
+			classifier.setDebug(false);
+			
 			} catch (Exception e) {
 
 			}
@@ -108,7 +111,8 @@ public class WekaClassifierBuilder {
 			System.out.println("Algorithm: K-Nearest Neighbours");
 			return new weka.classifiers.lazy.IBk();
 		} else if (algo.equals("RNN")) {
-
+			Elman classifier=new weka.classifiers.functions.Elman();
+			
 			System.out.println("Algorithm: Recurrent Neural Network");
 
 			return new weka.classifiers.functions.Elman();

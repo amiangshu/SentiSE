@@ -12,6 +12,7 @@ import java.util.StringTokenizer;
 
 import edu.sentise.model.SentimentData;
 import edu.sentise.preprocessing.ContractionLoader;
+import edu.sentise.preprocessing.EmoticonProcessor;
 import edu.sentise.preprocessing.URLRemover;
 import edu.sentise.util.Constants;
 import edu.sentise.util.DataLists;
@@ -28,13 +29,14 @@ public class TriGramGenerator {
 	public static void main(String[] args) {
 		ArrayList<SentimentData> sentimentDataList = SentimentData.parseSentimentData(Constants.ORACLE_FILE_NAME);
 
-		/*System.out.println("Preprocessing text ..");
+		System.out.println("Preprocessing text ..");
 		ContractionLoader contractionLoader=new ContractionLoader(Constants.CONTRACTION_TEXT_FILE_NAME);
-		sentimentDataList = contractionLoader.preprocessContractions(sentimentDataList);
-		sentimentDataList = URLRemover.removeURL(sentimentDataList);
-		EmoticonLoader emoticonHandler = new EmoticonLoader(Constants.EMOTICONS_FILE_NAME);
-		sentimentDataList = emoticonHandler.preprocessEmoticons(sentimentDataList);
-		lematizeSentimentData(sentimentDataList);*/
+		sentimentDataList = contractionLoader.apply(sentimentDataList);
+		URLRemover remover=new URLRemover();
+		sentimentDataList = remover.apply(sentimentDataList);
+		EmoticonProcessor emoticonHandler = new EmoticonProcessor(Constants.EMOTICONS_FILE_NAME);
+		sentimentDataList = emoticonHandler.apply(sentimentDataList);
+		lematizeSentimentData(sentimentDataList);
 	}
 	public static void lematizeSentimentData(ArrayList<SentimentData> sentimentData) {
 	     
@@ -46,7 +48,7 @@ public class TriGramGenerator {
 			tokenize(sentimentData.get(i).getText());
 			if((i%100) ==0)
 			{
-				System.out.println("bigram processed:"+i +" of "+length);
+				System.out.println("trigram processed:"+i +" of "+length);
 			}
 		}
 		createListFromMap();
@@ -87,7 +89,7 @@ public class TriGramGenerator {
 		for(int i=0;i<SELECT && i<mList.size();i++)
 		{
 			System.out.println(mList.get(i).trigram+ " "+mList.get(i).count);
-			bufferedWriter.write(mList.get(i).trigram+ " "+mList.get(i).count+"\n");
+			bufferedWriter.write(mList.get(i).trigram+"\n");
 		}
 		
 		bufferedWriter.close();
@@ -101,7 +103,7 @@ public class TriGramGenerator {
 	}
 	private static void tokenize(String text)
 	{
-		StringTokenizer st= new StringTokenizer(text, " ");
+		StringTokenizer st= new StringTokenizer(text, ",.!-+1234567890:[] ())| {}[]");
 		String prevToken=null;
 		String prev_prevToken=null;
 		while(st.hasMoreTokens())
