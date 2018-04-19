@@ -12,7 +12,7 @@
                 <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
                 <attribute name="Rsrc-Main-Class" value="edu.sentise.SentiSE"/>
                 <attribute name="Class-Path" value="."/>
-                <attribute name="Rsrc-Class-Path" value="./ mysql-connector-java-5.1.41.jar SMOTE.jar snowball-stemmer-1.3.0.581.1.jar stanford-corenlp-3.8.0.jar stanford-parser.jar stanford-postagger.jar weka-src.jar weka.jar commons-codec-1.10.jar commons-collections4-4.1.jar junit-4.12.jar log4j-1.2.17.jar poi-3.17.jar poi-examples-3.17.jar poi-excelant-3.17.jar poi-ooxml-3.17.jar poi-ooxml-schemas-3.17.jar poi-scratchpad-3.17.jar xmlbeans-2.6.0.jar commons-cli-1.4.jar"/>
+                <attribute name="Rsrc-Class-Path" value="./ mysql-connector-java-5.1.41.jar SMOTE.jar snowball-stemmer-1.3.0.581.1.jar stanford-corenlp-3.8.0.jar stanford-parser.jar stanford-postagger.jar weka-src.jar weka.jar commons-codec-1.10.jar commons-collections4-4.1.jar junit-4.12.jar log4j-1.2.17.jar poi-3.17.jar poi-examples-3.17.jar poi-excelant-3.17.jar poi-ooxml-3.17.jar poi-ooxml-schemas-3.17.jar poi-scratchpad-3.17.jar xmlbeans-2.6.0.jar commons-cli-1.4.jar mtj-1.0-snapshot.jar opencsv-2.3.jar NeuralNetwork.jar"/>
             </manifest>
             <zipfileset src="jar-in-jar-loader.zip"/>
             <fileset dir="${dir.jarfile}/bin"/>
@@ -24,9 +24,6 @@
             <zipfileset dir="${dir.jarfile}/libs" includes="stanford-postagger.jar"/>
             <zipfileset dir="${dir.jarfile}/libs" includes="weka-src.jar"/>
             <zipfileset dir="${dir.jarfile}/libs" includes="weka.jar"/>
-        	 <zipfileset dir="${dir.jarfile}/libs" includes="NeuralNetwork.jar"/>
-        	 <zipfileset dir="${dir.jarfile}/libs" includes="opencsv-2.3.jar"/>
-        	 <zipfileset dir="${dir.jarfile}/libs" includes="mtj-1.0-snapshot.jar"/>
             <zipfileset dir="${dir.jarfile}/libs/excel" includes="commons-codec-1.10.jar"/>
             <zipfileset dir="${dir.jarfile}/libs/excel" includes="commons-collections4-4.1.jar"/>
             <zipfileset dir="${dir.jarfile}/libs/excel" includes="junit-4.12.jar"/>
@@ -39,6 +36,9 @@
             <zipfileset dir="${dir.jarfile}/libs/excel" includes="poi-scratchpad-3.17.jar"/>
             <zipfileset dir="${dir.jarfile}/libs/excel" includes="xmlbeans-2.6.0.jar"/>
             <zipfileset dir="${dir.jarfile}/libs" includes="commons-cli-1.4.jar"/>
+            <zipfileset dir="${dir.jarfile}/libs" includes="mtj-1.0-snapshot.jar"/>
+            <zipfileset dir="${dir.jarfile}/libs" includes="opencsv-2.3.jar"/>
+            <zipfileset dir="${dir.jarfile}/libs" includes="NeuralNetwork.jar"/>
         </jar>
     </target>
 </project>
