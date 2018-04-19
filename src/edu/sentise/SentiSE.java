@@ -154,7 +154,7 @@ public class SentiSE {
        String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
        
        this.outputFile =Constants.OUTPUT_DIRECTORY+this.algorithm+"_"+ timeStamp + ".txt";
-		this.arffFileName=timeStamp+".arff";
+		this.arffFileName=Constants.ARFF_DIRECTORY+timeStamp+".arff";
 	}
 
 	public void generateTrainingInstance() throws Exception {
