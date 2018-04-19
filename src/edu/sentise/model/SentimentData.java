@@ -89,6 +89,7 @@ public class SentimentData {
 		                		positive++;
 		                	else if(rating == -1)
 		                		negative++;
+		                	
 		                }
 	               // }
 	                //System.out.println();

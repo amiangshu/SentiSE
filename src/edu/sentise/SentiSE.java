@@ -30,6 +30,7 @@ import edu.sentise.preprocessing.MyStopWordsHandler;
 import edu.sentise.preprocessing.POSTagProcessor;
 import edu.sentise.preprocessing.QuestionMarkHandler;
 import edu.sentise.preprocessing.StanfordCoreNLPLemmatizer;
+import edu.sentise.preprocessing.StopWordProcessor;
 import edu.sentise.preprocessing.TextPreprocessor;
 import edu.sentise.preprocessing.URLRemover;
 import edu.sentise.test.ARFFTestGenerator;
@@ -139,15 +140,21 @@ public class SentiSE {
 
 	public SentiSE() {
 
-		String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-		this.outputFile = timeStamp + ".txt";
-		this.arffFileName=timeStamp+".arff";
+		
 		// common preprocessing steps, always applied
 		preprocessPipeline.add(new EmoticonProcessor(this.emoticonDictionary));
 		preprocessPipeline.add(new ContractionLoader(this.contractionDictionary));
 		preprocessPipeline.add(new URLRemover());
 		preprocessPipeline.add(new AncronymHandler(this.acronymDictionary));
+		
 
+	}
+	private void createresultsFiles()
+	{
+       String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+       
+       this.outputFile =Constants.OUTPUT_DIRECTORY+this.algorithm+"_"+ timeStamp + ".txt";
+		this.arffFileName=timeStamp+".arff";
 	}
 
 	public void generateTrainingInstance() throws Exception {
@@ -163,11 +170,13 @@ public class SentiSE {
 		if (this.handleNGram)
 			preprocessPipeline.add(new BiGramTriGramHandler());
 
+		
 		System.out.println("Preprocessing text ..");
 		preprocessPipeline
 				.add(new POSTagProcessor(BasicFactory.getPOSUtility(applyPosTag, keepOnlyImportantPos, applyContextTag),
 						this.preprocessNegation, addSentiScoreType));
 
+		
 		for (TextPreprocessor process : preprocessPipeline) {
 			sentimentDataList = process.apply(sentimentDataList);
 		}
@@ -440,7 +449,7 @@ public class SentiSE {
 		builder.append("\n");
 		builder.append("Replace question mark: " + this.processQuestionMark);
 		builder.append("\n");
-		builder.append("Replace question mark: " + this.processExclamationMark);
+		builder.append("Replace exclamation mark: " + this.processExclamationMark);
 		builder.append("\n");
 		builder.append("Stemming:" + this.useStemmer);
 		builder.append("\n");
@@ -468,6 +477,7 @@ public class SentiSE {
 	}
 
 	public void runRepeatedValidation() {
+		createresultsFiles();
 		ArrayList<CrossValidationResult> cvResults = new ArrayList<CrossValidationResult>();
 
 		try {
@@ -489,8 +499,9 @@ public class SentiSE {
 			for (CrossValidationResult result : cvResults) {
 				outputBuffer.append(result.toString() + "\n");
 			}
+			outputBuffer.append(totalAverage(cvResults));
 
-			this.writeResultsToFile(outputBuffer.toString());
+			this.writeResultsToFile(outputBuffer.toString()+"\n");
 
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
@@ -505,6 +516,27 @@ public class SentiSE {
 		writer.close();
 	}
 
+	private String totalAverage(ArrayList<CrossValidationResult> cvResults)
+	{
+		double[] results=new double[11];
+		for (CrossValidationResult result : cvResults) {
+			String [] splits=result.toString().split(",");
+			for(int i=0 ;i<splits.length;i++)
+				results[i]+=Double.parseDouble(splits[i]);
+		}
+		for(int i=0 ;i<results.length;i++)
+			results[i]/=10;
+		String res="";
+		for(int i=0;i<results.length;i++)
+		{
+			if(i>0)
+				res+=",";
+			
+			res+=results[i];
+		}
+		return res;
+
+	}
 	public static void main(String[] args) {
 
 		SentiSE instance = new SentiSE();
