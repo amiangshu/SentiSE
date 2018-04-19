@@ -537,6 +537,7 @@ public class SentiSE {
 		options.addOption(Option.builder("sentiword").hasArg(true)
 				.desc("Categorize sentiment words.\n 0= None (default) | 2= Two groups |4= Four groups ").build());
 		options.addOption(Option.builder("output").hasArg(true).desc("Output file").build());
+		options.addOption(Option.builder("oracle").hasArg(true).desc("Training dataset (Excel)").build());
 
 		Option termFreq = Option.builder("minfreq").hasArg()
 				.desc("Minimum frequecy required to be considered as a feature. Default: 5").build();
@@ -586,6 +587,11 @@ public class SentiSE {
 			if (commandLine.hasOption("output")) {
 				this.outputFile = commandLine.getOptionValue("output");
 			}
+			
+			if (commandLine.hasOption("oracle")) {
+				this.oracleFileName = commandLine.getOptionValue("oracle");
+			}
+
 
 			if (commandLine.hasOption("tag")) {
 				if (commandLine.getOptionValue("tag").equals("1")) {
