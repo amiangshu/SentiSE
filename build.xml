@@ -24,6 +24,9 @@
             <zipfileset dir="${dir.jarfile}/libs" includes="stanford-postagger.jar"/>
             <zipfileset dir="${dir.jarfile}/libs" includes="weka-src.jar"/>
             <zipfileset dir="${dir.jarfile}/libs" includes="weka.jar"/>
+        	 <zipfileset dir="${dir.jarfile}/libs" includes="NeuralNetwork.jar"/>
+        	 <zipfileset dir="${dir.jarfile}/libs" includes="opencsv-2.3.jar"/>
+        	 <zipfileset dir="${dir.jarfile}/libs" includes="mtj-1.0-snapshot.jar"/>
             <zipfileset dir="${dir.jarfile}/libs/excel" includes="commons-codec-1.10.jar"/>
             <zipfileset dir="${dir.jarfile}/libs/excel" includes="commons-collections4-4.1.jar"/>
             <zipfileset dir="${dir.jarfile}/libs/excel" includes="junit-4.12.jar"/>
