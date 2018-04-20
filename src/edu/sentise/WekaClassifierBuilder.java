@@ -12,6 +12,7 @@ import weka.classifiers.meta.AdaBoostM1;
 import weka.classifiers.meta.RandomCommittee;
 import weka.classifiers.misc.InputMappedClassifier;
 import weka.classifiers.trees.J48;
+import weka.classifiers.trees.LMT;
 import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
 import weka.classifiers.functions.Elman;
@@ -110,13 +111,14 @@ public class WekaClassifierBuilder {
 		else if (algo.equals("KNN")) {
 			System.out.println("Algorithm: K-Nearest Neighbours");
 			return new weka.classifiers.lazy.IBk();
-		} else if (algo.equals("RNN")) {
-			Elman classifier=new weka.classifiers.functions.Elman();
+		} else if (algo.equals("LMT")) {
+			LMT classifier=new LMT();
 			
-			System.out.println("Algorithm: Recurrent Neural Network");
+			System.out.println("Algorithm: Logistic Model Trees");
 
-			return new weka.classifiers.functions.Elman();
-		} else if (algo.equals("RF")) {
+			return classifier;
+		}
+		 else if (algo.equals("RF")) {
 			System.out.println("Algorithm: Random Forest");
 			RandomForest classifier = new RandomForest();
 			classifier.setNumExecutionSlots(4);
