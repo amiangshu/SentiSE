@@ -46,9 +46,9 @@ public class POSTagProcessor implements TextPreprocessor {
 		int length = sentimentData.size();
 		for (int i = 0; i < length; i++) {
 
-			System.out.println(sentimentData.get(i).getText());
+			//System.out.println(sentimentData.get(i).getText());
 			sentimentData.get(i).setText(preprocessPOStags(sentimentData.get(i).getText()));
-			System.out.println(sentimentData.get(i).getText());
+			//System.out.println(sentimentData.get(i).getText());
 			if ((i % 100) == 0) {
 				System.out.println("POS tag processsed processed:" + i + " of " + length);
 			}
