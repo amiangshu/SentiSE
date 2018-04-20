@@ -25,6 +25,5 @@
 	<classpathentry kind="lib" path="libs/mtj-1.0-snapshot.jar"/>
 	<classpathentry kind="lib" path="libs/NeuralNetwork.jar"/>
 	<classpathentry kind="lib" path="libs/opencsv-2.3.jar"/>
-	<classpathentry kind="lib" path="libs/wekaclassalgos.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
