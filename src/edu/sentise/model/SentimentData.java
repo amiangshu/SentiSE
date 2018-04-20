@@ -96,9 +96,11 @@ public class SentimentData {
 
 	            }
 	        } catch (FileNotFoundException e) {
-	            e.printStackTrace();
+	           System.out.println("Unable to open oracle file!");
+	           System.exit(1);
 	        } catch (IOException e) {
-	            e.printStackTrace();
+	        	System.out.println("Unable to parse oracle file!");
+		        System.exit(1);
 	        }
 		 return sentimentDataList;
 	}

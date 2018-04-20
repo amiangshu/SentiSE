@@ -160,7 +160,7 @@ public class SentiSE {
 	public void generateTrainingInstance() throws Exception {
 
 		System.out.println("Reading oracle file...");
-		ArrayList<SentimentData> sentimentDataList = SentimentData.parseSentimentData(Constants.ORACLE_FILE_NAME);
+		ArrayList<SentimentData> sentimentDataList = SentimentData.parseSentimentData(this.oracleFileName);
 
 		if (this.processExclamationMark)
 			preprocessPipeline.add(new ExclamationHandler());
