@@ -57,7 +57,7 @@ public class SentiSE {
 	
 	private String arffFileName;
 	private int minTermFrequeny = 3;
-	private int maxWordsToKeep = 2500;
+	private int maxWordsToKeep = 4000;
 	private String algorithm = "RF";
 
 	private boolean crossValidate = false;
@@ -154,6 +154,14 @@ public class SentiSE {
        String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
        
        this.outputFile =Constants.OUTPUT_DIRECTORY+this.algorithm+"_"+ timeStamp + ".txt";
+		this.arffFileName=Constants.ARFF_DIRECTORY+timeStamp+".arff";
+	}
+	
+	private void createCombinedResultFile()
+	{
+       String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+       
+       this.outputFile =Constants.OUTPUT_DIRECTORY+"combined_"+ timeStamp + ".txt";
 		this.arffFileName=Constants.ARFF_DIRECTORY+timeStamp+".arff";
 	}
 
@@ -437,8 +445,8 @@ public class SentiSE {
 		StringBuilder builder = new StringBuilder();
 		builder.append(".......Configuration......: ");
 		builder.append("\n");
-		builder.append("Algorithm: " + this.algorithm);
-		builder.append("\n");
+		//builder.append("Algorithm: " + this.algorithm);
+		//builder.append("\n");
 		builder.append("Use ngram: " + this.handleNGram);
 		builder.append("\n");
 		builder.append("Negation preprocess: " + this.preprocessNegation);
@@ -508,10 +516,59 @@ public class SentiSE {
 			e1.printStackTrace();
 		}
 	}
+	
+	public void runCVWithSameConfig() {
+		createCombinedResultFile();
+		
+		setForceRcreateTrainingData(true);
+		
+		ArrayList<CrossValidationResult> cvResults = new ArrayList<CrossValidationResult>();
+		
+		String[] algorithms= {"RF","SL", "CNN", "SVM"};
+		
+		StringBuilder outputBuffer = new StringBuilder();
+		outputBuffer.append(getConfiguration());
+		outputBuffer.append("\n\n------Results-------\n");
+		
+		for(String algo:algorithms) {
+			this.algorithm=algo;
+			cvResults.clear();
+		
+		
+		try {
+			
+
+			initRand(5555);
+
+			outputBuffer.append("\n\n------"+algo+"-------\n");
+			for (int i = 0; i < REPEAT_COUNT; i++) {
+				CrossValidationResult result = tenFoldCV();
+				cvResults.add(result);
+			}
+
+			
+
+			outputBuffer.append(CrossValidationResult.getResultHeader() + "\n");
+
+			for (CrossValidationResult result : cvResults) {
+				outputBuffer.append(result.toString() + "\n");
+			}
+			outputBuffer.append(totalAverage(cvResults));
+
+			this.writeResultsToFile(outputBuffer.toString()+"\n");
+			outputBuffer=new StringBuilder();
+
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		}
+	}
+	
 
 	private void writeResultsToFile(String text) throws IOException {
 
-		BufferedWriter writer = new BufferedWriter(new FileWriter(this.outputFile));
+		BufferedWriter writer = new BufferedWriter(new FileWriter(this.outputFile,true));
 		writer.write(text);
 		writer.close();
 	}
@@ -543,7 +600,7 @@ public class SentiSE {
 		if (!instance.isCommandLineParsed(args))
 			return;
 
-		instance.runRepeatedValidation();
+		instance.runCVWithSameConfig();
 
 	}
 
