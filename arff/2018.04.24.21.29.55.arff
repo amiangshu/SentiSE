@@ -1,0 +1,117 @@
+@relation 'SentiSe-weka.filters.unsupervised.attribute.StringToWordVector-R2-W4000-prune-rate-1.0-T-I-N0-L-stemmerweka.core.stemmers.SnowballStemmer -S porter-stopwords-handleredu.sentise.preprocessing.MyStopWordsHandler-M3-tokenizerweka.core.tokenizers.WordTokenizer -delimiters \" \\r\\t\\n.,;:\\\'\\\"()?!-><#$\\\\\\\%&*+/@^=[]{}`~0123456789\\\'|\"'
+
+@attribute lab {0,-1,1}
+@attribute '' numeric
+@attribute actual numeric
+@attribute app numeric
+@attribute attach numeric
+@attribute batteri numeric
+@attribute but numeric
+@attribute chang numeric
+@attribute code numeric
+@attribute cpu numeric
+@attribute creat numeric
+@attribute damn numeric
+@attribute exist numeric
+@attribute file numeric
+@attribute fire numeric
+@attribute first numeric
+@attribute good numeric
+@attribute just numeric
+@attribute know numeric
+@attribute like numeric
+@attribute line numeric
+@attribute login numeric
+@attribute look numeric
+@attribute need numeric
+@attribute no numeric
+@attribute not numeric
+@attribute onli numeric
+@attribute pleas numeric
+@attribute positivesenti numeric
+@attribute project numeric
+@attribute read numeric
+@attribute reason numeric
+@attribute sai numeric
+@attribute slow numeric
+@attribute string numeric
+@attribute style numeric
+@attribute syntax numeric
+@attribute system numeric
+@attribute term numeric
+@attribute thank numeric
+@attribute thi numeric
+@attribute thing numeric
+@attribute thought numeric
+@attribute us numeric
+@attribute user numeric
+@attribute valu numeric
+@attribute veri numeric
+@attribute wa numeric
+@attribute what numeric
+@attribute when numeric
+@attribute which numeric
+@attribute work numeric
+@attribute would numeric
+@attribute â numeric
+
+@data
+{4 2.064834,24 1.865428,27 2.064834,43 1.303334}
+{0 -1,5 1.865428,6 1.584381,46 2.064834}
+{0 -1,3 1.710756,5 1.865428,19 2.345881,33 2.064834,37 2.064834}
+{0 -1,25 0.949256}
+{0 -1,16 1.865428,33 2.064834}
+{0 -1,5 1.865428}
+{0 -1,3 1.710756,27 2.064834}
+{2 1.865428,8 1.865428,13 1.865428,18 2.064834,25 0.949256,29 2.345881,31 1.865428,40 1.384975,43 1.303334,47 1.584381,50 1.865428}
+{22 1.710756,40 1.384975}
+{0 1,16 1.865428,22 1.710756}
+{0 1,39 2.064834}
+{0 -1,5 1.865428,25 0.949256,27 2.064834,32 2.345881}
+{0 -1,3 1.710756,16 1.865428,40 1.384975}
+{0 -1,2 1.865428,7 1.865428,25 0.949256,26 2.064834,49 1.477531}
+{0 -1,3 1.710756,6 1.584381,25 0.949256,49 1.477531,51 2.064834}
+{10 2.064834}
+{0 -1,8 1.865428,11 2.345881,13 1.865428,17 2.064834,25 0.949256,32 2.345881,40 1.384975,43 1.303334,45 2.064834,50 1.865428,53 2.826334}
+{0 -1,2 1.865428,6 1.584381,7 1.865428,9 2.826334,13 1.865428,17 2.064834,23 2.826334,25 0.949256,26 2.064834,30 2.064834,33 2.064834,34 2.064834,41 1.865428,43 1.303334,45 2.064834,46 2.064834,52 1.710756}
+{1 2.345881,44 2.345881}
+{0 -1,14 2.345881,25 0.949256}
+{0 -1,12 2.064834,14 2.345881,15 2.064834,17 2.064834,25 0.949256,31 1.865428,41 1.865428,44 2.345881,49 1.477531,51 2.064834}
+{29 2.345881}
+{0 -1,6 1.584381,7 1.865428,10 2.064834,11 2.345881,15 2.064834,21 2.826334,25 0.949256,34 2.064834,36 2.064834,43 1.303334,52 1.710756}
+{2 1.865428,38 2.826334,43 1.303334}
+{}
+{0 -1,19 2.345881,40 1.384975,42 2.345881}
+{20 1.865428,40 1.384975}
+{47 1.584381,49 1.477531,51 2.064834}
+{49 1.477531}
+{8 1.865428,35 1.865428,43 1.303334}
+{35 1.865428,45 2.064834}
+{35 1.865428}
+{7 1.865428,20 1.865428,35 1.865428}
+{0 1,39 2.064834}
+{30 2.064834}
+{4 2.064834,6 1.584381,24 1.865428,46 2.064834,50 1.865428}
+{25 0.949256,41 1.865428}
+{}
+{0 -1,20 1.865428,36 2.064834,48 2.064834}
+{0 -1}
+{0 -1,6 1.584381,12 2.064834,24 1.865428,41 1.865428}
+{0 -1,8 1.865428,18 2.064834,25 0.949256,31 1.865428,42 2.345881}
+{26 2.064834,34 2.064834,50 1.865428}
+{40 1.384975}
+{0 -1}
+{0 1,13 1.865428,22 1.710756,25 0.949256,28 1.865428,40 1.384975,43 1.303334}
+{0 1,28 1.865428,39 2.064834,47 1.584381}
+{0 1,15 2.064834,16 1.865428,30 2.064834,37 2.064834,47 1.584381,49 1.477531,52 1.710756}
+{0 -1,1 2.345881,36 2.064834,47 1.584381}
+{20 1.865428,48 2.064834}
+{0 1,22 1.710756,28 1.865428,37 2.064834,52 1.710756}
+{0 -1,52 1.710756}
+{3 1.710756,4 2.064834,10 2.064834,12 2.064834,18 2.064834,25 0.949256,47 1.584381}
+{0 1,24 1.865428}
+{0 1}
+{0 1,22 1.710756,25 0.949256,28 1.865428,31 1.865428,49 1.477531}
+{43 1.303334}
+{48 2.064834}
+{0 1}

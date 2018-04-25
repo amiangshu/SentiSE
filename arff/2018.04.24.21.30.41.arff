@@ -1,0 +1,105 @@
+@relation 'SentiSe-weka.filters.unsupervised.attribute.StringToWordVector-R2-W4000-prune-rate-1.0-T-I-N0-L-stemmeredu.sentise.preprocessing.StanfordCoreNLPLemmatizer-stopwords-handleredu.sentise.preprocessing.MyStopWordsHandler-M3-tokenizerweka.core.tokenizers.WordTokenizer -delimiters \" \\r\\t\\n.,;:\\\'\\\"()?!-><#$\\\\\\\%&*+/@^=[]{}`~0123456789\\\'|\"'
+
+@attribute lab {0,-1,1}
+@attribute I numeric
+@attribute actually numeric
+@attribute app numeric
+@attribute battery numeric
+@attribute but numeric
+@attribute changes numeric
+@attribute code numeric
+@attribute cpu numeric
+@attribute create numeric
+@attribute damn numeric
+@attribute fire numeric
+@attribute first numeric
+@attribute good numeric
+@attribute just numeric
+@attribute know numeric
+@attribute like numeric
+@attribute line numeric
+@attribute login numeric
+@attribute look numeric
+@attribute no numeric
+@attribute not numeric
+@attribute one numeric
+@attribute only numeric
+@attribute please numeric
+@attribute positivesentiment numeric
+@attribute read numeric
+@attribute reason numeric
+@attribute say numeric
+@attribute string numeric
+@attribute style numeric
+@attribute syntax numeric
+@attribute system numeric
+@attribute term numeric
+@attribute thanks numeric
+@attribute thought numeric
+@attribute use numeric
+@attribute what numeric
+@attribute when numeric
+@attribute which numeric
+@attribute would numeric
+@attribute â numeric
+
+@data
+{20 1.865428,24 2.064834,36 1.303334}
+{0 -1,4 1.865428,5 1.584381}
+{0 -1,3 1.710756,4 1.865428,16 2.345881,32 2.064834}
+{0 -1,21 0.949256}
+{0 -1,13 1.865428}
+{0 -1,4 1.865428}
+{0 -1,1 1.865428,3 1.710756,24 2.064834}
+{2 2.064834,7 1.865428,15 2.064834,21 0.949256,27 1.865428,36 1.303334,39 1.865428}
+{19 2.064834}
+{0 1,13 1.865428}
+{0 1,34 2.064834}
+{0 -1,4 1.865428,21 0.949256,24 2.064834,28 2.064834}
+{0 -1,3 1.710756,13 1.865428}
+{0 -1,2 2.064834,6 2.345881,21 0.949256,23 2.064834,38 1.477531}
+{0 -1,3 1.710756,5 1.584381,21 0.949256,38 1.477531}
+{9 2.064834}
+{0 -1,7 1.865428,10 2.345881,14 2.064834,21 0.949256,28 2.064834,36 1.303334,39 1.865428,41 2.826334}
+{0 -1,2 2.064834,5 1.584381,6 2.345881,8 2.826334,14 2.064834,21 0.949256,22 1.865428,23 2.064834,26 2.345881,29 2.064834,36 1.303334,40 1.710756}
+{}
+{0 -1,11 2.345881,21 0.949256}
+{0 -1,11 2.345881,12 2.064834,14 2.064834,21 0.949256,27 1.865428,38 1.477531}
+{}
+{0 -1,5 1.584381,9 2.064834,10 2.345881,12 2.064834,18 2.826334,21 0.949256,22 1.865428,29 2.064834,31 2.064834,36 1.303334,40 1.710756}
+{33 2.826334,36 1.303334}
+{}
+{0 -1,1 1.865428,16 2.345881,35 2.345881}
+{17 2.064834}
+{38 1.477531}
+{38 1.477531}
+{7 1.865428,30 1.865428,36 1.303334}
+{30 1.865428}
+{30 1.865428}
+{30 1.865428}
+{0 1,34 2.064834}
+{}
+{5 1.584381,20 1.865428,39 1.865428}
+{21 0.949256}
+{}
+{0 -1,17 2.064834,31 2.064834,37 2.064834}
+{0 -1}
+{0 -1,5 1.584381,20 1.865428}
+{0 -1,7 1.865428,15 2.064834,21 0.949256,27 1.865428,35 2.345881}
+{23 2.064834,29 2.064834,39 1.865428}
+{}
+{0 -1,1 1.865428}
+{0 1,21 0.949256,22 1.865428,25 1.865428,36 1.303334}
+{0 1,25 1.865428,34 2.064834}
+{0 1,1 1.865428,12 2.064834,13 1.865428,26 2.345881,32 2.064834,38 1.477531,40 1.710756}
+{0 -1,31 2.064834}
+{17 2.064834,37 2.064834}
+{0 1,19 2.064834,25 1.865428,32 2.064834,40 1.710756}
+{0 -1,40 1.710756}
+{3 1.710756,9 2.064834,15 2.064834,21 0.949256,22 1.865428}
+{0 1,20 1.865428}
+{0 1}
+{0 1,19 2.064834,21 0.949256,25 1.865428,27 1.865428,38 1.477531}
+{36 1.303334}
+{28 2.064834,37 2.064834}
+{0 1}
