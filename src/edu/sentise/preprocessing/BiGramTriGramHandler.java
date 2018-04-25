@@ -17,7 +17,7 @@ public class BiGramTriGramHandler implements TextPreprocessor {
 	private static HashMap<String,String> bigram_map= null;
 	private static HashMap<String,String> trigram_map= null;
 	public static void main(String[] args) {
-		System.out.println(new BiGramTriGramHandler().replacenGrams(" i would like to tell you that"));
+		System.out.println(new BiGramTriGramHandler().replacenGrams(" i would like to tell you that big fan not sure"));
 		
 	}
 	@Override
@@ -64,14 +64,8 @@ public class BiGramTriGramHandler implements TextPreprocessor {
 		{
 			while((line = bufferedReader.readLine())!= null)
 			{
-				//String[] parse=line.split(" ");
-				String str=new StringBuilder(line).reverse().toString();
-				String[] splits=str.split(" ",2);
-				
-				String key=new StringBuilder(splits[1]).reverse().toString();
-				String val=" "+key.replaceAll(" ", "_")+" ";
-				bigram_map.put(key,val);
-				//System.out.println(key+ " "+val);
+				String val=" "+line.replaceAll(" ", "_")+" ";
+				bigram_map.put(line,val);				
 			}
 		}
 		catch(Exception e)
@@ -89,12 +83,9 @@ public class BiGramTriGramHandler implements TextPreprocessor {
 		{
 			while((line = bufferedReader.readLine())!= null)
 			{
-				//String[] parse=line.split(" ");
-				String str=new StringBuilder(line).reverse().toString();
-				String[] splits=str.split(" ",2);
-				String key=new StringBuilder(splits[1]).reverse().toString();
-				String val=" "+key.replaceAll(" ", "_")+" ";
-				trigram_map.put(key,val);
+			
+				String val=" "+line.replaceAll(" ", "_")+" ";
+				trigram_map.put(line,val);
 				//System.out.println(key+ " "+val);
 			}
 		}
