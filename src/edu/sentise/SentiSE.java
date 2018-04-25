@@ -56,7 +56,7 @@ public class SentiSE {
 	private String acronymDictionary = Constants.ACRONYM_WORD_FILE;
 	
 	private String arffFileName;
-	private int minTermFrequeny = 3;
+	private int minTermFrequeny = 1;
 	private int maxWordsToKeep = 2500;
 	private String algorithm = "RF";
 
@@ -160,7 +160,7 @@ public class SentiSE {
 	public void generateTrainingInstance() throws Exception {
 
 		System.out.println("Reading oracle file...");
-		ArrayList<SentimentData> sentimentDataList = SentimentData.parseSentimentData(this.oracleFileName);
+		ArrayList<SentimentData> sentimentDataList = SentimentData.parseSentimentData(Constants.ORACLE_FILE_NAME);
 
 		if (this.processExclamationMark)
 			preprocessPipeline.add(new ExclamationHandler());
@@ -181,6 +181,8 @@ public class SentiSE {
 			sentimentDataList = process.apply(sentimentDataList);
 		}
 
+		/*for(int i= 0;i<sentimentDataList.size();i++)
+			System.out.println(sentimentDataList.get(i).getText());*/
 		System.out.println("Converting to WEKA format ..");
 		Instances rawInstance = ARFFTestGenerator.generateTestData(sentimentDataList);
 
@@ -287,13 +289,15 @@ public class SentiSE {
 		filter.setStopwordsHandler(new MyStopWordsHandler());
 
 		if (this.useStemmer) {
-			filter.setStemmer(new SnowballStemmer());
+			SnowballStemmer snowballStemmer=new SnowballStemmer();
+			filter.setStemmer(snowballStemmer);
 		} else if (this.useLemmatizer) {
 			StanfordCoreNLPLemmatizer lemmatizer = new StanfordCoreNLPLemmatizer();
 			filter.setStemmer(lemmatizer);
 		} else
 			filter.setStemmer(new NullStemmer());
 
+		System.out.println(useLemmatizer+" "+useStemmer+"  "+filter.getStemmer());
 		filter.setLowerCaseTokens(true);
 		filter.setTFTransform(true);
 		filter.setIDFTransform(true);
@@ -553,7 +557,7 @@ public class SentiSE {
 		Options options = new Options();
 
 		options.addOption(Option.builder("algo").hasArg(true)
-				.desc("Algorithm for classifier. \nChoices are: RF(Default)| DT | NB| SVM | CNN | MLPC | LMT | KNN | SL | RC").build());
+				.desc("Algorithm for classifier. \nChoices are: RF(Default)| DT | NB| SVM | CNN | MLPC | RNN| SVM | SL | RC").build());
 		options.addOption(Option.builder("help").hasArg(false).desc("Prints help message").build());
 		options.addOption(Option.builder("root").hasArg(true)
 				.desc("Word root determination process.\n 0=None (Default) | 1=Stemming | 2=Lemmatization ").build());
@@ -591,7 +595,7 @@ public class SentiSE {
 
 			if (commandLine.hasOption("algo")) {
 				String algo = commandLine.getOptionValue("algo");
-				if (algo.equals("RF") || algo.equals("DT") || algo.equals("NB") || algo.equals("LMT")|| algo.equals("CNN")
+				if (algo.equals("RF") || algo.equals("DT") || algo.equals("NB") || algo.equals("RNN")|| algo.equals("CNN")
 						|| algo.equals("SVM") || algo.equals("MLPC") || algo.equals("SL") || algo.equals("KNN") || algo.equals("RC") )
 					this.algorithm = algo;
 				else

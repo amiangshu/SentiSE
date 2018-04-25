@@ -1,0 +1,6 @@
+@relation 'SentiSe-weka.filters.unsupervised.attribute.StringToWordVector-R2-W2500-prune-rate-1.0-T-I-N0-L-stemmerweka.core.stemmers.SnowballStemmer -S porter-stopwords-handleredu.sentise.preprocessing.MyStopWordsHandler-M3-tokenizerweka.core.tokenizers.WordTokenizer -delimiters \" \\r\\t\\n.,;:\\\'\\\"()?!-><#$\\\\\\\%&*+/@^=[]{}`~0123456789\\\'|\"'
+
+@attribute lab {0,-1,1}
+
+@data
+{0 -1}

@@ -1,0 +1,56 @@
+@relation 'SentiSe-weka.filters.unsupervised.attribute.StringToWordVector-R2-W2500-prune-rate-1.0-T-I-N0-L-stemmerweka.core.stemmers.NullStemmer-stopwords-handleredu.sentise.preprocessing.MyStopWordsHandler-M3-tokenizerweka.core.tokenizers.WordTokenizer -delimiters \" \\r\\t\\n.,;:\\\'\\\"()?!-><#$\\\\\\\%&*+/@^=[]{}`~0123456789\\\'|\"'
+
+@attribute lab {0,-1,1}
+@attribute actually numeric
+@attribute app numeric
+@attribute battery numeric
+@attribute but numeric
+@attribute changes numeric
+@attribute code numeric
+@attribute cpu numeric
+@attribute fire numeric
+@attribute first numeric
+@attribute good numeric
+@attribute just numeric
+@attribute like numeric
+@attribute login numeric
+@attribute not numeric
+@attribute one numeric
+@attribute please numeric
+@attribute saying numeric
+@attribute term numeric
+@attribute use numeric
+@attribute when numeric
+@attribute would numeric
+@attribute â numeric
+
+@data
+{16 1.572532}
+{0 -1,3 1.373126,4 1.373126}
+{0 -1,2 1.373126,3 1.373126,12 1.853579}
+{0 -1,14 0.738001}
+{0 -1,10 1.572532}
+{0 -1,3 1.373126}
+{0 -1,2 1.373126,16 1.572532}
+{1 1.572532,6 1.853579,14 0.738001,19 1.373126}
+{}
+{0 1,10 1.572532}
+{0 1}
+{0 -1,3 1.373126,14 0.738001,16 1.572532,17 1.853579}
+{0 -1,2 1.373126,10 1.572532}
+{0 -1,1 1.572532,5 1.853579,14 0.738001,20 1.218454}
+{0 -1,2 1.373126,4 1.373126,14 0.738001,20 1.218454}
+{}
+{0 -1,6 1.853579,11 1.572532,14 0.738001,17 1.853579,19 1.373126,22 2.334032}
+{0 -1,1 1.572532,4 1.373126,5 1.853579,7 2.334032,11 1.572532,14 0.738001,15 1.853579,19 1.373126,21 1.853579}
+{}
+{0 -1,8 1.853579,14 0.738001}
+{0 -1,8 1.853579,9 1.853579,11 1.572532,14 0.738001,20 1.218454}
+{}
+{0 -1,4 1.373126,9 1.853579,13 2.334032,14 0.738001,15 1.853579,21 1.853579}
+{18 2.334032,19 1.373126}
+{}
+{0 -1,12 1.853579}
+{}
+{20 1.218454}
+{20 1.218454}

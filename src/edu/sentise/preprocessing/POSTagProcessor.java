@@ -46,9 +46,9 @@ public class POSTagProcessor implements TextPreprocessor {
 		int length = sentimentData.size();
 		for (int i = 0; i < length; i++) {
 
-			//System.out.println(sentimentData.get(i).getText());
+			System.out.println(sentimentData.get(i).getText());
 			sentimentData.get(i).setText(preprocessPOStags(sentimentData.get(i).getText()));
-			//System.out.println(sentimentData.get(i).getText());
+			System.out.println(sentimentData.get(i).getText());
 			if ((i % 100) == 0) {
 				System.out.println("POS tag processsed processed:" + i + " of " + length);
 			}
@@ -110,6 +110,7 @@ public class POSTagProcessor implements TextPreprocessor {
 				String pos = "";
 				if (pos_arr.length == 2) {
 					pos = pos_arr[0];
+					
 
 				}
 				// poshashTable.put(leave.label().toString(), pos);
@@ -220,6 +221,7 @@ public class POSTagProcessor implements TextPreprocessor {
 			String pos = "";
 			if (pos_arr.length == 2) {
 				pos = pos_arr[0];
+				
 
 			}
 			if (isNegWordfound && (pos.startsWith("NN") || pos.startsWith("PR")))
@@ -244,7 +246,7 @@ public class POSTagProcessor implements TextPreprocessor {
 		else if (emoticon_words.contains(word))
 			return " " + word;
 		else if (pos.startsWith("VB") || pos.startsWith("RB") || pos.startsWith("JJ") || pos.startsWith("MD"))
-			return "NOT_" + word;
+			return "not_" + word;
 		else
 			return word;
 	}

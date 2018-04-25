@@ -24,7 +24,9 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import edu.sentise.factory.BasePOSUtility;
+import edu.sentise.preprocessing.StanfordCoreNLPLemmatizer;
 import edu.stanford.nlp.trees.Tree;
+import weka.core.stemmers.SnowballStemmer;
 
 public class Util {
 	private static HashSet<String> negation_words = new HashSet<String>(Arrays.asList(DataLists.negation_words));
@@ -135,5 +137,11 @@ public class Util {
 		else
 			return word;
 	}
-	
+	public static void main(String[] args) {
+		SnowballStemmer snowballStemmer=new SnowballStemmer();
+		String str= snowballStemmer.stem("please makes it work!");
+		System.out.println(str);
+		str= new StanfordCoreNLPLemmatizer().stem("please makes it work!");
+		System.out.println(str);
+	}
 }

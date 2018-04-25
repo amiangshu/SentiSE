@@ -83,12 +83,14 @@ public class SentimentData {
 		                //if((rating == 0 && neutral<800) || (rating == 1 && positive<400) ||(rating == -1 && negative<400))
 		               // {
 		                	sentimentDataList.add(sentimentData);
+		                	
 		                	if(rating == 0)
 		                		neutral++;
 		                	else if(rating == 1)
 		                		positive++;
 		                	else if(rating == -1)
 		                		negative++;
+		                	
 		                	
 		                }
 	               // }

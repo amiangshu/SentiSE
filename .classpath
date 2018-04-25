@@ -9,7 +9,7 @@
 	<classpathentry kind="lib" path="libs/stanford-parser.jar"/>
 	<classpathentry kind="lib" path="libs/stanford-postagger.jar"/>
 	<classpathentry kind="lib" path="libs/weka-src.jar"/>
-	<classpathentry kind="lib" path="libs/weka.jar"/>
+	<classpathentry kind="lib" path="libs/weka.jar" sourcepath="libs/weka-src.jar"/>
 	<classpathentry kind="lib" path="libs/excel/commons-codec-1.10.jar"/>
 	<classpathentry kind="lib" path="libs/excel/commons-collections4-4.1.jar"/>
 	<classpathentry kind="lib" path="libs/excel/junit-4.12.jar"/>

@@ -1,0 +1,14 @@
+@relation 'SentiSe-weka.filters.unsupervised.attribute.StringToWordVector-R2-W2500-prune-rate-1.0-T-I-N0-L-stemmerweka.core.stemmers.NullStemmer-stopwords-handleredu.sentise.preprocessing.MyStopWordsHandler-M1-tokenizerweka.core.tokenizers.WordTokenizer -delimiters \" \\r\\t\\n.,;:\\\'\\\"()?!-><#$\\\\\\\%&*+/@^=[]{}`~0123456789\\\'|\"'
+
+@attribute lab {0,-1,1}
+@attribute fix numeric
+@attribute iii numeric
+@attribute not numeric
+@attribute not_can numeric
+@attribute not_install numeric
+@attribute note numeric
+@attribute please numeric
+@attribute samsung numeric
+
+@data
+{0 -1}

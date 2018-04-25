@@ -1,0 +1,15 @@
+@relation 'SentiSe-weka.filters.unsupervised.attribute.StringToWordVector-R2-W2500-prune-rate-1.0-T-I-N0-L-stemmerweka.core.stemmers.SnowballStemmer -S porter-stopwords-handleredu.sentise.preprocessing.MyStopWordsHandler-M1-tokenizerweka.core.tokenizers.WordTokenizer -delimiters \" \\r\\t\\n.,;:\\\'\\\"()?!-><#$\\\\\\\%&*+/@^=[]{}`~0123456789\\\'|\"'
+
+@attribute lab {0,-1,1}
+@attribute bad numeric
+@attribute exactli numeric
+@attribute expect numeric
+@attribute file numeric
+@attribute look numeric
+@attribute not numeric
+@attribute sysf numeric
+@attribute thi numeric
+@attribute us numeric
+
+@data
+{0 -1}
