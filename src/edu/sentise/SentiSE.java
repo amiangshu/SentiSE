@@ -29,6 +29,7 @@ import edu.sentise.preprocessing.ExclamationHandler;
 import edu.sentise.preprocessing.MyStopWordsHandler;
 import edu.sentise.preprocessing.POSTagProcessor;
 import edu.sentise.preprocessing.QuestionMarkHandler;
+import edu.sentise.preprocessing.IdentifierProcessor;
 import edu.sentise.preprocessing.StanfordCoreNLPLemmatizer;
 import edu.sentise.preprocessing.StopWordProcessor;
 import edu.sentise.preprocessing.TextPreprocessor;
@@ -77,6 +78,7 @@ public class SentiSE {
 
 	private boolean useStemmer = false;
 	private boolean useLemmatizer = false;
+	private boolean removeIdentifiers=false;
 	private Random rand;
 	private static int REPEAT_COUNT = 10;
 	private String outputFile;
@@ -112,6 +114,14 @@ public class SentiSE {
 
 	public void setMaxWordsToKeep(int maxWordsToKeep) {
 		this.maxWordsToKeep = maxWordsToKeep;
+	}
+
+	public boolean isRemoveIdentifiers() {
+		return removeIdentifiers;
+	}
+
+	public void setRemoveIdentifiers(boolean removeIdentifiers) {
+		this.removeIdentifiers = removeIdentifiers;
 	}
 
 	public void setPreprocessNegation(boolean preprocessNegation) {
@@ -172,6 +182,8 @@ public class SentiSE {
 		System.out.println("Reading oracle file...");
 		ArrayList<SentimentData> sentimentDataList = SentimentData.parseSentimentData(Constants.ORACLE_FILE_NAME);
 
+		if(this.removeIdentifiers)
+			preprocessPipeline.add(new IdentifierProcessor());
 		if (this.processExclamationMark)
 			preprocessPipeline.add(new ExclamationHandler());
 
@@ -465,6 +477,9 @@ public class SentiSE {
 		builder.append("\n");
 		builder.append("Replace exclamation mark: " + this.processExclamationMark);
 		builder.append("\n");
+		builder.append("Remove identifiers: " + this.removeIdentifiers);
+		builder.append("\n");
+		
 		builder.append("Stemming:" + this.useStemmer);
 		builder.append("\n");
 		builder.append("Lemmatization:" + this.useLemmatizer);
@@ -634,6 +649,9 @@ public class SentiSE {
 		options.addOption(Option.builder("output").hasArg(true).desc("Output file").build());
 		options.addOption(Option.builder("oracle").hasArg(true).desc("Training dataset (Excel)").build());
 
+		options.addOption(Option.builder("identifier").hasArg(true)
+				.desc("Remove identifiers").build());
+	
 		Option termFreq = Option.builder("minfreq").hasArg()
 				.desc("Minimum frequecy required to be considered as a feature. Default: 5").build();
 		termFreq.setType(Number.class);
@@ -677,6 +695,10 @@ public class SentiSE {
 
 			if (commandLine.hasOption("negate")) {
 				setPreprocessNegation(true);
+			}
+			
+			if (commandLine.hasOption("identifier")) {
+				this.setRemoveIdentifiers(true);
 			}
 
 			if (commandLine.hasOption("output")) {
