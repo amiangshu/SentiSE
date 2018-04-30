@@ -36,6 +36,9 @@ import edu.sentise.preprocessing.TextPreprocessor;
 import edu.sentise.preprocessing.URLRemover;
 import edu.sentise.test.ARFFTestGenerator;
 import edu.sentise.util.Constants;
+import weka.attributeSelection.AttributeSelection;
+import weka.attributeSelection.InfoGainAttributeEval;
+import weka.attributeSelection.Ranker;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.core.Instances;
@@ -44,6 +47,7 @@ import weka.core.stemmers.NullStemmer;
 import weka.core.stemmers.SnowballStemmer;
 import weka.core.tokenizers.WordTokenizer;
 import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.Remove;
 import weka.filters.unsupervised.attribute.StringToWordVector;
 
 public class SentiSE {
@@ -213,6 +217,8 @@ public class SentiSE {
 
 		this.trainingInstances.setClassIndex(0);
 
+		// adding info gain
+		trainingInstances=getInstancesFilteredByInformationgain(trainingInstances);
 		storeAsARFF(this.trainingInstances, this.arffFileName);
 		this.setForceRcreateTrainingData(false);
 
@@ -330,6 +336,35 @@ public class SentiSE {
 
 		return Filter.useFilter(instance, filter);
 
+	}
+	private Instances getInstancesFilteredByInformationgain( Instances instances)
+	{
+		try
+		{
+		AttributeSelection filter = new AttributeSelection();
+		InfoGainAttributeEval evaluator=new InfoGainAttributeEval();
+		filter.setEvaluator(evaluator);
+		Ranker search= new Ranker();
+		search.setThreshold(0);
+		filter.setSearch(search);
+		filter.SelectAttributes(instances);
+		int [] selected=filter.selectedAttributes();
+		
+		
+		Remove removeFilter=new Remove();
+		
+		removeFilter.setAttributeIndicesArray(selected);
+		removeFilter.setInvertSelection(true);
+		removeFilter.setInputFormat(instances);
+		return Filter.useFilter(instances, removeFilter);
+		}
+		
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return instances;
+		
 	}
 
 	private void initRand(long value) {
@@ -649,7 +684,7 @@ public class SentiSE {
 		options.addOption(Option.builder("output").hasArg(true).desc("Output file").build());
 		options.addOption(Option.builder("oracle").hasArg(true).desc("Training dataset (Excel)").build());
 
-		options.addOption(Option.builder("identifier").hasArg(true)
+		options.addOption(Option.builder("identifier").hasArg(false)
 				.desc("Remove identifiers").build());
 	
 		Option termFreq = Option.builder("minfreq").hasArg()

@@ -111,6 +111,7 @@ public class POSTagProcessor implements TextPreprocessor {
 				if (pos_arr.length == 2) {
 					pos = pos_arr[0];
 					
+					
 
 				}
 				// poshashTable.put(leave.label().toString(), pos);

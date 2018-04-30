@@ -12,7 +12,7 @@ public class KeepImportantWithContextTags extends BasePOSUtility{
 	public void shouldInclude(String label,String word, String tag, String context, Hashtable<String, String> myMap) {
 		if(Util.isEligiblePos(tag))
 			if(!MyStopWordsHandler.stop_words.contains(word)) 
-			     myMap.put(label,context+"_"+word);
+			 myMap.put(label,context+"_"+word);
 		
 	}
 }
