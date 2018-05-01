@@ -7,7 +7,7 @@ import java.util.HashSet;
 
 
 import edu.sentise.model.SentimentData;
-import edu.sentise.util.Constants;
+import edu.sentise.util.Configuration;
 import edu.sentise.util.Util;
 
 public class AncronymHandler implements TextPreprocessor {
@@ -16,7 +16,7 @@ public class AncronymHandler implements TextPreprocessor {
 	private String fileName;
 
 	public static void main(String[] args) {
-		new AncronymHandler(Constants.ACRONYM_WORD_FILE);
+		new AncronymHandler(Configuration.ACRONYM_WORD_FILE);
 	}
 	public ArrayList<SentimentData> apply(ArrayList<SentimentData> sentiList) {
 		for (int i = 0; i < sentiList.size(); i++)

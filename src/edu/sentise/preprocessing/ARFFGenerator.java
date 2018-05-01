@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import edu.sentise.model.SentimentData;
-import edu.sentise.util.Constants;
+import edu.sentise.util.Configuration;
 import edu.sentise.util.Util;
 import weka.core.Attribute;
 import weka.core.DenseInstance;
@@ -26,7 +26,7 @@ public class ARFFGenerator {
 	private static void writeInFile(Instances instances) {
 		try {
 			
-			BufferedWriter bufferedWriter = Util.getBufferedWriterByFileName(Constants.ARFF_ORACLE_FILE_NAME);
+			BufferedWriter bufferedWriter = Util.getBufferedWriterByFileName(Configuration.ARFF_ORACLE_FILE_NAME);
 			bufferedWriter.write(instances.toString());
 			Util.closeBufferedWriter(bufferedWriter);
 		} catch (IOException e) {
@@ -37,7 +37,7 @@ public class ARFFGenerator {
 	public static void writeInFileTest(Instances instances) {
 		try {
 			
-			BufferedWriter bufferedWriter = Util.getBufferedWriterByFileName(Constants.ARFF_ORACLE_FILE_NAME_TEST);
+			BufferedWriter bufferedWriter = Util.getBufferedWriterByFileName(Configuration.ARFF_ORACLE_FILE_NAME_TEST);
 			bufferedWriter.write(instances.toString());
 			Util.closeBufferedWriter(bufferedWriter);
 		} catch (IOException e) {

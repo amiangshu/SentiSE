@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 import com.mysql.jdbc.ReplicationConnectionProxy;
 
 import edu.sentise.model.SentimentData;
-import edu.sentise.util.Constants;
+import edu.sentise.util.Configuration;
 import edu.sentise.util.Util;
 
 public class BiGramTriGramHandler implements TextPreprocessor {
@@ -58,7 +58,7 @@ public class BiGramTriGramHandler implements TextPreprocessor {
 	private static void createBiGram()
 	{
 		bigram_map= new HashMap<>();
-		BufferedReader bufferedReader=Util.getBufferedreaderByFileName(Constants.BIGRAM_FILE);
+		BufferedReader bufferedReader=Util.getBufferedreaderByFileName(Configuration.BIGRAM_FILE);
 		String line=null;
 		try
 		{
@@ -77,7 +77,7 @@ public class BiGramTriGramHandler implements TextPreprocessor {
 	private static void createTriGram()
 	{
 		trigram_map= new HashMap<>();
-		BufferedReader bufferedReader=Util.getBufferedreaderByFileName(Constants.TRIGRAM_FILE);
+		BufferedReader bufferedReader=Util.getBufferedreaderByFileName(Configuration.TRIGRAM_FILE);
 		String line=null;
 		try
 		{

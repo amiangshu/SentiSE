@@ -80,7 +80,7 @@ public class Util {
 	public static void printFile(BufferedReader bufferedReader) {
 		 try {
 
-	            FileInputStream excelFile = new FileInputStream(new File(Constants.ORACLE_FILE_NAME));
+	            FileInputStream excelFile = new FileInputStream(new File(Configuration.ORACLE_FILE_NAME));
 	            Workbook workbook = new XSSFWorkbook(excelFile);
 	            Sheet datatypeSheet = workbook.getSheetAt(0);
 	            Iterator<Row> iterator = datatypeSheet.iterator();

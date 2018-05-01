@@ -7,9 +7,14 @@ import edu.sentise.preprocessing.MyStopWordsHandler;
 
 public class KeepPOSTags extends BasePOSUtility{
 
+	public KeepPOSTags(MyStopWordsHandler handler) {
+		super(handler);
+		
+	}
+
 	@Override
 	public void shouldInclude(String label,String word, String tag, String context, Hashtable<String, String> myMap) {
-		if(!MyStopWordsHandler.stop_words.contains(word))
+		if(!this.isStopWord(word))
 		     myMap.put(label,tag+"_"+word);
 		
 	}

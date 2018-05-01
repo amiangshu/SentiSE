@@ -1,23 +1,27 @@
 package edu.sentise.factory;
 
-public  class BasicFactory {
+import edu.sentise.preprocessing.MyStopWordsHandler;
 
-	public static BasePOSUtility getPOSUtility(boolean keepPosTag, boolean includeImportantPOS, boolean keepContextTag) {
-		if(keepPosTag && keepContextTag)
+public class BasicFactory {
+
+	public static BasePOSUtility getPOSUtility(boolean keepPosTag, boolean includeImportantPOS, boolean keepContextTag,
+			MyStopWordsHandler handler) {
+		if (keepPosTag && keepContextTag)
 			throw new RuntimeException("Both POS and Context Tag cannot be kept at the same time");
-		
-		//System.out.println("\nprinting parameters:\n\nkeep pos Tags: "+ keepPosTag+"\ninclude important pos: "+includeImportantPOS+"\n");
+
+		// System.out.println("\nprinting parameters:\n\nkeep pos Tags: "+
+		// keepPosTag+"\ninclude important pos: "+includeImportantPOS+"\n");
 		if (keepPosTag && includeImportantPOS)
-			return new KeepImportantWithPOSTags();
-		if(keepContextTag && includeImportantPOS)
-			return new KeepImportantWithContextTags();
+			return new KeepImportantWithPOSTags(handler);
+		if (keepContextTag && includeImportantPOS)
+			return new KeepImportantWithContextTags(handler);
 		else if (keepPosTag)
-			return new KeepPOSTags();
-		else if(keepContextTag)
-			return new KeepContextTags();
+			return new KeepPOSTags(handler);
+		else if (keepContextTag)
+			return new KeepContextTags(handler);
 		else if (includeImportantPOS)
-			return new KeepImportantPOSWithoutTags();
+			return new KeepImportantPOSWithoutTags(handler);
 		else
-			return new KeepUnchanged();
+			return new KeepUnchanged(handler);
 	}
 }

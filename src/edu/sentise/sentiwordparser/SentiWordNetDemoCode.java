@@ -11,7 +11,7 @@ import java.util.Map;
 
 import org.apache.poi.hslf.examples.CreateHyperlink;
 
-import edu.sentise.util.Constants;
+import edu.sentise.util.Configuration;
 import edu.sentise.util.Util;
 
 public class SentiWordNetDemoCode {
@@ -138,7 +138,7 @@ public class SentiWordNetDemoCode {
 	
 		try
 		{
-		String fileName=Constants.POSITIVE_SENTI_WORD_FILE;
+		String fileName=Configuration.POSITIVE_SENTI_WORD_FILE;
 		File file= new File(fileName);
 		file.createNewFile();
 		BufferedWriter bufferedWriter=edu.sentise.util.Util.getBufferedWriterByFileName(fileName);
@@ -188,7 +188,7 @@ public class SentiWordNetDemoCode {
 	
 		try
 		{
-		String fileName=Constants.NEGATIVE_SENTI_WORD_FILE;
+		String fileName=Configuration.NEGATIVE_SENTI_WORD_FILE;
 
 		File file= new File(fileName);
 		file.createNewFile();

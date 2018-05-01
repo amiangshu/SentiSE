@@ -61,7 +61,7 @@ public class ContractionLoader implements TextPreprocessor {
 				text = text.replaceAll(key, contractionMap.get(key));
 			}
 		}
-		text=text.replaceAll("_", " "); //replace all underscores in the original word
+		
 
 		return text;
 	}

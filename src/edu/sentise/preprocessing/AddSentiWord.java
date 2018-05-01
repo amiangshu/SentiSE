@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import org.apache.log4j.chainsaw.Main;
 
-import edu.sentise.util.Constants;
+import edu.sentise.util.Configuration;
 import edu.sentise.util.Util;
 
 
@@ -33,7 +33,7 @@ public class AddSentiWord {
 	public static void createPositiveSentiMap()
 	{
 		
-		BufferedReader bufferedReader=Util.getBufferedreaderByFileName(Constants.POSITIVE_SENTI_WORD_FILE);
+		BufferedReader bufferedReader=Util.getBufferedreaderByFileName(Configuration.POSITIVE_SENTI_WORD_FILE);
 		String line=null;
 		try
 		{
@@ -53,7 +53,7 @@ public class AddSentiWord {
 	public static void createNegativeSentiMap()
 	{
 		
-		BufferedReader bufferedReader=Util.getBufferedreaderByFileName(Constants.NEGATIVE_SENTI_WORD_FILE);
+		BufferedReader bufferedReader=Util.getBufferedreaderByFileName(Configuration.NEGATIVE_SENTI_WORD_FILE);
 		String line=null;
 		try
 		{

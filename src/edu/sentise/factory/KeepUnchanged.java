@@ -3,11 +3,17 @@ package edu.sentise.factory;
 import java.util.HashMap;
 import java.util.Hashtable;
 
-public class KeepUnchanged extends BasePOSUtility{
+import edu.sentise.preprocessing.MyStopWordsHandler;
+
+public class KeepUnchanged extends BasePOSUtility {
+
+	public KeepUnchanged(MyStopWordsHandler handler) {
+		super(handler);
+	}
 
 	@Override
-	public void shouldInclude(String label,String word, String tag, String context, Hashtable<String, String> myMap) {
-		myMap.put(label,word);
-		
+	public void shouldInclude(String label, String word, String tag, String context, Hashtable<String, String> myMap) {
+		myMap.put(label, word);
+
 	}
 }

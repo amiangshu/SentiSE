@@ -31,11 +31,11 @@ import edu.sentise.preprocessing.POSTagProcessor;
 import edu.sentise.preprocessing.QuestionMarkHandler;
 import edu.sentise.preprocessing.IdentifierProcessor;
 import edu.sentise.preprocessing.StanfordCoreNLPLemmatizer;
-import edu.sentise.preprocessing.StopWordProcessor;
+import edu.sentise.preprocessing.StopwordWithKeywords;
 import edu.sentise.preprocessing.TextPreprocessor;
 import edu.sentise.preprocessing.URLRemover;
 import edu.sentise.test.ARFFTestGenerator;
-import edu.sentise.util.Constants;
+import edu.sentise.util.Configuration;
 import weka.attributeSelection.AttributeSelection;
 import weka.attributeSelection.InfoGainAttributeEval;
 import weka.attributeSelection.Ranker;
@@ -54,11 +54,11 @@ public class SentiSE {
 
 	private HashMap<Integer, Integer> classMapping;
 	private Classifier classifier;
-	private String emoticonDictionary = Constants.EMOTICONS_FILE_NAME;
+	private String emoticonDictionary = Configuration.EMOTICONS_FILE_NAME;
 	// private String stopWordDictionary = Constants.STOPWORDS_FILE_NAME;
-	private String contractionDictionary = Constants.CONTRACTION_TEXT_FILE_NAME;
-	private String oracleFileName = Constants.ORACLE_FILE_NAME;
-	private String acronymDictionary = Constants.ACRONYM_WORD_FILE;
+	private String contractionDictionary = Configuration.CONTRACTION_TEXT_FILE_NAME;
+	private String oracleFileName = Configuration.ORACLE_FILE_NAME;
+	private String acronymDictionary = Configuration.ACRONYM_WORD_FILE;
 	
 	private String arffFileName;
 
@@ -83,10 +83,13 @@ public class SentiSE {
 	private boolean useStemmer = false;
 	private boolean useLemmatizer = false;
 	private boolean removeIdentifiers=false;
+	private boolean removeKeywords=false;
 	private Random rand;
 	private static int REPEAT_COUNT = 10;
 	private String outputFile;
 	Instances trainingInstances = null;
+	
+	private MyStopWordsHandler stopWordHandler;
 
 	public void setEmoticonDictionary(String emoticonDictionary) {
 		this.emoticonDictionary = emoticonDictionary;
@@ -152,11 +155,19 @@ public class SentiSE {
 		applyPosTag = keep;
 	}
 
+	public boolean isRemoveKeywords() {
+		return removeKeywords;
+	}
+
+	public void setRemoveKeywords(boolean removeKeywords) {
+		this.removeKeywords = removeKeywords;
+	}
+
 	private ArrayList<TextPreprocessor> preprocessPipeline = new ArrayList<TextPreprocessor>();
 
 	public SentiSE() {
 
-		
+		stopWordHandler=new MyStopWordsHandler(Configuration.STOPWORDS_FILE_NAME);
 		// common preprocessing steps, always applied
 		preprocessPipeline.add(new EmoticonProcessor(this.emoticonDictionary));
 		preprocessPipeline.add(new ContractionLoader(this.contractionDictionary));
@@ -169,22 +180,22 @@ public class SentiSE {
 	{
        String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
        
-       this.outputFile =Constants.OUTPUT_DIRECTORY+this.algorithm+"_"+ timeStamp + ".txt";
-		this.arffFileName=Constants.ARFF_DIRECTORY+timeStamp+".arff";
+       this.outputFile =Configuration.OUTPUT_DIRECTORY+this.algorithm+"_"+ timeStamp + ".txt";
+		this.arffFileName=Configuration.ARFF_DIRECTORY+timeStamp+".arff";
 	}
 	
 	private void createCombinedResultFile()
 	{
        String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
        
-       this.outputFile =Constants.OUTPUT_DIRECTORY+"combined_"+ timeStamp + ".txt";
-		this.arffFileName=Constants.ARFF_DIRECTORY+timeStamp+".arff";
+       this.outputFile =Configuration.OUTPUT_DIRECTORY+"combined_"+ timeStamp + ".txt";
+		this.arffFileName=Configuration.ARFF_DIRECTORY+timeStamp+".arff";
 	}
 
 	public void generateTrainingInstance() throws Exception {
 
 		System.out.println("Reading oracle file...");
-		ArrayList<SentimentData> sentimentDataList = SentimentData.parseSentimentData(Constants.ORACLE_FILE_NAME);
+		ArrayList<SentimentData> sentimentDataList = SentimentData.parseSentimentData(Configuration.ORACLE_FILE_NAME);
 
 		if(this.removeIdentifiers)
 			preprocessPipeline.add(new IdentifierProcessor());
@@ -199,7 +210,8 @@ public class SentiSE {
 		
 		System.out.println("Preprocessing text ..");
 		preprocessPipeline
-				.add(new POSTagProcessor(BasicFactory.getPOSUtility(applyPosTag, keepOnlyImportantPos, applyContextTag),
+				.add(new POSTagProcessor(BasicFactory.getPOSUtility(applyPosTag, 
+						keepOnlyImportantPos, applyContextTag,stopWordHandler),
 						this.preprocessNegation, addSentiScoreType));
 
 		
@@ -218,7 +230,7 @@ public class SentiSE {
 		this.trainingInstances.setClassIndex(0);
 
 		// adding info gain
-		trainingInstances=getInstancesFilteredByInformationgain(trainingInstances);
+		//trainingInstances=getInstancesFilteredByInformationgain(trainingInstances);
 		storeAsARFF(this.trainingInstances, this.arffFileName);
 		this.setForceRcreateTrainingData(false);
 
@@ -249,31 +261,6 @@ public class SentiSE {
 
 	}
 
-	// public Instances applyOversampling(Instances filteredInstance) throws
-	// Exception {
-	// int count[] = filteredInstance.attributeStats(0).nominalCounts;
-	// System.out.println("Instances 0->" + count[0] + ", -1->" + count[1] + ", 1->"
-	// + count[2]);
-	//
-	// System.out.println("Creating synthetic negative samples");
-	// SMOTE oversampler = new SMOTE();
-	// oversampler.setNearestNeighbors(15);
-	// oversampler.setClassValue("2");
-	//
-	// oversampler.setInputFormat(filteredInstance);
-	// filteredInstance = Filter.useFilter(filteredInstance, oversampler);
-	// System.out.println("Creating synthetic positive samples");
-	// SMOTE oversampler2 = new SMOTE();
-	// oversampler2.setClassValue("3");
-	// oversampler2.setNearestNeighbors(15);
-	// oversampler2.setPercentage(40);
-	// oversampler2.setInputFormat(filteredInstance);
-	//
-	// filteredInstance = Filter.useFilter(filteredInstance, oversampler2);
-	// System.out.println("Finished oversampling..");
-	// return filteredInstance;
-	//
-	// }
 
 	public int[] getSentimentScore(ArrayList<String> sentences) throws Exception {
 
@@ -312,9 +299,12 @@ public class SentiSE {
 		StringToWordVector filter = new StringToWordVector();
 		filter.setInputFormat(instance);
 		WordTokenizer customTokenizer = new WordTokenizer();
-		customTokenizer.setDelimiters(Constants.DELIMITERS);
+		customTokenizer.setDelimiters(Configuration.DELIMITERS);
 		filter.setTokenizer(customTokenizer);
-		filter.setStopwordsHandler(new MyStopWordsHandler());
+		
+		if(this.removeKeywords)
+			this.stopWordHandler=new StopwordWithKeywords(Configuration.STOPWORDS_FILE_NAME, Configuration.KEYWORD_LIST_FILE);
+		filter.setStopwordsHandler(this.stopWordHandler);
 
 		if (this.useStemmer) {
 			SnowballStemmer snowballStemmer=new SnowballStemmer();
@@ -514,6 +504,8 @@ public class SentiSE {
 		builder.append("\n");
 		builder.append("Remove identifiers: " + this.removeIdentifiers);
 		builder.append("\n");
+		builder.append("Remove programming keywords: " + this.removeKeywords);
+		builder.append("\n");
 		
 		builder.append("Stemming:" + this.useStemmer);
 		builder.append("\n");
@@ -580,7 +572,7 @@ public class SentiSE {
 		
 		ArrayList<CrossValidationResult> cvResults = new ArrayList<CrossValidationResult>();
 		
-		String[] algorithms= {"RF","SL", "CNN", "SVM"};
+		String[] algorithms= {"RF","SL",  "SVM", "CNN","LMT"};
 		
 		StringBuilder outputBuffer = new StringBuilder();
 		outputBuffer.append(getConfiguration());
@@ -686,6 +678,8 @@ public class SentiSE {
 
 		options.addOption(Option.builder("identifier").hasArg(false)
 				.desc("Remove identifiers").build());
+		options.addOption(Option.builder("keyword").hasArg(false)
+				.desc("Remove programming Keywords").build());
 	
 		Option termFreq = Option.builder("minfreq").hasArg()
 				.desc("Minimum frequecy required to be considered as a feature. Default: 5").build();
@@ -734,6 +728,10 @@ public class SentiSE {
 			
 			if (commandLine.hasOption("identifier")) {
 				this.setRemoveIdentifiers(true);
+			}
+			
+			if (commandLine.hasOption("keyword")) {
+				this.setRemoveKeywords(true);
 			}
 
 			if (commandLine.hasOption("output")) {

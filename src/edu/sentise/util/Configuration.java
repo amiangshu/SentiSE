@@ -1,6 +1,6 @@
 package edu.sentise.util;
 
-public class Constants {
+public class Configuration {
 
 	public static final String CONTRACTION_TEXT_FILE_NAME="models/Contractions.txt";
 	public static final String EMOTICONS_FILE_NAME="models/EmoticonLookupTable.txt";
@@ -16,6 +16,7 @@ public class Constants {
     public static final String BIGRAM_FILE="models/bigram.txt";
     public static final String TRIGRAM_FILE="models/trigram.txt";
     public static final String ACRONYM_WORD_FILE="models/short_word_list.txt"; 
+    public static final String KEYWORD_LIST_FILE="models/keyword_list.txt";
     public static final String OUTPUT_DIRECTORY="output/"; 
     public static final String ARFF_DIRECTORY="arff/"; 
 
