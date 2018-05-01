@@ -4,6 +4,7 @@ public class Configuration {
 
 	public static final String CONTRACTION_TEXT_FILE_NAME="models/Contractions.txt";
 	public static final String EMOTICONS_FILE_NAME="models/EmoticonLookupTable.txt";
+	public static final String EMOTICONS_CATEGORIZED="models/EmoticonLookupCategorized.txt";
 	public static final String STOPWORDS_FILE_NAME="models/StopWords.txt";
 	public static final String ORACLE_FILE_NAME="models/sentise-oracle-short.xlsx";
 	public static final String ARFF_ORACLE_FILE_NAME="models/myoracle.arff";

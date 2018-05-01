@@ -18,7 +18,7 @@
 8-0	 negativesentiment 
 8/	 negativesentiment 
 8\	 negativesentiment 
-8c	 negativesentiment 
+8c	negativesentiment 
 :#	 negativesentiment 
 :'(	 negativesentiment 
 :'-(	 negativesentiment 
