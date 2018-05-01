@@ -46,7 +46,7 @@ public class IdentifierProcessor implements TextPreprocessor {
 
 	public static void main(String[] args) {
 
-		String test = "camelCase this well amin_gerat23 nice_try History2Lession IFoo HTTPConnection Good1 good1 bad Touch leaF";
+		String test = "camelCase this well amin_gerat23 nice_try History2Lession IFoo HTTPConnection Good1 good1 this.ElectionModel bad Touch leaF";
 		IdentifierProcessor p = new IdentifierProcessor();
 		String modText=p.removeCameCaseWords(test);
 		modText=p.removeWordsWithNumbers(modText);	
