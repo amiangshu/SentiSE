@@ -110,7 +110,7 @@ public class CrossValidationResult {
 
 	public static String getResultHeader() {
 
-		return "Accuracy, Kappa, Precision(pos), Recall(pos), Fmeasure(pos), Precision(neu), Recall(neu), Fmeasure(neu), Precision(neg), Recall(neg), Fmeasure(neg)";
+		return "Accuracy,  Weighted-Kappa, Precision(pos), Recall(pos), Fmeasure(pos), Precision(neu), Recall(neu), Fmeasure(neu), Precision(neg), Recall(neg), Fmeasure(neg)";
 	}
 
 }

@@ -26,6 +26,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import edu.sentise.factory.BasePOSUtility;
 import edu.sentise.preprocessing.StanfordCoreNLPLemmatizer;
 import edu.stanford.nlp.trees.Tree;
+import weka.classifiers.Evaluation;
 import weka.core.stemmers.SnowballStemmer;
 
 public class Util {
@@ -53,6 +54,47 @@ public class Util {
 		}
 	}
 
+	public static double computeWeightedKappa(Evaluation eval) {
+
+		double[][] confusionMatrix = eval.confusionMatrix();
+		double[][] expectedMatrix = new double[3][3];
+
+		double totalInstances = eval.numInstances();
+
+		double[] classActual = new double[3];
+		double[] classGot = new double[3];
+
+		for (int i = 0; i < 3; i++) {
+
+			for (int j = 0; j < 3; j++) {
+				classActual[i] += confusionMatrix[i][j];
+				classGot[i] += confusionMatrix[j][i];
+			}
+
+		}
+
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				expectedMatrix[i][j] = classActual[i] * classGot[j] / totalInstances;
+			}
+
+		}
+
+		double numerator = 0.0;
+		double denominator = 0.0;
+		for (int i = 0; i < 3; i++) {
+
+			for (int j = 0; j < 3; j++) {
+				numerator += confusionMatrix[i][j] * Math.abs(j - i);
+				denominator += expectedMatrix[i][j] * Math.abs(j - i);
+
+			}
+		}
+
+		double weightedKappa = 1.0 - (numerator / denominator);
+		return weightedKappa;
+	}
+
 	public static BufferedWriter getBufferedWriterByFileName(String fileName) {
 
 		try {
@@ -62,8 +104,7 @@ public class Util {
 			return new BufferedWriter(fileWriter);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -78,55 +119,59 @@ public class Util {
 	}
 
 	public static void printFile(BufferedReader bufferedReader) {
-		 try {
+		try {
 
-	            FileInputStream excelFile = new FileInputStream(new File(Configuration.ORACLE_FILE_NAME));
-	            Workbook workbook = new XSSFWorkbook(excelFile);
-	            Sheet datatypeSheet = workbook.getSheetAt(0);
-	            Iterator<Row> iterator = datatypeSheet.iterator();
+			FileInputStream excelFile = new FileInputStream(new File(Configuration.ORACLE_FILE_NAME));
+			Workbook workbook = new XSSFWorkbook(excelFile);
+			Sheet datatypeSheet = workbook.getSheetAt(0);
+			Iterator<Row> iterator = datatypeSheet.iterator();
 
-	            while (iterator.hasNext()) {
+			while (iterator.hasNext()) {
 
-	                Row currentRow = iterator.next();
-	                Iterator<Cell> cellIterator = currentRow.iterator();
+				Row currentRow = iterator.next();
+				Iterator<Cell> cellIterator = currentRow.iterator();
 
-	                while (cellIterator.hasNext()) {
+				while (cellIterator.hasNext()) {
 
-	                    Cell currentCell = cellIterator.next();
-	                    //getCellTypeEnum shown as deprecated for version 3.15
-	                    //getCellTypeEnum ill be renamed to getCellType starting from version 4.0
-	                    if (currentCell.getCellTypeEnum() == CellType.STRING) {
-	                        System.out.print(currentCell.getStringCellValue() + "--");
-	                    } else if (currentCell.getCellTypeEnum() == CellType.NUMERIC) {
-	                        System.out.print(currentCell.getNumericCellValue() + "--");
-	                    }
+					Cell currentCell = cellIterator.next();
+					// getCellTypeEnum shown as deprecated for version 3.15
+					// getCellTypeEnum ill be renamed to getCellType starting from version 4.0
+					if (currentCell.getCellTypeEnum() == CellType.STRING) {
+						System.out.print(currentCell.getStringCellValue() + "--");
+					} else if (currentCell.getCellTypeEnum() == CellType.NUMERIC) {
+						System.out.print(currentCell.getNumericCellValue() + "--");
+					}
 
-	                }
-	                System.out.println();
-	                workbook.close();
+				}
+				System.out.println();
+				workbook.close();
 
-	            }
-	        } catch (FileNotFoundException e) {
-	            e.printStackTrace();
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-	    }
+	}
+
 	/**
-	 * only verb,adverb, adjective and modals contribute to negation of a sentence.So checking eligibility of that
-	 * pos 
-	 * @param pos is the parts of speech
+	 * only verb,adverb, adjective and modals contribute to negation of a
+	 * sentence.So checking eligibility of that pos
+	 * 
+	 * @param pos
+	 *            is the parts of speech
 	 * @return is it eligible or not
 	 */
-	
-	public static  boolean isEligiblePos(String pos) {
-		
-		if(pos.startsWith("RB") || pos.startsWith("MD") || pos.startsWith("VB") || pos.startsWith("JJ"))
+
+	public static boolean isEligiblePos(String pos) {
+
+		if (pos.startsWith("RB") || pos.startsWith("MD") || pos.startsWith("VB") || pos.startsWith("JJ"))
 			return true;
-		
+
 		return false;
 	}
+
 	public static String negatedWord(String word, String pos) {
 		if (negation_words.contains(word))
 			return word;
@@ -137,11 +182,16 @@ public class Util {
 		else
 			return word;
 	}
+
 	public static void main(String[] args) {
-		SnowballStemmer snowballStemmer=new SnowballStemmer();
-		String str= snowballStemmer.stem("please makes it work!");
-		System.out.println(str);
-		str= new StanfordCoreNLPLemmatizer().stem("please makes it work!");
-		System.out.println(str);
+		// SnowballStemmer snowballStemmer = new SnowballStemmer();
+		// String str = snowballStemmer.stem("please makes it work!");
+		// System.out.println(str);
+		// str = new StanfordCoreNLPLemmatizer().stem("please makes it work!");
+		// System.out.println(str);
+
+		double[][] matrix = { { 16, 6, 2 }, { 4, 10, 1 }, { 3, 0, 8 } };
+
+		// System.out.println(computeWeightedKappa(matrix));
 	}
 }

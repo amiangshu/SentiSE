@@ -36,6 +36,7 @@ import edu.sentise.preprocessing.TextPreprocessor;
 import edu.sentise.preprocessing.URLRemover;
 import edu.sentise.test.ARFFTestGenerator;
 import edu.sentise.util.Configuration;
+import edu.sentise.util.Util;
 import weka.attributeSelection.AttributeSelection;
 import weka.attributeSelection.InfoGainAttributeEval;
 import weka.attributeSelection.Ranker;
@@ -437,10 +438,11 @@ public class SentiSE {
 				neu_recall[n] = eval.recall(0);
 				neg_recall[n] = eval.recall(1);
 				pos_recall[n] = eval.recall(2);
-				kappa[n] = eval.kappa();
+				//eval.
+				kappa[n] = Util.computeWeightedKappa(eval);
 
 				System.out.println("Accuracy:" + eval.pctCorrect());
-				System.out.println("Kappa:" + eval.kappa());
+				System.out.println(" Weighted Kappa:" + kappa[n]);
 
 				System.out.println(" Precision(positive):" + eval.precision(2));
 				System.out.println("Recall(positive):" + eval.recall(2));
@@ -472,7 +474,7 @@ public class SentiSE {
 			System.out.println("Algorithm:" + this.algorithm + "\n Oracle:" + this.oracleFileName);
 			System.out.println("\n\n.......Average......: ");
 			System.out.println("Accuracy:" + result.getAccuracy());
-			System.out.println("Kappa: " + getAverage(kappa));
+			System.out.println(" Weighted Kappa: " + getAverage(kappa));
 
 			System.out.println("Precision (Positive):" + result.getPosPrecision());
 			System.out.println("Recall (Positive):" + result.getPosRecall());
@@ -585,7 +587,7 @@ public class SentiSE {
 
 		ArrayList<CrossValidationResult> cvResults = new ArrayList<CrossValidationResult>();
 
-		String[] algorithms = { "RF",  "SVM",  "SL", "CNN", "LMT" };
+		String[] algorithms = { "NB", "RF",  "SVM",  "SL", "CNN", "RS", "KNN","DT","LMT", "MLPC" };
 
 		
 		try {
@@ -665,7 +667,7 @@ public class SentiSE {
 		Options options = new Options();
 
 		options.addOption(Option.builder("algo").hasArg(true).desc(
-				"Algorithm for classifier. \nChoices are: RF(Default)| DT | NB| SVM | CNN | MLPC | RNN| SVM | SL | RC")
+				"Algorithm for classifier. \nChoices are: RF(Default)| DT | NB| SVM | KNN | MLPC | RNN| SVM | SL | RS")
 				.build());
 		options.addOption(Option.builder("help").hasArg(false).desc("Prints help message").build());
 		options.addOption(Option.builder("root").hasArg(true)
@@ -709,9 +711,9 @@ public class SentiSE {
 
 			if (commandLine.hasOption("algo")) {
 				String algo = commandLine.getOptionValue("algo");
-				if (algo.equals("RF") || algo.equals("DT") || algo.equals("NB") || algo.equals("RNN")
-						|| algo.equals("CNN") || algo.equals("SVM") || algo.equals("MLPC") || algo.equals("SL")
-						|| algo.equals("KNN") || algo.equals("RC"))
+				if (algo.equals("RF") || algo.equals("DT") || algo.equals("NB") || 
+						algo.equals("CNN") || algo.equals("SVM") || algo.equals("MLPC") || algo.equals("SL")
+						|| algo.equals("KNN") || algo.equals("RS"))
 					this.algorithm = algo;
 				else
 					printUsageAndExit(options, formatter);

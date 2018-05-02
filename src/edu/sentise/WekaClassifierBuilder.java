@@ -10,12 +10,14 @@ import weka.classifiers.bayes.NaiveBayesMultinomial;
 import weka.classifiers.functions.SMO;
 import weka.classifiers.meta.AdaBoostM1;
 import weka.classifiers.meta.RandomCommittee;
+import weka.classifiers.meta.RandomSubSpace;
 import weka.classifiers.misc.InputMappedClassifier;
 import weka.classifiers.trees.J48;
 import weka.classifiers.trees.LMT;
 import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
 import weka.classifiers.functions.Elman;
+import weka.classifiers.functions.MLPClassifier;
 import weka.classifiers.functions.MultilayerPerceptron;
 import weka.classifiers.functions.NeuralNetwork;
 
@@ -100,7 +102,8 @@ public class WekaClassifierBuilder {
 
 		else if (algo.equals("MLPC")) {
 			System.out.println("Algorithm: Multilayer Percptron Classifier");
-			return new weka.classifiers.functions.MLPClassifier();
+			MLPClassifier classifier =new weka.classifiers.functions.MLPClassifier();
+			classifier.setNumThreads(8);
 		}
 
 		else if (algo.equals("SL")) {
@@ -132,13 +135,13 @@ public class WekaClassifierBuilder {
 			return classifier;
 		}
 
-		else if (algo.equals("RC")) {
-			System.out.println("Algorithm: Random Committee");
-			RandomCommittee classifier = new weka.classifiers.meta.RandomCommittee();
+		else if (algo.equals("RS")) {
+			System.out.println("Algorithm: Random Subspace");
+			RandomSubSpace classifier = new RandomSubSpace();
 			classifier.setNumExecutionSlots(4);
 			try {
 				classifier.setOptions(weka.core.Utils.splitOptions(
-						"-S 1 -num-slots 4 -I 10 -W weka.classifiers.trees.RandomTree -- -K 0 -M 1.0 -V 0.001 -S 1"));
+						"-P 0.5 -S 1 -num-slots 1 -I 10 -W weka.classifiers.trees.REPTree -- -M 2 -V 0.001 -N 3 -S 1 -L -1 -I 0.0"));
 			} catch (Exception e) {
 
 			}
