@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import edu.sentise.factory.BasePOSUtility;
 import edu.sentise.model.SentimentData;
@@ -126,7 +127,11 @@ public class POSTagProcessor implements TextPreprocessor {
 					handlePositiveSentimentStatusByScore(d);
 					d= AddSentiWord.getNegativeSentiScore(word, pos);
 					handleNegativeSentimentStatusByScore(d);
-					basePOSUtility.shouldInclude(leaf.label().toString(), word, pos, context, hashTable);
+					
+					if(!isPunctuation(word))
+						basePOSUtility.shouldInclude(leaf.label().toString(), word, pos, context, hashTable);
+					else 
+						hashTable.put(leaf.label().toString(), word);
 				}
 
 				if (handleNegation) {
@@ -235,7 +240,10 @@ public class POSTagProcessor implements TextPreprocessor {
 			handlePositiveSentimentStatusByScore(d);
 			d= AddSentiWord.getNegativeSentiScore(word, pos);
 			handleNegativeSentimentStatusByScore(d);
-			basePOSUtility.shouldInclude(leave.label().toString(), neg, pos, tree.value(), hashTable);
+			
+			
+			
+				basePOSUtility.shouldInclude(leave.label().toString(), neg, pos, tree.value(), hashTable);
 
 		}
 
@@ -261,5 +269,13 @@ public class POSTagProcessor implements TextPreprocessor {
 		else
 			return true;
 	}
+	
+	private static boolean isPunctuation(String str) {
+		if (Pattern.matches("\\p{Punct}", str)) {
+		    return true;
+		}
+		return false;
+	}
+	
 
 }
