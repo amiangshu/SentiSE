@@ -42,7 +42,7 @@ public class ContractionLoader implements TextPreprocessor {
 	}
 
 	public String preprocessContractions(String text) {
-		return applyContraction(text.toLowerCase());
+		return applyContraction(text);
 	}
 
 	public ArrayList<SentimentData> apply(ArrayList<SentimentData> sentiList) {
