@@ -186,7 +186,7 @@ public class SentiSE {
 
 	public SentiSE() {
 
-		stopWordHandler = new MyStopWordsHandler(Configuration.STOPWORDS_FILE_NAME);
+		stopWordHandler = new MyStopWordsHandler(this.stopWordDictionary);
 		// common preprocessing steps, always applied
 		preprocessPipeline.add(new ContractionLoader(this.contractionDictionary));
 		preprocessPipeline.add(new URLRemover());
@@ -220,18 +220,24 @@ public class SentiSE {
 		
 
 		preprocessPipeline.add(new EmoticonProcessor(this.emoticonDictionary));
+		
 		if (this.removeIdentifiers)
 			preprocessPipeline.add(new IdentifierProcessor());
+		
 		if (this.processExclamationMark)
 			preprocessPipeline.add(new ExclamationHandler());
 
 		if (this.processQuestionMark)
 			preprocessPipeline.add(new QuestionMarkHandler());
+		
 		if (this.handleNGram)
 			preprocessPipeline.add(new BiGramTriGramHandler());
 		
 		if(this.useStopWords)
+		{
 			this.stopWordDictionary=Configuration.EMPTY_FILE;
+			this.stopWordHandler=new MyStopWordsHandler(this.stopWordDictionary);
+		}
 		if (this.removeKeywords)
 			this.stopWordHandler = new StopwordWithKeywords(stopWordDictionary, Configuration.KEYWORD_LIST_FILE);
 
