@@ -19,7 +19,8 @@ public class Configuration {
     public static final String ACRONYM_WORD_FILE="models/short_word_list.txt"; 
     public static final String KEYWORD_LIST_FILE="models/keyword_list.txt";
     public static final String OUTPUT_DIRECTORY="output/"; 
-    public static final String ARFF_DIRECTORY="arff/"; 
+    public static final String ARFF_DIRECTORY="arff/";
+	public static final String EMPTY_FILE = "models/EmptyStopWords.txt"; 
 
 
 
