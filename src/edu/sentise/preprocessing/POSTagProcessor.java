@@ -20,25 +20,27 @@ import edu.stanford.nlp.util.CoreMap;
 
 public class POSTagProcessor implements TextPreprocessor {
 
-	private static HashSet<String> negation_words = new HashSet<String>(Arrays.asList(DataLists.negation_words));
-	private static HashSet<String> emoticon_words = new HashSet<String>(Arrays.asList(DataLists.emoticon_words));
-	
-	private static StanfordCoreNLP pipeline = null;
-	private static BasePOSUtility basePOSUtility;
-	private static boolean handleNegation = true;
-	private static double POSITIVE_THRESHOLD=0.5;
-	private static double NEGATIVE_THRESHOLD=-0.75;
+	private HashSet<String> negation_words = new HashSet<String>(Arrays.asList(DataLists.negation_words));
+	private HashSet<String> emoticon_words = new HashSet<String>(Arrays.asList(DataLists.emoticon_words));
 
-	public POSTagProcessor(BasePOSUtility bUtility, boolean shouldNegate,int addSentiScore) {
+	private StanfordCoreNLP pipeline = null;
+	private BasePOSUtility basePOSUtility;
+	private boolean handleNegation = true;
+	private double POSITIVE_THRESHOLD = 0.5;
+	private double NEGATIVE_THRESHOLD = -0.75;
+	private static boolean markSlangWords;
+
+	public POSTagProcessor(BasePOSUtility bUtility, boolean shouldNegate, int addSentiScore, boolean markSlangWords) {
 
 		handleNegation = shouldNegate;
 		basePOSUtility = bUtility;
-		addSentiScoreType=addSentiScore;
+		addSentiScoreType = addSentiScore;
+		this.markSlangWords = markSlangWords;
 	}
 
-	private static int addSentiScoreType = 0;
+	private int addSentiScoreType = 0;
 
-	public static void setHandleSentiScore(int hSentiScore) {
+	public void setHandleSentiScore(int hSentiScore) {
 		addSentiScoreType = hSentiScore;
 	}
 
@@ -47,9 +49,9 @@ public class POSTagProcessor implements TextPreprocessor {
 		int length = sentimentData.size();
 		for (int i = 0; i < length; i++) {
 
-			//System.out.println(sentimentData.get(i).getText());
+			// System.out.println(sentimentData.get(i).getText());
 			sentimentData.get(i).setText(preprocessPOStags(sentimentData.get(i).getText()));
-		//	System.out.println(sentimentData.get(i).getText());
+			// System.out.println(sentimentData.get(i).getText());
 			if ((i % 100) == 0) {
 				System.out.println("POS tag processsed processed:" + i + " of " + length);
 			}
@@ -58,12 +60,12 @@ public class POSTagProcessor implements TextPreprocessor {
 		return sentimentData;
 	}
 
-	public static void initCoreNLP() {
+	public void initCoreNLP() {
 		if (pipeline == null)
 			pipeline = getCoreNLP();
 	}
 
-	public static StanfordCoreNLP getCoreNLP() {
+	public StanfordCoreNLP getCoreNLP() {
 		Properties props = new Properties();
 		props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse");
 		StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
@@ -71,7 +73,7 @@ public class POSTagProcessor implements TextPreprocessor {
 		return pipeline;
 	}
 
-	public static String preprocessPOStags(String text) {
+	public String preprocessPOStags(String text) {
 
 		initCoreNLP();
 		// if (isNegationAvailable(text)) {
@@ -82,17 +84,14 @@ public class POSTagProcessor implements TextPreprocessor {
 		// return text;
 	}
 
-	static boolean positive;
-	static boolean negative ;
-	static boolean extreme_positive;
-	static boolean extreme_negative ;
-
-	public static String getPosProccesedText(String text) {
+	public String getPosProccesedText(String text) {
 		String newText = "";
-		positive = false;
-		negative = false;
-		extreme_negative=false;
-		extreme_positive=false;
+		int countPositive = 0;
+		int countNegative = 0;
+		int countExtremeNegative = 0;
+		int countExtremePositive = 0;
+		int countSwearWord = 0;
+
 		Annotation annotation = new Annotation(text);
 		pipeline.annotate(annotation);
 		List<CoreMap> sentences = annotation.get(SentencesAnnotation.class);
@@ -102,44 +101,53 @@ public class POSTagProcessor implements TextPreprocessor {
 			List<Tree> leaves = new ArrayList<>();
 			leaves = tree.getLeaves(leaves);
 			Hashtable<String, String> hashTable = new Hashtable<>();
-			// Hashtable<String, String> poshashTable = new Hashtable<>();
-			// boolean isNegationFound = false;
-			// String negetedSentence = sentence.toString();
 			for (Tree leaf : leaves) {
 				String word = leaf.toString().toLowerCase();
 				String pos_arr[] = leaf.parent(tree).toString().replace(")", "").replace("(", "").split(" ");
 				String pos = "";
 				if (pos_arr.length == 2) {
 					pos = pos_arr[0];
-					
-					
 
 				}
-				// poshashTable.put(leave.label().toString(), pos);
-				// System.out.println("label: "+ leave.toString().toLowerCase()+" "+
-				// leave.label());
 				Tree parentNode = null;
 
 				if (!isAleadyChanged(leaf, hashTable)) {
 
 					String context = leaf.parent(tree).parent(tree).value();
-					double d = AddSentiWord.getPositiveSentiScore(word, pos);
-					handlePositiveSentimentStatusByScore(d);
-					d= AddSentiWord.getNegativeSentiScore(word, pos);
-					handleNegativeSentimentStatusByScore(d);
-					
-					if(!isPunctuation(word))
+					double wordPosScore = AddSentiWord.getPositiveSentiScore(word, pos);
+
+					if (wordPosScore != 0 && this.addSentiScoreType > 0) {
+						if (this.addSentiScoreType == 4 && wordPosScore > POSITIVE_THRESHOLD)
+							countExtremePositive++;
+						else
+							countPositive++;
+
+					}
+
+					double wordNegScore = AddSentiWord.getNegativeSentiScore(word, pos);
+
+					if (wordNegScore != 0 && this.addSentiScoreType > 0) {
+						if (this.addSentiScoreType == 4 && wordNegScore > NEGATIVE_THRESHOLD)
+							countExtremeNegative++;
+						else
+							countNegative++;
+
+					}
+					if (this.markSlangWords && AddSentiWord.isSlangWord(word))
+						countSwearWord++;
+
+					if (!isPunctuation(word))
 						basePOSUtility.shouldInclude(leaf.label().toString(), word, pos, context, hashTable);
-					else 
+					else
 						hashTable.put(leaf.label().toString(), word);
 				}
 
 				if (handleNegation) {
 					if (negation_words.contains(word)) {
-						// isNegationFound = true;
+
 						parentNode = leaf.parent(tree).parent(tree);
 						getNegatedSentence(parentNode, hashTable, word, basePOSUtility);
-						// newText+=" "+compare;
+
 					}
 				}
 
@@ -164,54 +172,26 @@ public class POSTagProcessor implements TextPreprocessor {
 
 			}
 			// System.out.println(positiveSentiScore+" "+negativeSentiScore);
-			if (addSentiScoreType == 4) {
-				if(extreme_negative)
-					newText +=  " includes_extremenegative ";
+			for (int j = 0; j < countExtremeNegative; j++)
+				newText += " includes_extremenegative ";
 
-				if(extreme_positive)
-					newText +=  " includes_extremepositive ";
-			}
-			if(addSentiScoreType >=2)
-			{
-				if(negative)
-					newText +=  " includes_negative ";
+			for (int j = 0; j < countExtremePositive; j++)
+				newText += " includes_extremepositive ";
 
-				if(positive)
-					newText +=  " includes_positive ";
-			}
+			for (int j = 0; j < countNegative; j++)
+				newText += " includes_negative ";
+			for (int j = 0; j < countPositive; j++)
+				newText += " includes_positive ";
+
+			for (int j = 0; j < countSwearWord; j++)
+				newText += " includes_slangwords ";
 
 		}
 
 		return newText;
 	}
-	private static void handlePositiveSentimentStatusByScore(double score)
-	{
-		if(score== 0)
-			return;
-		if(addSentiScoreType == 4 && score>=POSITIVE_THRESHOLD)
-		{
-			extreme_positive=true;
-			return;
-		}
-		positive=true;
-		
-		
-	}
-	private static void handleNegativeSentimentStatusByScore(double score)
-	{
-		if(score== 0)
-			return;
-		if(addSentiScoreType == 4 && score<=NEGATIVE_THRESHOLD)
-		{
-			extreme_negative=true;
-			return;
-		}
-		negative=true;
-		
-		
-	}
 
-	private static void getNegatedSentence(Tree tree, Hashtable<String, String> hashTable, String negatedWord,
+	private void getNegatedSentence(Tree tree, Hashtable<String, String> hashTable, String negatedWord,
 			BasePOSUtility basePOSUtility) {
 
 		List<Tree> leaves = new ArrayList<>();
@@ -227,7 +207,6 @@ public class POSTagProcessor implements TextPreprocessor {
 			String pos = "";
 			if (pos_arr.length == 2) {
 				pos = pos_arr[0];
-				
 
 			}
 			if (isNegWordfound && (pos.startsWith("NN") || pos.startsWith("PR")))
@@ -237,19 +216,17 @@ public class POSTagProcessor implements TextPreprocessor {
 			// System.out.println(word+" "+ pos);
 			String neg = negatedWord(word, pos);
 			double d = AddSentiWord.getPositiveSentiScore(word, pos);
-			handlePositiveSentimentStatusByScore(d);
-			d= AddSentiWord.getNegativeSentiScore(word, pos);
-			handleNegativeSentimentStatusByScore(d);
-			
-			
-			
-				basePOSUtility.shouldInclude(leave.label().toString(), neg, pos, tree.value(), hashTable);
+			// handlePositiveSentimentStatusByScore(d);
+			d = AddSentiWord.getNegativeSentiScore(word, pos);
+			// handleNegativeSentimentStatusByScore(d);
+
+			basePOSUtility.shouldInclude(leave.label().toString(), neg, pos, tree.value(), hashTable);
 
 		}
 
 	}
 
-	private static String negatedWord(String word, String pos) {
+	private String negatedWord(String word, String pos) {
 		if (negation_words.contains(word))
 			return word;
 		else if (emoticon_words.contains(word))
@@ -260,7 +237,7 @@ public class POSTagProcessor implements TextPreprocessor {
 			return word;
 	}
 
-	private static boolean isAleadyChanged(Tree leaf, Hashtable<String, String> hashtable) {
+	private boolean isAleadyChanged(Tree leaf, Hashtable<String, String> hashtable) {
 		String val = hashtable.get(leaf.label().toString());
 		String compare = leaf.toString().toLowerCase();
 		// System.out.println(leaf.label().toString()+" "+val+" gg: "+compare);
@@ -269,13 +246,12 @@ public class POSTagProcessor implements TextPreprocessor {
 		else
 			return true;
 	}
-	
-	private static boolean isPunctuation(String str) {
+
+	private boolean isPunctuation(String str) {
 		if (Pattern.matches("\\p{Punct}", str)) {
-		    return true;
+			return true;
 		}
 		return false;
 	}
-	
 
 }

@@ -86,6 +86,7 @@ public class SentiSE {
 	private boolean removeIdentifiers = false;
 	private boolean removeKeywords = false;
 	private boolean useStopWords=false;
+	private boolean markSlangWords=false;
 	private Random rand;
 	private static int REPEAT_COUNT = 10;
 	private boolean categorizeEmoticon = false;
@@ -244,7 +245,7 @@ public class SentiSE {
 		System.out.println("Preprocessing text ..");
 		preprocessPipeline.add(new POSTagProcessor(
 				BasicFactory.getPOSUtility(applyPosTag, keepOnlyImportantPos, applyContextTag, stopWordHandler),
-				this.preprocessNegation, addSentiScoreType));
+				this.preprocessNegation, addSentiScoreType,this.markSlangWords));
 
 		for (TextPreprocessor process : preprocessPipeline) {
 			sentimentDataList = process.apply(sentimentDataList);
@@ -539,6 +540,8 @@ public class SentiSE {
 		builder.append("\n");
 		builder.append("Keep stopwords:"  + this.useStopWords);
 		builder.append("\n");
+		builder.append("Mark swearwords:"  + this.markSlangWords);
+		builder.append("\n");
 
 		builder.append("Stemming:" + this.useStemmer);
 		builder.append("\n");
@@ -700,7 +703,7 @@ public class SentiSE {
 		options.addOption(Option.builder("punctuation").hasArg(true)
 				.desc("Preprocess punctuations.\n 0= None (default) | 1= Question | 2= Exclamation | 3=Both ").build());
 		options.addOption(Option.builder("sentiword").hasArg(true)
-				.desc("Categorize sentiment words.\n 0= None (default) | 2= Two groups |4= Four groups ").build());
+				.desc("Count sentiment words.\n 0= None (default) | 2= Two groups |4= Four groups ").build());
 		options.addOption(Option.builder("output").hasArg(true).desc("Output file").build());
 		options.addOption(Option.builder("oracle").hasArg(true).desc("Training dataset (Excel)").build());
 
@@ -709,6 +712,7 @@ public class SentiSE {
 
 		options.addOption(Option.builder("emocat").hasArg(false).desc("Categorize emoticons").build());
 		options.addOption(Option.builder("allwords").hasArg(false).desc("Do not discard stop words").build());
+		options.addOption(Option.builder("slang").hasArg(false).desc("Count slang words").build());
 
 		Option termFreq = Option.builder("minfreq").hasArg()
 				.desc("Minimum frequecy required to be considered as a feature. Default: 5").build();
@@ -832,6 +836,11 @@ public class SentiSE {
 			if (commandLine.hasOption("ngram")) {
 
 				handleNGram = true;
+			}
+			
+			if (commandLine.hasOption("slang")) {
+
+				this.markSlangWords=true;
 			}
 
 			if (commandLine.hasOption("minfreq")) {

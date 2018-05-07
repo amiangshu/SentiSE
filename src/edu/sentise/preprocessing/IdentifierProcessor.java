@@ -7,7 +7,7 @@ import edu.sentise.model.SentimentData;
 public class IdentifierProcessor implements TextPreprocessor {
 
 	final String camelCaseRegex = "[A-Za-z]([A-Z0-9]*[a-z][a-z0-9]*[A-Z]|[a-z0-9]*[A-Z][A-Z0-9]*[a-z])[A-Za-z0-9]*";
-	// final String camelCaseRegex="([A-Z][a-z\\d]+)(?=([A-Z][a-z\\d]+))";
+	final String allCAPSRegex="([A-Z][A-Z]+)";
 
 	final String regexWordsWithNumbers = "\\w*\\d\\w*";
 	final String regexWordsWithUnderscore = "\\w*_\\w*";
@@ -27,10 +27,17 @@ public class IdentifierProcessor implements TextPreprocessor {
 		return sentiList;
 	}
 
-	String removeCameCaseWords(String text) {
+	String removeCameCaseWords(String text) { 
 
 		return text.replaceAll(camelCaseRegex, replacement);
 	}
+	
+	
+	String removeAllCAPS(String text) { //Not applied since some word can be written in all caps for emphasis
+
+		return text.replaceAll(allCAPSRegex, replacement);
+	}
+	
 	
 	String removeWordsWithNumbers(String text) {
 
@@ -46,11 +53,12 @@ public class IdentifierProcessor implements TextPreprocessor {
 
 	public static void main(String[] args) {
 
-		String test = "camelCase this well amin_gerat23 nice_try History2Lession IFoo HTTPConnection Good1 good1 this.ElectionModel bad Touch leaF";
+		String test = "camelCase this well amin_gerat23 nice_try History2Lession IFoo HTTPConnection Good1 good1 this.ElectionModel bad Touch leaF CORRECT GOT_IT";
 		IdentifierProcessor p = new IdentifierProcessor();
 		String modText=p.removeCameCaseWords(test);
 		modText=p.removeWordsWithNumbers(modText);	
 		modText=p.removeWordsWithUnderscores(modText);
+		//modText=p.removeAllCAPS(modText);
 
 		System.out.println(modText);
 
