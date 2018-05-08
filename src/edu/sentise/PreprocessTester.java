@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import edu.sentise.factory.BasicFactory;
 import edu.sentise.model.SentimentData;
 import edu.sentise.preprocessing.*;
-import edu.sentise.util.Configuration;
 
 public class PreprocessTester {
 

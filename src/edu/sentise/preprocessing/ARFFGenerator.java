@@ -4,8 +4,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import edu.sentise.Configuration;
 import edu.sentise.model.SentimentData;
-import edu.sentise.util.Configuration;
 import edu.sentise.util.Util;
 import weka.core.Attribute;
 import weka.core.DenseInstance;

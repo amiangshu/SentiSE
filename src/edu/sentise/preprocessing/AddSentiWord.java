@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 import org.apache.log4j.chainsaw.Main;
 
-import edu.sentise.util.Configuration;
+import edu.sentise.Configuration;
 import edu.sentise.util.Util;
 
 public class AddSentiWord {

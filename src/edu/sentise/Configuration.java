@@ -1,4 +1,4 @@
-package edu.sentise.util;
+package edu.sentise;
 
 public class Configuration {
 

@@ -35,7 +35,6 @@ import edu.sentise.preprocessing.StopwordWithKeywords;
 import edu.sentise.preprocessing.TextPreprocessor;
 import edu.sentise.preprocessing.URLRemover;
 import edu.sentise.test.ARFFTestGenerator;
-import edu.sentise.util.Configuration;
 import edu.sentise.util.Util;
 import weka.attributeSelection.AttributeSelection;
 import weka.attributeSelection.InfoGainAttributeEval;
@@ -692,7 +691,7 @@ public class SentiSE {
 				.build());
 		options.addOption(Option.builder("help").hasArg(false).desc("Prints help message").build());
 		options.addOption(Option.builder("root").hasArg(true)
-				.desc("Word root determination process.\n 0=None (Default) | 1=Stemming | 2=Lemmatization ").build());
+				.desc("Word normalization.\n 0=None (Default) | 1=Stemming | 2=Lemmatization ").build());
 		options.addOption(Option.builder("negate").hasArg(false)
 				.desc("Prefix words in negative context\n Default: False").build());
 		options.addOption(Option.builder("tag").hasArg(true)
@@ -701,7 +700,7 @@ public class SentiSE {
 		options.addOption(Option.builder("features").hasArg(true)
 				.desc("Features to use.\n 1 = All (default) | 2 = Only Verbs, Adverbs, and Adjectives").build());
 		options.addOption(Option.builder("punctuation").hasArg(true)
-				.desc("Preprocess punctuations.\n 0= None (default) | 1= Question | 2= Exclamation | 3=Both ").build());
+				.desc("Mark punctuations.\n 0= None (default) | 1= Question | 2= Exclamation | 3=Both ").build());
 		options.addOption(Option.builder("sentiword").hasArg(true)
 				.desc("Count sentiment words.\n 0= None (default) | 2= Two groups |4= Four groups ").build());
 		options.addOption(Option.builder("output").hasArg(true).desc("Output file").build());

@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-
+import edu.sentise.Configuration;
 import edu.sentise.model.SentimentData;
-import edu.sentise.util.Configuration;
 import edu.sentise.util.Util;
 
 public class AncronymHandler implements TextPreprocessor {

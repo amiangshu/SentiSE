@@ -8,8 +8,8 @@ import java.util.StringTokenizer;
 
 import com.mysql.jdbc.ReplicationConnectionProxy;
 
+import edu.sentise.Configuration;
 import edu.sentise.model.SentimentData;
-import edu.sentise.util.Configuration;
 import edu.sentise.util.Util;
 
 public class BiGramTriGramHandler implements TextPreprocessor {

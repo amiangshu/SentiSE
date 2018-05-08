@@ -10,12 +10,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.StringTokenizer;
 
+import edu.sentise.Configuration;
 import edu.sentise.model.SentimentData;
 import edu.sentise.preprocessing.ContractionLoader;
 import edu.sentise.preprocessing.EmoticonProcessor;
 import edu.sentise.preprocessing.MyStopWordsHandler;
 import edu.sentise.preprocessing.URLRemover;
-import edu.sentise.util.Configuration;
 import edu.sentise.util.DataLists;
 
 public class TriGramGenerator {

@@ -11,7 +11,7 @@ import java.util.Map;
 
 import org.apache.poi.hslf.examples.CreateHyperlink;
 
-import edu.sentise.util.Configuration;
+import edu.sentise.Configuration;
 import edu.sentise.util.Util;
 
 public class SentiWordNetDemoCode {
