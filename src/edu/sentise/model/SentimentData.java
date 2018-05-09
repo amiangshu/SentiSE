@@ -18,93 +18,90 @@ public class SentimentData {
 
 	private String text;
 	private int rating;
+
 	public String getText() {
 		return text;
 	}
+
 	public void setText(String text) {
 		this.text = text;
 	}
+
 	public int getRating() {
 		return rating;
 	}
+
 	public void setRating(int rating) {
 		this.rating = rating;
 	}
+
 	public SentimentData(String text, int rating) {
-	
+
 		this.text = text;
 		this.rating = rating;
 	}
-	public static ArrayList<SentimentData> parseSentimentData(String fileName)
-	{
+
+	public static ArrayList<SentimentData> parseSentimentData(String fileName) {
+
+		ArrayList<SentimentData> sentimentDataList = new ArrayList<>();
+		
+		int rowCount=0;
+		try {
+
+			FileInputStream excelFile = new FileInputStream(new File(fileName));
+			Workbook workbook = new XSSFWorkbook(excelFile);
+			Sheet datatypeSheet = workbook.getSheetAt(0);
+			Iterator<Row> iterator = datatypeSheet.iterator();
+
+			while (iterator.hasNext()) {
+
+				Row currentRow = iterator.next();	
+				rowCount++;
+				String text = "";
+				int rating = 0;
+
+				try {
+					Cell textCell=currentRow.getCell(0);
+					if(textCell.getCellTypeEnum()==CellType.STRING)// first column is text					
+						text = textCell.getStringCellValue(); 
+					else if(textCell.getCellTypeEnum()==CellType.NUMERIC)
+						text = Double.toString(textCell.getNumericCellValue()); 
+					else if(textCell.getCellTypeEnum()==CellType.FORMULA)
+						text = textCell.getCellFormula();
+					
+					
+					rating = (int) currentRow.getCell(1).getNumericCellValue(); // second column is rating
+					
+					if (rating <= 1 && rating >= -1) {
+						SentimentData sentimentData = new SentimentData(text, rating);
+						sentimentDataList.add(sentimentData);
+						//System.out.println(sentimentData.toString());
+
+					}
+					else {
+						System.out.println("Error: "+currentRow+"-> "+rating);
+					}
+				} catch (Exception e) {
+					System.out.println("Error parsing row:"+rowCount);
+					System.out.println(e.getMessage());
+					
+				}
+
+			}
+			workbook.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("Unable to open oracle file!");
+			System.exit(1);
+		} catch (IOException e) {
+			System.out.println("Unable to parse oracle file!");
+			System.exit(1);
+		}
+		
+		return sentimentDataList;
+	}
 	
-		//BufferedReader bufferedReader=Util.getBufferedreaderByFileName(Constants.ORACLE_FILE_NAME);
-		ArrayList<SentimentData> sentimentDataList =  new ArrayList<>();
-		 try {
-
-	            FileInputStream excelFile = new FileInputStream(new File(fileName));
-	            Workbook workbook = new XSSFWorkbook(excelFile);
-	            Sheet datatypeSheet = workbook.getSheetAt(0);
-	            Iterator<Row> iterator = datatypeSheet.iterator();
-
-	            int positive=0;
-	            int negative=0;
-	            int neutral=0;
-	            while (iterator.hasNext()) {
-
-	            	
-	            	//if(count>1600)
-	            		//break;
-	                Row currentRow = iterator.next();
-	                Iterator<Cell> cellIterator = currentRow.iterator();
-	                //SentimentData sentimentData=new SentimentData(text, rating)
-	                String text="";
-	                int rating=0;
-	                while (cellIterator.hasNext()) {
-
-	                    Cell currentCell = cellIterator.next();
-	                  
-	                    //getCellTypeEnum shown as deprecated for version 3.15
-	                    //getCellTypeEnum ill be renamed to getCellType starting from version 4.0
-	                    if (currentCell.getCellTypeEnum() == CellType.STRING) {
-	                    	text=currentCell.getStringCellValue();
-	                       // System.out.print(currentCell.getStringCellValue() + "--");
-	                    } else if (currentCell.getCellTypeEnum() == CellType.NUMERIC) {
-	                       // System.out.print(currentCell.getNumericCellValue() + "--");
-	                    	rating=(int)currentCell.getNumericCellValue(); 
-	                    }
-
-	                }
-	                if(rating<2)
-	                {
-	                SentimentData sentimentData=new SentimentData(text, rating);
-	               // String[] data=text.split("\\s+");
-	                //if(data.length>20)
-		                //if((rating == 0 && neutral<800) || (rating == 1 && positive<400) ||(rating == -1 && negative<400))
-		               // {
-		                	sentimentDataList.add(sentimentData);
-		                	
-		                	if(rating == 0)
-		                		neutral++;
-		                	else if(rating == 1)
-		                		positive++;
-		                	else if(rating == -1)
-		                		negative++;
-		                	
-		                	
-		                	
-		                }
-	               // }
-	                //System.out.println();
-
-	            }
-	        } catch (FileNotFoundException e) {
-	           System.out.println("Unable to open oracle file!");
-	           System.exit(1);
-	        } catch (IOException e) {
-	        	System.out.println("Unable to parse oracle file!");
-		        System.exit(1);
-	        }
-		 return sentimentDataList;
+	public String toString() {
+		return text+" ["+rating+"]";
+		
 	}
 }

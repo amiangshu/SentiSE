@@ -677,7 +677,7 @@ public class SentiSE {
 		if (!instance.isCommandLineParsed(args))
 			return;
 
-		instance.runCVWithSameConfig();
+		instance.runRepeatedValidation();
 
 	}
 
