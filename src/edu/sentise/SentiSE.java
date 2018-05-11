@@ -55,7 +55,7 @@ public class SentiSE {
 	private HashMap<Integer, Integer> classMapping;
 	private Classifier classifier;
 	private String emoticonDictionary = Configuration.EMOTICONS_FILE_NAME;
-	private String stopWordDictionary = Configuration.STOPWORDS_FILE_NAME;
+	private String stopWordDictionary = Configuration.EMPTY_FILE;
 	private String contractionDictionary = Configuration.CONTRACTION_TEXT_FILE_NAME;
 	private String oracleFileName = Configuration.ORACLE_FILE_NAME;
 	private String acronymDictionary = Configuration.ACRONYM_WORD_FILE;
@@ -84,7 +84,7 @@ public class SentiSE {
 	private boolean useLemmatizer = false;
 	private boolean removeIdentifiers = false;
 	private boolean removeKeywords = false;
-	private boolean useStopWords=false;
+	private boolean removeStopwords=false;
 	private boolean markSlangWords=false;
 	private Random rand;
 	private static int REPEAT_COUNT = 10;
@@ -175,18 +175,18 @@ public class SentiSE {
 	}
 
 	public boolean isUseStopWords() {
-		return useStopWords;
+		return removeStopwords;
 	}
 
 	public void setUseStopWords(boolean useStopWords) {
-		this.useStopWords = useStopWords;
+		this.removeStopwords = useStopWords;
 	}
 
 	private ArrayList<TextPreprocessor> preprocessPipeline = new ArrayList<TextPreprocessor>();
 
 	public SentiSE() {
-
-		stopWordHandler = new MyStopWordsHandler(this.stopWordDictionary);
+		this.stopWordHandler=new MyStopWordsHandler(this.stopWordDictionary);
+		
 		// common preprocessing steps, always applied
 		preprocessPipeline.add(new ContractionLoader(this.contractionDictionary));
 		preprocessPipeline.add(new URLRemover());
@@ -211,7 +211,7 @@ public class SentiSE {
 	public void generateTrainingInstance() throws Exception {
 
 		System.out.println("Reading oracle file...");
-		ArrayList<SentimentData> sentimentDataList = SentimentData.parseSentimentData(Configuration.ORACLE_FILE_NAME);
+		ArrayList<SentimentData> sentimentDataList = SentimentData.parseSentimentData(this.oracleFileName);
 
 		if (this.categorizeEmoticon)
 			this.emoticonDictionary = Configuration.EMOTICONS_CATEGORIZED;
@@ -233,11 +233,12 @@ public class SentiSE {
 		if (this.handleNGram)
 			preprocessPipeline.add(new BiGramTriGramHandler());
 		
-		if(this.useStopWords)
+		if(this.removeStopwords)
 		{
-			this.stopWordDictionary=Configuration.EMPTY_FILE;
+			this.stopWordDictionary=Configuration.STOPWORDS_FILE_NAME;
 			this.stopWordHandler=new MyStopWordsHandler(this.stopWordDictionary);
 		}
+		
 		if (this.removeKeywords)
 			this.stopWordHandler = new StopwordWithKeywords(stopWordDictionary, Configuration.KEYWORD_LIST_FILE);
 
@@ -537,7 +538,7 @@ public class SentiSE {
 		builder.append("\n");
 		builder.append("Remove programming keywords: " + this.removeKeywords);
 		builder.append("\n");
-		builder.append("Keep stopwords:"  + this.useStopWords);
+		builder.append("Remove stopwords:"  + this.removeStopwords);
 		builder.append("\n");
 		builder.append("Mark swearwords:"  + this.markSlangWords);
 		builder.append("\n");
@@ -607,7 +608,7 @@ public class SentiSE {
 
 		ArrayList<CrossValidationResult> cvResults = new ArrayList<CrossValidationResult>();
 
-		String[] algorithms = { "RF", "SL", "CNN", "LMT"};
+		String[] algorithms = { "RF","SL", "CNN", "LMT"};
 
 		
 		try {
@@ -677,7 +678,8 @@ public class SentiSE {
 		if (!instance.isCommandLineParsed(args))
 			return;
 
-		instance.runRepeatedValidation();
+		instance.runCVWithSameConfig();
+		//instance.runRepeatedValidation();
 
 	}
 
@@ -687,7 +689,7 @@ public class SentiSE {
 		Options options = new Options();
 
 		options.addOption(Option.builder("algo").hasArg(true).desc(
-				"Algorithm for classifier. \nChoices are: RF(Default)| DT | NB| SVM | KNN | MLPC | RNN| SVM | SL | RS")
+				"Algorithm for classifier. \nChoices are: RF(Default)| DT | NB| SVM | KNN | MLPC | LMT| SVM | SL | RS")
 				.build());
 		options.addOption(Option.builder("help").hasArg(false).desc("Prints help message").build());
 		options.addOption(Option.builder("root").hasArg(true)
@@ -710,7 +712,7 @@ public class SentiSE {
 		options.addOption(Option.builder("keyword").hasArg(false).desc("Remove programming Keywords").build());
 
 		options.addOption(Option.builder("emocat").hasArg(false).desc("Categorize emoticons").build());
-		options.addOption(Option.builder("allwords").hasArg(false).desc("Do not discard stop words").build());
+		options.addOption(Option.builder("allwords").hasArg(false).desc("Remove stop words").build());
 		options.addOption(Option.builder("slang").hasArg(false).desc("Count slang words").build());
 
 		Option termFreq = Option.builder("minfreq").hasArg()
@@ -735,7 +737,7 @@ public class SentiSE {
 				String algo = commandLine.getOptionValue("algo");
 				if (algo.equals("RF") || algo.equals("DT") || algo.equals("NB") || 
 						algo.equals("CNN") || algo.equals("SVM") || algo.equals("MLPC") || algo.equals("SL")
-						|| algo.equals("KNN") || algo.equals("RS"))
+						|| algo.equals("KNN") || algo.equals("RS")|| algo.equals("LMT"))
 					this.algorithm = algo;
 				else
 					printUsageAndExit(options, formatter);

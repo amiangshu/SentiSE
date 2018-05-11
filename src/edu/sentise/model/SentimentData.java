@@ -91,6 +91,7 @@ public class SentimentData {
 			workbook.close();
 		} catch (FileNotFoundException e) {
 			System.out.println("Unable to open oracle file!");
+			System.out.println(e.getMessage());
 			System.exit(1);
 		} catch (IOException e) {
 			System.out.println("Unable to parse oracle file!");
