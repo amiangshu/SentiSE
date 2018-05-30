@@ -33,6 +33,13 @@ import weka.core.stemmers.SnowballStemmer;
 public class Util {
 	private static HashSet<String> negation_words = new HashSet<String>(Arrays.asList(DataLists.negation_words));
 	private static HashSet<String> emoticon_words = new HashSet<String>(Arrays.asList(DataLists.emoticon_words));
+	public static SentiSeLogListner sentiSeLogListner=null;
+	public static void Logger( String message)
+	{
+		System.out.println(message);
+		if(Util.sentiSeLogListner != null )
+			Util.sentiSeLogListner.onLogAvailable(message);
+	}
 
 	public static BufferedReader getBufferedreaderByFileName(String fileName) {
 

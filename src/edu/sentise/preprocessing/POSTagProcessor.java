@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 import edu.sentise.factory.BasePOSUtility;
 import edu.sentise.model.SentimentData;
 import edu.sentise.util.DataLists;
+import edu.sentise.util.Util;
 import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
@@ -53,7 +54,7 @@ public class POSTagProcessor implements TextPreprocessor {
 			sentimentData.get(i).setText(preprocessPOStags(sentimentData.get(i).getText()));
 			// System.out.println(sentimentData.get(i).getText());
 			if ((i % 100) == 0) {
-				System.out.println("POS tag processsed processed:" + i + " of " + length);
+				Util.Logger("POS tag processsed processed:" + i + " of " + length);
 			}
 		}
 

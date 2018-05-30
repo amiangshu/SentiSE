@@ -2,13 +2,19 @@ package edu.sentise;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
+
+import javax.management.RuntimeErrorException;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -18,7 +24,10 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import com.sun.corba.se.impl.orbutil.closure.Constant;
+
 import edu.sentise.factory.BasicFactory;
+import edu.sentise.model.ClassifierModel;
 import edu.sentise.model.SentimentData;
 import edu.sentise.preprocessing.AncronymHandler;
 import edu.sentise.preprocessing.BiGramTriGramHandler;
@@ -35,12 +44,14 @@ import edu.sentise.preprocessing.StopwordWithKeywords;
 import edu.sentise.preprocessing.TextPreprocessor;
 import edu.sentise.preprocessing.URLRemover;
 import edu.sentise.test.ARFFTestGenerator;
+import edu.sentise.util.SentiSeLogListner;
 import edu.sentise.util.Util;
 import weka.attributeSelection.AttributeSelection;
 import weka.attributeSelection.InfoGainAttributeEval;
 import weka.attributeSelection.Ranker;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
+import weka.classifiers.misc.InputMappedClassifier;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.core.stemmers.NullStemmer;
@@ -52,6 +63,7 @@ import weka.filters.unsupervised.attribute.StringToWordVector;
 
 public class SentiSE {
 
+	private  ClassifierModel classifierModel = new ClassifierModel();
 	private HashMap<Integer, Integer> classMapping;
 	private Classifier classifier;
 	private String emoticonDictionary = Configuration.EMOTICONS_FILE_NAME;
@@ -60,7 +72,7 @@ public class SentiSE {
 	private String oracleFileName = Configuration.ORACLE_FILE_NAME;
 	private String acronymDictionary = Configuration.ACRONYM_WORD_FILE;
 
-	private String arffFileName;
+	private String arffFileName=Configuration.ARFF_DIRECTORY+"predict.arff";
 
 	private int minTermFrequeny = 3;
 	private int maxWordsToKeep = 4000;
@@ -87,7 +99,7 @@ public class SentiSE {
 	private boolean removeStopwords=false;
 	private boolean markSlangWords=false;
 	private Random rand;
-	private static int REPEAT_COUNT = 10;
+	private static int REPEAT_COUNT = 2;
 	private boolean categorizeEmoticon = false;
 	private String outputFile;
 	Instances trainingInstances = null;
@@ -208,10 +220,11 @@ public class SentiSE {
 		this.arffFileName = Configuration.ARFF_DIRECTORY + timeStamp + ".arff";
 	}
 
-	public void generateTrainingInstance() throws Exception {
+	public String generateTrainingInstance(String fileName) throws Exception {
 
-		System.out.println("Reading oracle file...");
-		ArrayList<SentimentData> sentimentDataList = SentimentData.parseSentimentData(this.oracleFileName);
+		Util.Logger("Reading oracle file...");
+		
+		ArrayList<SentimentData> sentimentDataList = SentimentData.parseSentimentData(fileName);
 
 		if (this.categorizeEmoticon)
 			this.emoticonDictionary = Configuration.EMOTICONS_CATEGORIZED;
@@ -242,7 +255,7 @@ public class SentiSE {
 		if (this.removeKeywords)
 			this.stopWordHandler = new StopwordWithKeywords(stopWordDictionary, Configuration.KEYWORD_LIST_FILE);
 
-		System.out.println("Preprocessing text ..");
+		Util.Logger("Preprocessing text ..");
 		preprocessPipeline.add(new POSTagProcessor(
 				BasicFactory.getPOSUtility(applyPosTag, keepOnlyImportantPos, applyContextTag, stopWordHandler),
 				this.preprocessNegation, addSentiScoreType,this.markSlangWords));
@@ -251,14 +264,17 @@ public class SentiSE {
 			sentimentDataList = process.apply(sentimentDataList);
 		}
 
-		/*
-		 * for(int i= 0;i<sentimentDataList.size();i++)
-		 * System.out.println(sentimentDataList.get(i).getText());
-		 */
-		System.out.println("Converting to WEKA format ..");
+		
+		  for(int i= 0;i<sentimentDataList.size();i++)
+		     System.out.println(sentimentDataList.get(i).getText());
+		 
+		
+		 Util.Logger("Converting to WEKA format ..");
+		//System.out.println("Converting to WEKA format ..");
 		Instances rawInstance = ARFFTestGenerator.generateTestData(sentimentDataList);
 
-		System.out.println("Converting string to vector..");
+		 Util.Logger("Converting string to vector..");
+		
 		this.trainingInstances = generateFilteredInstance(rawInstance, true);
 
 		this.trainingInstances.setClassIndex(0);
@@ -267,26 +283,28 @@ public class SentiSE {
 		// trainingInstances=getInstancesFilteredByInformationgain(trainingInstances);
 		storeAsARFF(this.trainingInstances, this.arffFileName);
 		this.setForceRcreateTrainingData(false);
+		return this.arffFileName;
 
 	}
 
 	private void storeAsARFF(Instances instance, String fileName) {
 
 		ARFFTestGenerator.writeInFile(this.trainingInstances, fileName);
-		System.out.println("Instance saved as:" + fileName);
+		//System.out.println("Instance saved as:" + fileName);
+		 Util.Logger("Instance saved as:" + fileName);
 	}
 
 	private Instances loadInstanceFromARFF(String arffFileName) throws Exception {
 		DataSource dataSource = new DataSource(arffFileName);
 		Instances loadedInstance = dataSource.getDataSet();
 		loadedInstance.setClassIndex(0);
-		System.out.println("Instance loaded from:" + arffFileName);
+		 Util.Logger("Instance loaded from:" + arffFileName);
 		return loadedInstance;
 	}
 
 	public void reloadClassifier() throws Exception {
 
-		this.generateTrainingInstance();
+		this.generateTrainingInstance(this.arffFileName);
 		// trainingInstances = applyOversampling(trainingInstances);
 		System.out.println("Training classifier..");
 		this.classifier = WekaClassifierBuilder.createClassifierFromInstance(this.algorithm, this.trainingInstances);
@@ -399,7 +417,7 @@ public class SentiSE {
 			File arffFile = new File(arffFileName);
 
 			if (!arffFile.exists() || this.isForceRcreateTrainingData()) {
-				this.generateTrainingInstance();
+				this.generateTrainingInstance(this.oracleFileName);
 			} else {
 				this.trainingInstances = loadInstanceFromARFF(arffFileName);
 
@@ -438,7 +456,9 @@ public class SentiSE {
 				test = randData.testCV(folds, n);
 
 				Classifier clsCopy = WekaClassifierBuilder.getClassifierForAlgorithm(this.algorithm);
-				System.out.println("Training classifier model..");
+				
+				 Util.Logger("Training classifier model..");
+
 				clsCopy.buildClassifier(train);
 				eval.evaluateModel(clsCopy, test);
 
@@ -458,20 +478,20 @@ public class SentiSE {
 				//eval.
 				kappa[n] = Util.computeWeightedKappa(eval);
 
-				System.out.println("Accuracy:" + eval.pctCorrect());
-				System.out.println(" Weighted Kappa:" + kappa[n]);
+				Util.Logger("Accuracy:" + eval.pctCorrect());
+				Util.Logger(" Weighted Kappa:" + kappa[n]);
 
-				System.out.println(" Precision(positive):" + eval.precision(2));
-				System.out.println("Recall(positive):" + eval.recall(2));
-				System.out.println("Fmeasure(positive):" + eval.fMeasure(2));
+				Util.Logger(" Precision(positive):" + eval.precision(2));
+				Util.Logger("Recall(positive):" + eval.recall(2));
+				Util.Logger("Fmeasure(positive):" + eval.fMeasure(2));
 
-				System.out.println(" Precision(neutral):" + eval.precision(0));
-				System.out.println("Recall(neutral):" + eval.recall(0));
-				System.out.println("Fmeasure(neutral):" + eval.fMeasure(0));
+				Util.Logger(" Precision(neutral):" + eval.precision(0));
+				Util.Logger("Recall(neutral):" + eval.recall(0));
+				Util.Logger("Fmeasure(neutral):" + eval.fMeasure(0));
 
-				System.out.println(" Precision(negative):" + eval.precision(1));
-				System.out.println("Recall(negative):" + eval.recall(1));
-				System.out.println("Fmeasure(negative):" + eval.fMeasure(1));
+				Util.Logger(" Precision(negative):" + eval.precision(1));
+				Util.Logger("Recall(negative):" + eval.recall(1));
+				Util.Logger("Fmeasure(negative):" + eval.fMeasure(1));
 
 			}
 			CrossValidationResult result = new CrossValidationResult();
@@ -487,31 +507,78 @@ public class SentiSE {
 			result.setNeuFmeasure(getAverage(neu_fscore));
 
 			result.setKappa(getAverage(kappa));
+			
+			Util.Logger("Algorithm:" + this.algorithm + "\n Oracle:" + this.oracleFileName);
+			Util.Logger("\n\n.......Average......: ");
+			Util.Logger("Accuracy:" + result.getAccuracy());
+			Util.Logger(" Weighted Kappa: " + getAverage(kappa));
 
-			System.out.println("Algorithm:" + this.algorithm + "\n Oracle:" + this.oracleFileName);
-			System.out.println("\n\n.......Average......: ");
-			System.out.println("Accuracy:" + result.getAccuracy());
-			System.out.println(" Weighted Kappa: " + getAverage(kappa));
+			Util.Logger("Precision (Positive):" + result.getPosPrecision());
+			Util.Logger("Recall (Positive):" + result.getPosRecall());
+			Util.Logger("F-Measure (Positive):" + result.getPosFmeasure());
 
-			System.out.println("Precision (Positive):" + result.getPosPrecision());
-			System.out.println("Recall (Positive):" + result.getPosRecall());
-			System.out.println("F-Measure (Positive):" + result.getPosFmeasure());
+			Util.Logger("Precision (Neutral):" + result.getNeuPrecision());
+			Util.Logger("Recall (Neutral):" + result.getNeuRecall());
+			Util.Logger("F-Measure (Neutral):" + result.getNeuFmeasure());
 
-			System.out.println("Precision (Neutral):" + result.getNeuPrecision());
-			System.out.println("Recall (Neutral):" + result.getNeuRecall());
-			System.out.println("F-Measure (Neutral):" + result.getNeuFmeasure());
-
-			System.out.println("Precision (Negative):" + result.getNegPrecision());
-			System.out.println("Recall (Negative):" + result.getNegRecall());
-			System.out.println("F-measure (Negative):" + result.getNegFmeasure());
+			Util.Logger("Precision (Negative):" + result.getNegPrecision());
+			Util.Logger("Recall (Negative):" + result.getNegRecall());
+			Util.Logger("F-measure (Negative):" + result.getNegFmeasure());
 
 			// printConfiguration();
+			buildTotalClassifierModel(randData);
 			return result;
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	private void buildTotalClassifierModel(Instances trainingData)
+	{
+		try {
+			Util.Logger("building classifier with total data");
+		Classifier clsCopy = WekaClassifierBuilder.getClassifierForAlgorithm(this.algorithm);
+		Util.Logger("Training classifier model..");
+		InputMappedClassifier inputMappedClassifier= new InputMappedClassifier();
+		inputMappedClassifier.setClassifier(clsCopy);
+		inputMappedClassifier.setModelHeader(trainingData);
+		inputMappedClassifier.setSuppressMappingReport(true);
+	    clsCopy.buildClassifier(trainingData);
+		
+		classifierModel.setClassifier(inputMappedClassifier);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	private void saveClassifierModelInFile()
+	{
+		Date date = new Date();
+		String time = date.toString();
+		File file= new File("test"+"_"+this.algorithm+".model");
+		
+		FileOutputStream fileOutputStream;
+		try {
+			if(!file.exists())
+				file.createNewFile();
+			fileOutputStream = new FileOutputStream(file);
+
+			ObjectOutputStream objectOutputStream;
+
+			objectOutputStream = new ObjectOutputStream(fileOutputStream);
+
+			objectOutputStream.writeObject(classifierModel);
+			objectOutputStream.flush();
+			objectOutputStream.close();
+			Util.Logger("model saved in: "+file.getAbsolutePath());
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private String getConfiguration() {
@@ -555,6 +622,7 @@ public class SentiSE {
 		builder.append("\n");
 		builder.append("Max features:" + this.maxWordsToKeep);
 		builder.append("\n");
+		
 		return builder.toString();
 	}
 
@@ -608,7 +676,7 @@ public class SentiSE {
 
 		ArrayList<CrossValidationResult> cvResults = new ArrayList<CrossValidationResult>();
 
-		String[] algorithms = { "RF","SL", "CNN", "LMT"};
+		String[] algorithms = { "RF"};
 
 		
 		try {
@@ -679,8 +747,35 @@ public class SentiSE {
 			return;
 
 		//instance.runCVWithSameConfig();
+		
+		instance.classifierModel.setParams(args);
 		instance.runRepeatedValidation();
+		instance.saveClassifierModelInFile();
 
+	}
+	public static void buildModel(String[] args, String inputFilePath, SentiSeLogListner sentiSeLogListner)
+	{
+		Configuration.ORACLE_FILE_NAME=inputFilePath;
+		Util.sentiSeLogListner=sentiSeLogListner;
+		main(args);
+		
+		
+	}
+	public Instances getPreprocessdInstances(String fileName, String [] args)
+	{
+		SentiSE instance = new SentiSE();
+		if (!instance.isCommandLineParsed(args))
+			new Exception("param parsing exception");
+		try {
+			String arffFileName=instance.generateTrainingInstance(fileName);
+			return loadInstanceFromARFF(arffFileName);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
 	}
 
 	private boolean isCommandLineParsed(String[] args) {

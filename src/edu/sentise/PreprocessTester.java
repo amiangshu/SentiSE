@@ -10,7 +10,7 @@ public class PreprocessTester {
 
 	public static void main(String[] args) {
 		
-		String text="First of all I do not think you hate hate hate horrible suck fuck genius love awesome need all these.";
+		String text="it looks like this can be closed since the Python UI is gone.";
 		SentimentData d=new SentimentData(text,0);
 		ArrayList<SentimentData> dt=new ArrayList<SentimentData>();
 		dt.add(d);
