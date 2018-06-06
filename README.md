@@ -6,7 +6,7 @@ fourteen different optional pre-processing steps that are commonly used to impro
 We empirically evaluated each of the algorithms and preprocessing steps to determine the best configuration. 
 We evaluated SentiSE using a large-scale labeled dataset of 13K comments from three different types of SE interactions.
 
- ``
+ ```
 | Oracle | tool  |Precision<br> (Positive) | Recall<br> (Positive) | F-measure<br> (Positive) | Precision<br> (Positive) | Recall<br> (Positive) | F-measure<br> (Positive) |  Precision<br> (Positive) | Recall<br> (Positive) | F-measure<br> (Positive) | Accuracy | Weighted <br> Kappa |
 |--|--| -- | -- |  -- | -- | --|  -- | -- | --|  -- | -- | --|
 |  Orcal1|SentiSE  | 85.63% | 75.27% | 80.11% | 81.51% | 92.78% | 86.78% | 81.03% | 55.92%|66.16%|82.23%|0.681
