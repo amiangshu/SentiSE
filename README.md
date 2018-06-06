@@ -19,5 +19,9 @@ We compare SentiSE with other sentiment analysis tool available in software engi
 |_Oracle2_| SentiStrength-SE | 79.56% | 83.57% | 81.52% | 80.73% | 84.15% | 82.41% | 80.41% | 69.31% | 74.45% | 80.34% | 0. 696
 
 <br><br><br>
-Usage Instructions:
+**Usage Instructions:**
 Downaload and import SentiSe Project. Run the build.xml file and generate the sentise.jar. SentiSE is a commandline base tool. Use the command <code> java -jar sentise.jar -help</code> to find all the commands avialable in sentiSE.
+
+<br><br>
+**ScreenShot**
+![SentiSE-cli](https://github.com/amiangshu/SentiSE/blob/tanzeerH-readme/models/cli.png)
