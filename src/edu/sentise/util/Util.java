@@ -8,8 +8,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -190,7 +192,11 @@ public class Util {
 		else
 			return word;
 	}
-
+	public static String getTimeStamp()
+	{
+		String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+		return timeStamp;
+	}
 	public static void main(String[] args) {
 		// SnowballStemmer snowballStemmer = new SnowballStemmer();
 		// String str = snowballStemmer.stem("please makes it work!");

@@ -99,7 +99,7 @@ public class SentiSE {
 	private boolean removeStopwords=false;
 	private boolean markSlangWords=false;
 	private Random rand;
-	private static int REPEAT_COUNT = 2;
+	private static int REPEAT_COUNT = 10;
 	private boolean categorizeEmoticon = false;
 	private String outputFile;
 	Instances trainingInstances = null;
@@ -554,9 +554,8 @@ public class SentiSE {
 	}
 	private void saveClassifierModelInFile()
 	{
-		Date date = new Date();
-		String time = date.toString();
-		File file= new File("test"+"_"+this.algorithm+".model");
+		
+		File file= new File(Util.getTimeStamp()+"_"+this.algorithm+".model");
 		
 		FileOutputStream fileOutputStream;
 		try {
